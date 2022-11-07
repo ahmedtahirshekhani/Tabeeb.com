@@ -1,8 +1,20 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 
+const getDoctorRequests = async (req, res) => {
+  console.log("Hello in get doctor requests");
+  try {
+    const queryText = `SELECT * FROM doctors 
+    WHERE isVerified = false`;
+    const result = await query(queryText);
+    res.send(result);
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
+};
+
 const postSignup = async (req, res) => {
-  console.log("HELLO", req.body);
+  console.log("HELLO in post sign up", req.body);
   try {
     const {
       cnic,
@@ -38,4 +50,4 @@ const postSignup = async (req, res) => {
   }
 };
 
-module.exports = { postSignup };
+module.exports = { postSignup, getDoctorRequests };

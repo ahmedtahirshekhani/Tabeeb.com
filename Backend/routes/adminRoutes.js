@@ -8,5 +8,8 @@ adminRoutes.get(
   /*authController.authCheck*/ adminController.getDoctorRequests
 );
 adminRoutes.post("/login", adminController.postLogin);
+adminRoutes.post("/acceptRequest", adminController.postAcceptRequest);
+adminRoutes.post("/rejectRequest", adminController.postRejectRequest);
+adminRoutes.get("/reports", adminController.getReports);
 
 module.exports = adminRoutes;

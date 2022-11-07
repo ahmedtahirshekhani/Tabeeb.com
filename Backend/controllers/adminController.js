@@ -23,13 +23,67 @@ const postLogin = async (req, res) => {
 };
 
 const getDoctorRequests = async (req, res) => {
-  const queryText = `SELECT *
+  try {
+    const queryText = `SELECT *
           FROM doctors
           WHERE isVerified = false
           `;
-  const result = await query(queryText);
-  console.log(result);
-  res.send("Done");
+    const result = await query(queryText);
+    console.log(result);
+    res.send("Done");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
 };
 
-module.exports = { postLogin, getDoctorRequests };
+const postAcceptRequest = async (req, res) => {
+  console.log("IN post accept request");
+  try {
+    const cnic = req.body.cnic;
+    const queryText = `UPDATE doctors
+      SET isVerified = true
+      WHERE cnic = '${cnic}'`;
+    await query(queryText);
+    res.send("Request Accepted");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
+};
+
+const postRejectRequest = async (req, res) => {
+  console.log("IN post reject request");
+  try {
+    const cnic = req.body.cnic;
+    const queryText = `DELETE FROM doctors
+    WHERE cnic='${cnic}'`;
+    await query(queryText);
+    res.send("Request rejected");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
+};
+
+const getReports = async (req, res) => {
+  try {
+    let result = {};
+    let queryText = `SELECT *
+          FROM reported_doctors
+          `;
+    result["doctors"] = await query(queryText);
+    queryText = `SELECT *
+          FROM reported_patients
+          `;
+    result["patients"] = await query(queryText);
+    res.send(result);
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
+};
+
+module.exports = {
+  postLogin,
+  getDoctorRequests,
+  postAcceptRequest,
+  postRejectRequest,
+  getReports,
+};

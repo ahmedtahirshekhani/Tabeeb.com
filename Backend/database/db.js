@@ -67,7 +67,7 @@ const reviewsSchema = `CREATE TABLE IF NOT EXISTS reviews
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
 )`;
 
-const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS doctor_reviews
+const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS reported_doctors
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
@@ -77,7 +77,7 @@ const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS doctor_reviews
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
 )`;
 
-const reportPatientSchema = `CREATE TABLE IF NOT EXISTS patient_reviews
+const reportPatientSchema = `CREATE TABLE IF NOT EXISTS reported_patients
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
