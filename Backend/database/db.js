@@ -1,3 +1,6 @@
+const mysql = require("mysql");
+const util = require("util");
+
 const patientSchema = `CREATE TABLE IF NOT EXISTS patients
     (phone_number   varchar(13),
     email           varchar(255),
@@ -94,5 +97,33 @@ const schemas = [
   reportDoctorSchema,
   reportPatientSchema,
 ];
+// Create connection
+const db = mysql.createConnection({
+  host: process.env.host,
+  user: process.env.user,
+  password: process.env.password,
+  database: process.env.database,
+});
 
-module.exports = schemas;
+const query = util.promisify(db.query).bind(db);
+
+db.connect(function (err) {
+  if (err) throw err;
+  console.log("Connected to the database");
+  sql = "CREATE DATABASE IF NOT EXISTS " + process.env.database;
+  db.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log("Database created");
+    for (let k = 0; k < schemas.length; k++) {
+      db.query(schemas[k], (err, result) => {
+        if (err) {
+          console.log("Table creation failed", err);
+        } else {
+          console.log("Table created");
+        }
+      });
+    }
+  });
+});
+
+module.exports = { db, query };
