@@ -1,7 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 
-const postLogin = async (req, res, next) => {
+const postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
@@ -22,4 +22,14 @@ const postLogin = async (req, res, next) => {
   }
 };
 
-module.exports = { postLogin };
+const getDoctorRequests = async (req, res) => {
+  const queryText = `SELECT *
+          FROM doctors
+          WHERE isVerified = false
+          `;
+  const result = await query(queryText);
+  console.log(result);
+  res.send("Done");
+};
+
+module.exports = { postLogin, getDoctorRequests };

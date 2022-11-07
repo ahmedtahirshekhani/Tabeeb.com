@@ -1,6 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const doctorRoutes = express.Router();
 const authController = require("../controllers/auth");
+const doctorController = require("../controllers/doctorController.js");
 
-router.get("/", authController.authCheck);
-module.exports = router;
+doctorRoutes.post("/signup", doctorController.postSignup);
+
+module.exports = doctorRoutes;

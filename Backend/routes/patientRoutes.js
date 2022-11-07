@@ -1,6 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const patientRoutes = express.Router();
 const authController = require("../controllers/auth");
+const patientController = require("../controllers/patientController.js");
 
-router.get("/", authController.authCheck);
-module.exports = router;
+patientRoutes.post("/signup", patientController.postSignup);
+
+module.exports = patientRoutes;

@@ -16,9 +16,9 @@ const adminRoutes = require("./routes/adminRoutes.js");
 const doctorRoutes = require("./routes/doctorRoutes.js");
 
 // app.use("/api/v1/auth", authRoutes);
-// app.use("/doctor", patientRoutes);
+app.use("/doctor", doctorRoutes);
 app.use("/admin", adminRoutes);
-// app.use("/patient", doctorRoutes);
+app.use("/patient", patientRoutes);
 
 app.listen(port, function () {
   console.log("App is running! at port", port);
