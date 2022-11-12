@@ -1,6 +1,8 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 
+/*required: complete patient object from signup form
+follow the variable naming conventions below*/
 const postSignup = async (req, res) => {
   console.log("HELLO", req.body);
   try {

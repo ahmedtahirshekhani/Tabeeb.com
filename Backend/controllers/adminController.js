@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const postLogin = async (req, res) => {
   try {
+    // required: login form data object {email, password}
     const { email, password } = req.body;
     if (!email || !password)
       return res.status(422).send({ error: "Invalid login: Input missing!" });
@@ -30,15 +31,33 @@ const getDoctorRequests = async (req, res) => {
           `;
     const result = await query(queryText);
     console.log(result);
-    res.send("Done");
+    res.send(result);
   } catch (err) {
     res.status(422).send(err.message);
+    // check return format below
   }
 };
+/*
+   returns list of these objects
+  {
+        "cnic": "4000166412863",
+        "email": "faizan2@gmail.com",
+        "password": "faizan",
+        "phone_number": "09007860199",
+        "full_name": "malik malik",
+        "about_doctor": "ghanta",
+        "street_address": "199 XX",
+        "city": "Lahore",
+        "pmc_reg": "ABCDEF5",
+        "isverified": 0,
+        "isbanned": 0
+    }
+    */
 
 const postAcceptRequest = async (req, res) => {
   console.log("IN post accept request");
   try {
+    //required: cnic of doctor object -> {"cnic": XXXXXXX}
     const cnic = req.body.cnic;
     const queryText = `UPDATE doctors
       SET isVerified = true
@@ -53,6 +72,7 @@ const postAcceptRequest = async (req, res) => {
 const postRejectRequest = async (req, res) => {
   console.log("IN post reject request");
   try {
+    //required: cnic of doctor object
     const cnic = req.body.cnic;
     const queryText = `DELETE FROM doctors
     WHERE cnic='${cnic}'`;
@@ -77,8 +97,40 @@ const getReports = async (req, res) => {
     res.send(result);
   } catch (err) {
     res.status(422).send(err.message);
+    // check return format below
   }
 };
+/*
+    return format:
+    "doctors": [
+        {
+            "report_id": 3,
+            "patient_phone": "09447865199",
+            "d_cnic": "4000166412863",
+            "report_reason": "idk man"
+        },
+        {
+            "report_id": 4,
+            "patient_phone": "09447865555",
+            "d_cnic": "4000166416663",
+            "report_reason": "idk man 2"
+        }
+    ],
+    "patients": [
+        {
+            "report_id": 1,
+            "patient_phone": "09447865199",
+            "d_cnic": "4000166412863",
+            "report_reason": "idk man 2"
+        },
+        {
+            "report_id": 2,
+            "patient_phone": "09447865555",
+            "d_cnic": "4000166416663",
+            "report_reason": "idk man 2"
+        }
+    ]
+    */
 
 module.exports = {
   postLogin,
