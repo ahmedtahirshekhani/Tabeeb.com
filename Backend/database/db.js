@@ -1,20 +1,20 @@
 const mysql = require("mysql");
 const util = require("util");
 
-const patientSchema = `CREATE TABLE IF NOT EXISTS patients
+const patientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.patients
     (phone_number   varchar(13),
     email           varchar(255),
     full_name       varchar(50),
-    password        varchar(20),
+    password        varchar(100),
     city            varchar(20),
     wallet_amount   double,
     PRIMARY KEY (phone_number)
     )`;
 
-const doctorSchema = `CREATE TABLE IF NOT EXISTS doctors
+const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
     (cnic           varchar(13),
     email           varchar(255),
-    password        varchar(20),
+    password        varchar(100),
     phone_number    varchar(13),
     full_name       varchar(40),
     about_doctor    MEDIUMTEXT,
@@ -26,7 +26,7 @@ const doctorSchema = `CREATE TABLE IF NOT EXISTS doctors
     PRIMARY KEY (cnic)
 )`;
 
-const serviceSchema = `CREATE TABLE IF NOT EXISTS services
+const serviceSchema = `CREATE TABLE IF NOT EXISTS tabeeb.services
     (d_cnic           varchar(13),
     start_time        time,
     end_time          time,
@@ -36,7 +36,7 @@ const serviceSchema = `CREATE TABLE IF NOT EXISTS services
     FOREIGN KEY (d_cnic) REFERENCES doctors(cnic)
 )`;
 
-const appointmentSchema = `CREATE TABLE IF NOT EXISTS appointments
+const appointmentSchema = `CREATE TABLE IF NOT EXISTS tabeeb.appointments
     (appointment_id     int NOT NULL AUTO_INCREMENT,
     patient_phone       varchar(11),
     d_cnic              varchar(13),
@@ -50,13 +50,13 @@ const appointmentSchema = `CREATE TABLE IF NOT EXISTS appointments
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
 )`;
 
-const adminSchema = `CREATE TABLE IF NOT EXISTS admins
+const adminSchema = `CREATE TABLE IF NOT EXISTS tabeeb.admins
     (email          varchar(255),
-    password        varchar(20),
+    password        varchar(100),
     PRIMARY KEY (email)
 )`;
 
-const reviewsSchema = `CREATE TABLE IF NOT EXISTS reviews
+const reviewsSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reviews
     (review_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
@@ -67,7 +67,7 @@ const reviewsSchema = `CREATE TABLE IF NOT EXISTS reviews
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
 )`;
 
-const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS reported_doctors
+const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reported_doctors
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
@@ -77,7 +77,7 @@ const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS reported_doctors
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
 )`;
 
-const reportPatientSchema = `CREATE TABLE IF NOT EXISTS reported_patients
+const reportPatientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reported_patients
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
@@ -102,7 +102,6 @@ const db = mysql.createConnection({
   host: process.env.host,
   user: process.env.user,
   password: process.env.password,
-  database: process.env.database,
 });
 
 const query = util.promisify(db.query).bind(db);

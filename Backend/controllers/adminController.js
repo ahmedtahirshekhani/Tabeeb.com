@@ -1,5 +1,6 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const postLogin = async (req, res) => {
   try {
@@ -8,25 +9,25 @@ const postLogin = async (req, res) => {
     if (!email || !password)
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
-          FROM admins
+          FROM tabeeb.admins
           WHERE email = '${email}'
           `;
     const result = await query(queryText);
-    pw = result[0].password;
-    if (pw === password) {
+    hash = result[0].password;
+    if (await bcrypt.compare(password, hash)) {
       res.send("Admin logged in");
     } else {
-      throw err;
+      throw "Invalid Credentials";
     }
   } catch (err) {
-    res.status(422).send("incorrect credentials");
+    res.status(422).send(err);
   }
 };
 
 const getDoctorRequests = async (req, res) => {
   try {
     const queryText = `SELECT *
-          FROM doctors
+          FROM tabeeb.doctors
           WHERE isVerified = false
           `;
     const result = await query(queryText);
@@ -59,7 +60,7 @@ const postAcceptRequest = async (req, res) => {
   try {
     //required: cnic of doctor object -> {"cnic": XXXXXXX}
     const cnic = req.body.cnic;
-    const queryText = `UPDATE doctors
+    const queryText = `UPDATE tabeeb.doctors
       SET isVerified = true
       WHERE cnic = '${cnic}'`;
     await query(queryText);
@@ -74,7 +75,7 @@ const postRejectRequest = async (req, res) => {
   try {
     //required: cnic of doctor object
     const cnic = req.body.cnic;
-    const queryText = `DELETE FROM doctors
+    const queryText = `DELETE FROM tabeeb.doctors
     WHERE cnic='${cnic}'`;
     await query(queryText);
     res.send("Request rejected");
@@ -87,11 +88,11 @@ const getReports = async (req, res) => {
   try {
     let result = {};
     let queryText = `SELECT *
-          FROM reported_doctors
+          FROM tabeeb.reported_doctors
           `;
     result["doctors"] = await query(queryText);
     queryText = `SELECT *
-          FROM reported_patients
+          FROM tabeeb.reported_patients
           `;
     result["patients"] = await query(queryText);
     res.send(result);
