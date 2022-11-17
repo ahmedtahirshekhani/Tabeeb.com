@@ -1,13 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
+import Footer from './layouts/Footer';
+import Header from './layouts/Header';
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        
-        <p>Welcome to Tabeeb.com</p>
-      </header>
+      <Header/>
+        <div>Yahan mera main saman</div>
+      <Footer/>
     </div>
   );
 }
