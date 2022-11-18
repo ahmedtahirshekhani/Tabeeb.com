@@ -7,7 +7,7 @@ const Footer = () => {
 
     return (
         <footer>
-            <div>This is my footer</div>
+            <div>© Copyright @ 2022 Tabeeb Pvt. Ltd. - All Rights Reserved</div>
         </footer>
     );
     }

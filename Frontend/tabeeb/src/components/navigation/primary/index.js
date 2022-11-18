@@ -1,3 +1,4 @@
+
 const PrimaryNavbar = () => {
 
     return (
@@ -15,7 +16,7 @@ const PrimaryNavbar = () => {
     </div>
   </div>
   <div className="navbar-center">
-    <a className="btn btn-ghost normal-case text-xl">TabeebDotCom</a>
+    <a className="btn btn-ghost normal-case text-xl" href={'/'}>Tabeeb.com</a>
   </div>
   <div className="navbar-end">
     <button className="btn btn-ghost btn-circle">

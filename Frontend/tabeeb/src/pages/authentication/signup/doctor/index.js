@@ -1,8 +1,41 @@
 import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login";
-
+import { signup } from "../../../../services/utils/auth";
+import { useState } from "react";
 const DoctorSignup = () => {
+  const [pmc, setPmc] = useState("");
+  const [cnic, setCnic] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [aboutDoc, setAboutDoc] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const docSignup = ()=>{
+    console.log("Calling the Api for signup")
+    const req = {
+      "pmc_reg": pmc,
+      "cnic": cnic,
+      "email": email,
+      "password": password,
+      "phone_number": phone,
+      "name": fullName,
+      "about_doctor": aboutDoc,
+      "street_address": address,
+      "city": city
+    }
+    signup(req, "doctor").then(res=>{
+      console.log(res);
+      console.log("Success")
+      // localStorage.setItem('role', role);
+    }
+    ).catch(err=>{
+      console.log(err);
+    }
+    );
+  }
   return (
     <div>
       <Header />
@@ -28,6 +61,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="PMC"
                     className="input input-bordered input-sm "
+                    onChange = {(e) => setPmc(e.target.value)}
                   />
                 </label>
               </div>
@@ -39,6 +73,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="02131234567"
                     className="input input-bordered input-sm "
+                    onChange = {(e) => setPhone(e.target.value)}
                   />
                 </label>
               </div>
@@ -49,6 +84,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="Email Address"
                     className="input input-bordered input-sm "
+                    onChange = {(e) => setEmail(e.target.value)}
                   />
                 </label>
               </div>
@@ -59,6 +95,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="Name"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setFullName(e.target.value)}
                   />
                 </label>
               </div>
@@ -69,6 +106,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="Password"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setPassword(e.target.value)}
                   />
                 </label>
               </div>
@@ -79,6 +117,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="CNIC"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setCnic(e.target.value)}
                   />
                 </label>
               </div>
@@ -89,6 +128,7 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="About"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setAboutDoc(e.target.value)}
                   />
                 </label>
               </div>
@@ -99,22 +139,23 @@ const DoctorSignup = () => {
                     type="text"
                     placeholder="Street Address"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setAddress(e.target.value)}
                   />
                 </label>
               </div>
               <div className="form-control">
-                <label className="input-group input-group-sm input-group-vertical">
-                  <span>City</span>
-                  <input
-                    type="text"
-                    placeholder="City"
-                    className="input input-bordered input-sm"
-                  />
-                </label>
+                <div className="input-group">
+                  <select className="select select-bordered" onChange={(e)=>setCity(e.target.value)}>
+                    <option disabled selected defaultValue="None" >City</option>
+                    <option value = "Karachi">Karachi</option>
+                    <option value="Lahore">Lahore</option>
+                    <option value="Islamabad">Islamabad</option>
+                  </select>
+                </div>
               </div>
               
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Sign Up</button>
+                <button className="btn btn-primary" onClick={()=>docSignup()}>Sign Up</button>
               </div>
             </div>
           </div>
