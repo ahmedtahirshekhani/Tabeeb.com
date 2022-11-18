@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 const PrimaryNavbar = () => {
 
     return (
@@ -11,7 +10,7 @@ const PrimaryNavbar = () => {
       </label>
       <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
         <li><a href={'/login'}>Login</a></li>
-        <li><a>Register</a></li>
+        <li><a href={'/register'}>Register</a></li>
       </ul>
     </div>
   </div>

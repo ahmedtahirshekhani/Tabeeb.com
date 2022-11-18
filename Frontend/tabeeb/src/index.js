@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Root from "./routes/Root";
 import ErrorPage from "./pages/error";
 import Login from './pages/authentication/login';
+import Register from './pages/authentication/register';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  }, {
+    path: "/register",
+    element: <Register />,
+
   }
 ]);
 
