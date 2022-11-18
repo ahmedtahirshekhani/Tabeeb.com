@@ -13,14 +13,22 @@ const postLogin = async (req, res) => {
           WHERE email = '${email}'
           `;
     const result = await query(queryText);
-    hash = result[0].password;
+    const hash = result[0].password;
+    const successMessage = {
+      success: true,
+      message: "User Successfully Logged In!",
+    };
     if (await bcrypt.compare(password, hash)) {
-      res.send("Admin logged in");
+      res.send(successMessage);
     } else {
-      throw "Invalid Credentials";
+      throw err;
     }
   } catch (err) {
-    res.status(422).send(err);
+    const failureMessage = {
+      success: false,
+      message: "Invalid Credentials",
+    };
+    res.status(422).send(failureMessage);
   }
 };
 

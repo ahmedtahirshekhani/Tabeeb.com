@@ -37,13 +37,21 @@ const postLogin = async (req, res) => {
 
     const result = await query(queryText);
     hash = result[0].password;
+    const successMessage = {
+      success: true,
+      message: "User Successfully Logged In!",
+    };
     if (await bcrypt.compare(password, hash)) {
-      res.send("Patient logged in");
+      res.send(successMessage);
     } else {
-      throw "Invalid Credentials";
+      throw err;
     }
   } catch (err) {
-    return res.status(422).send(err);
+    const failureMessage = {
+      success: false,
+      message: "Invalid Credentials",
+    };
+    return res.status(422).send(failureMessage);
   }
 };
 
