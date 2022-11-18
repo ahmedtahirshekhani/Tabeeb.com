@@ -4,7 +4,7 @@ const authController = require("../controllers/auth");
 const adminController = require("../controllers/adminController.js");
 
 adminRoutes.get(
-  "/",
+  "/home",
   /*authController.authCheck*/ adminController.getDoctorRequests
 );
 adminRoutes.post("/login", adminController.postLogin);
