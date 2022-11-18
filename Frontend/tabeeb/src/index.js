@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import Root from "./routes/Root";
 import ErrorPage from "./pages/error";
 import Login from './pages/authentication/login';
-import Register from './pages/authentication/register';
 import DoctorLogin from './pages/authentication/login/doctor';
 import PatientLogin  from './pages/authentication/login/patient';
 import AdminLogin from './pages/authentication/login/admin';    
@@ -27,11 +26,7 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  }, {
-    path: "/register",
-    element: <Register />,
-
-  },
+  }, 
   {
     path: "/login/doctor",
     element: <DoctorLogin />,
