@@ -5,5 +5,8 @@ const patientController = require("../controllers/patientController.js");
 
 patientRoutes.post("/signup", patientController.postSignup);
 patientRoutes.post("/login", patientController.postLogin);
+patientRoutes.post("/changePassword", patientController.postChangePassword);
+patientRoutes.post("/search", patientController.postSearch);
+patientRoutes.post("/home", patientController.postDashboard);
 
 module.exports = patientRoutes;
