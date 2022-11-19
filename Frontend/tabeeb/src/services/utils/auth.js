@@ -9,29 +9,30 @@ const loginAuth = (email, password, role) => {
 		};
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
-		// axios.post(`/api/v1/${role}/login`, jsonReq, {
-		//     headers: {
-		//         'Content-Type': 'application/json'
-		//     }
-		// })
-		//     .then(res => {
-		//         console.log(res);
-		//         console.log("Success")
-		//         localStorage.setItem('role', role);
-		//         resolve(res);
-		//     })
-		//     .catch(err => {
-		//         console.log(err);
-		//         reject(err);
-		//     });
-		const res = {
-			status: 200,
-			data: {
-				success: true,
-				message: "User successfully logged in",
-			},
-		};
-		resolve(res);
+		axios
+			.post(`/api/v1/${role}/login`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				localStorage.setItem("role", role);
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+		// const res = {
+		// 	status: 200,
+		// 	data: {
+		// 		success: true,
+		// 		message: "User successfully logged in",
+		// 	},
+		// };
+		// resolve(res);
 	});
 };
 

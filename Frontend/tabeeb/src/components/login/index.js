@@ -19,7 +19,7 @@ const LoginComponent = (props) => {
 				if (res.status === 200 && res.data.success === true) {
 					setSuccessAlert(true);
 					//get token from response
-					const token = response.data.token;
+					const token = res.data.token;
 
 					//set JWT token to local
 					localStorage.setItem("token", token);
