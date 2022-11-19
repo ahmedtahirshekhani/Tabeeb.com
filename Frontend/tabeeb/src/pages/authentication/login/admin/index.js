@@ -15,11 +15,10 @@ const AdminLogin = () => {
             </div>
             <p className="py-6 w-96">Enter username and password to login!</p>
           </div>
-          <LoginComponent/>
+          <LoginComponent role="admin"/>
           
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
