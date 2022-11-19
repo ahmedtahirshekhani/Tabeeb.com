@@ -68,3 +68,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+git clone https://github.com/ahmedtahirshekhani/Tabeeb.com.git
+go to frontend/tabeeb folder
+run command npm i
+
+go to main directory
+go to backend
+run command npm i
+
+place .env file in backend folder
+replace the credentials
