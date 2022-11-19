@@ -3,6 +3,7 @@ import "./App.css";
 import Footer from "./layouts/Footer";
 import Header from "./layouts/Header";
 import homebanner from "./assets/images/homebanner.jpg";
+import { setAuthToken } from "./services/utils/auth";
 
 function App() {
 	const token = localStorage.getItem("token");
