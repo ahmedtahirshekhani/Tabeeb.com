@@ -3,6 +3,7 @@ import { loginAuth } from "../../services/utils/auth";
 import SuccessAlert from "../alerts/success";
 import ErrorAlert from "../alerts/error";
 import { useNavigate } from "react-router-dom";
+import { setAuthToken } from "../../services/utils/auth";
 const LoginComponent = (props) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -17,6 +18,12 @@ const LoginComponent = (props) => {
 				console.log(res);
 				if (res.status === 200 && res.data.success === true) {
 					setSuccessAlert(true);
+					//get token from response
+					const token = response.data.token;
+
+					//set JWT token to local
+					localStorage.setItem("token", token);
+					setAuthToken(token);
 					navigate(`/dashboard/${role}`);
 				} else {
 					setErrorAlert(true);
