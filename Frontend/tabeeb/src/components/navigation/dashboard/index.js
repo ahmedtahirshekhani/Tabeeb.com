@@ -12,7 +12,7 @@ const DashboardNavbar = () => {
 						className="input input-bordered"
 					/>
 				</div>
-				<div className="dropdown dropdown-end">
+				<div className="dropdown dropdown-end ">
 					<label tabIndex={0} className="btn btn-ghost btn-circle avatar">
 						<div className="w-10 rounded-full">
 							<img src="https://placeimg.com/80/80/people" />
@@ -23,16 +23,19 @@ const DashboardNavbar = () => {
 						className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 					>
 						<li>
-							<a className="justify-between">
+							<a className="justify-between text-white">
 								Profile
 								<span className="badge">New</span>
 							</a>
 						</li>
 						<li>
-							<a>Settings</a>
+							<a className="text-white">Settings</a>
 						</li>
 						<li>
-							<a>Logout</a>
+							<a href="/dashboard/admin/change_password" className="text-white">Change Password</a>
+						</li>
+						<li>
+							<a href = "/" className="text-white">Logout</a>
 						</li>
 					</ul>
 				</div>
