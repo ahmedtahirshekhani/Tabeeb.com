@@ -2,7 +2,7 @@ const DashboardNavbar = () => {
 	return (
 		<div className="navbar bg-primary text-primary-content">
 			<div className="flex-1">
-				<a className="btn btn-ghost normal-case text-xl">AdminDashboard</a>
+				{/* <a className="btn btn-ghost normal-case text-xl">AdminDashboard</a> */}
 			</div>
 			<div className="flex-none gap-2">
 				<div className="form-control">
