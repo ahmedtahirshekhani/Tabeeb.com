@@ -10,15 +10,15 @@ const { db, query } = require("./database/db.js");
 app.use(cors());
 app.use(bodyParser.json());
 
-// const authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth");
 const patientRoutes = require("./routes/patientRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const doctorRoutes = require("./routes/doctorRoutes.js");
 
-// app.use("/api/v1/auth", authRoutes);
-app.use("/doctor", doctorRoutes);
-app.use("/admin", adminRoutes);
-app.use("/patient", patientRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/doctor", doctorRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/patient", patientRoutes);
 
 app.listen(port, function () {
   console.log("App is running! at port", port);
