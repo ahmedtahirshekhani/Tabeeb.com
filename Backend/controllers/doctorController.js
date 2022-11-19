@@ -1,6 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { failureMessage } = require("./util");
 
 /*required
 complete doctor object from sign up form.
@@ -48,26 +49,56 @@ const postSignup = async (req, res) => {
 
 const postLogin = async (req, res) => {
   try {
-    // required: doctor login form data object {cnic, password}
+    // required: doctor login form data object {email, password}
     console.log("In post login", req.body);
-    const { cnic, password } = req.body;
-    if (!cnic || !password)
+    const { email, password } = req.body;
+    if (!email || !password)
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
           FROM tabeeb.doctors
-          WHERE cnic = '${cnic}'
+          WHERE email = '${email}'
           `;
 
     const result = await query(queryText);
     hash = result[0].password;
+    const successMessage = {
+      success: true,
+      message: "User Successfully Logged In!",
+    };
     if (await bcrypt.compare(password, hash)) {
-      res.send("Doctor logged in");
+      res.send(successMessage);
     } else {
-      throw "Invalid Credentials";
+      throw err;
     }
   } catch (err) {
-    return res.status(422).send(err);
+    return res.status(422).send(failureMessage);
   }
 };
 
-module.exports = { postSignup, postLogin };
+// required: email, old password, new password
+const postChangePassword = async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword } = req.body;
+    if (!newPassword) throw "Enter old password";
+    const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
+    const result = await query(queryText);
+    const hash = result[0].password;
+    const match = await bcrypt.compare(oldPassword, hash);
+    if (!match) throw "Old password doesnt match";
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+    const updateQuery = `UPDATE tabeeb.doctors 
+      SET password='${newPasswordHash}'
+      WHERE email='${email}'`;
+    await query(updateQuery);
+    const successMessage = {
+      success: true,
+      message: "Password successfully changed!",
+    };
+    res.send(successMessage);
+  } catch (err) {
+    console.log(err);
+    return res.status(422).send(failureMessage);
+  }
+};
+
+module.exports = { postSignup, postLogin, postChangePassword };

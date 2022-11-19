@@ -9,7 +9,8 @@ const patientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.patients
     password        varchar(100),
     city            varchar(20),
     wallet_amount   double,
-    PRIMARY KEY (phone_number)
+    PRIMARY KEY (phone_number),
+    UNIQUE (email)
     )`;
 
 const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
@@ -24,7 +25,9 @@ const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
     pmc_reg         varchar(7),
     isverified      boolean,
     isbanned        boolean,
-    PRIMARY KEY (cnic)
+    PRIMARY KEY (cnic),
+    UNIQUE (email),
+    UNIQUE (phone_number)
 )`;
 
 const serviceSchema = `CREATE TABLE IF NOT EXISTS tabeeb.services
