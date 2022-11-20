@@ -110,32 +110,32 @@ const db = mysql.createConnection({
 
 const query = util.promisify(db.query).bind(db);
 
-db.connect(function (err) {
-	if (err) throw err;
-	console.log("Connected to the database");
-	sql = "CREATE DATABASE IF NOT EXISTS " + process.env.database;
-	db.query(sql, async function (err, result) {
-		if (err) throw err;
-		console.log("Database created!");
-		for (let k = 0; k < schemas.length; k++) {
-			db.query(schemas[k], (err, result) => {
-				if (err) {
-					console.log("Table creation failed", err);
-				} else {
-					console.log("Table created");
-				}
-			});
-		}
-		const hash = await bcrypt.hash("test1234", 10);
-		addAdminQuery = `INSERT INTO tabeeb.admins (email, password) VALUES ('admin@test.com', '${hash}')`;
-		db.query(addAdminQuery, (err, result) => {
-			if (err) {
-				console.log("Admin already exists");
-			} else {
-				console.log("Admin created");
-			}
-		});
-	});
-});
+// db.connect(function (err) {
+// 	if (err) throw err;
+// 	console.log("Connected to the database");
+// 	sql = "CREATE DATABASE IF NOT EXISTS " + process.env.database;
+// 	db.query(sql, async function (err, result) {
+// 		if (err) throw err;
+// 		console.log("Database created!");
+// 		for (let k = 0; k < schemas.length; k++) {
+// 			db.query(schemas[k], (err, result) => {
+// 				if (err) {
+// 					console.log("Table creation failed", err);
+// 				} else {
+// 					console.log("Table created");
+// 				}
+// 			});
+// 		}
+// 		const hash = await bcrypt.hash("test1234", 10);
+// 		addAdminQuery = `INSERT INTO tabeeb.admins (email, password) VALUES ('admin@test.com', '${hash}')`;
+// 		db.query(addAdminQuery, (err, result) => {
+// 			if (err) {
+// 				console.log("Admin already exists");
+// 			} else {
+// 				console.log("Admin created");
+// 			}
+// 		});
+// 	});
+// });
 
 module.exports = { db, query };

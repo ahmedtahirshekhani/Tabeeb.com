@@ -19,6 +19,15 @@ const postLogin = async (req, res) => {
 			message: "User Successfully Logged In!",
 		};
 		if (await bcrypt.compare(password, hash)) {
+			token = jwt.sign(
+				{ email: result[0].email, role: "admin" },
+				process.env.JWT_SECRET,
+				{
+					expiresIn: "1h",
+				}
+			);
+			successMessage["token"] = token;
+			console.log(successMessage);
 			res.send(successMessage);
 		} else {
 			throw err;
@@ -36,13 +45,13 @@ const getDoctorRequests = async (req, res) => {
 	try {
 		const queryText = `SELECT *
           FROM tabeeb.doctors
-          WHERE isVerified = false
+          WHERE isVerified = ?
           `;
-		const result = await query(queryText);
-		console.log(result);
-		res.send(result);
+		const result = await query(queryText, [false]);
+		res.status(200).json({ success: true, data: result });
 	} catch (err) {
 		res.status(422).send(err.message);
+		return;
 		// check return format below
 	}
 };
