@@ -100,20 +100,19 @@ const changePasswordAuth = (oldPassword, NewPassword, role, token) => {
 	});
 }
 
-const searchAuth = (oldPassword, NewPassword, role, token) => {
+const searchAuth = (role, token, search) => {
 	return new Promise((resolve, reject) => {
 		// request content type json
-		console.log("Calling the Api for change Password");
+		console.log("Calling the Api for search");
 		console.log(role)
 		const req = {
 			token: token,
-			oldPassword: oldPassword,
-			newPassword: NewPassword
+			search: search
 		};
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/${role}/changePassword`, jsonReq, {
+			.post(`/api/v1/${role}/search`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -130,4 +129,4 @@ const searchAuth = (oldPassword, NewPassword, role, token) => {
 	});
 }
 
-export { loginAuth, signup, setAuthToken, changePasswordAuth };
+export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth };
