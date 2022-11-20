@@ -1,6 +1,6 @@
 import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
-import LoginComponent from "../../../../components/login"
+import LoginComponent from "../../../../components/login";
 
 const DoctorLogin = () => {
   return (
@@ -15,8 +15,7 @@ const DoctorLogin = () => {
             </div>
             <p className="py-6 w-96">Enter username and password to login!</p>
           </div>
-          <LoginComponent role= "doctor"/>
-          
+          <LoginComponent role="doctor" />
         </div>
       </div>
       <Footer />

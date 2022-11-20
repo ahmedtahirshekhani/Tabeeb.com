@@ -1,8 +1,18 @@
 import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
-import LoginComponent from "../../../../components/login"
-
+import LoginComponent from "../../../../components/login";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 const AdminLogin = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log("Login Component");
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    if (token) {
+      navigate(`/dashboard/${role}`);
+    }
+  }, []);
   return (
     <div>
       <Header />
@@ -15,8 +25,7 @@ const AdminLogin = () => {
             </div>
             <p className="py-6 w-96">Enter username and password to login!</p>
           </div>
-          <LoginComponent role="admin"/>
-          
+          <LoginComponent role="admin" />
         </div>
       </div>
     </div>

@@ -63,6 +63,7 @@ const signup = (obj, role) => {
 
 const setAuthToken = (token) => {
 	if (token) {
+		console.log("Setting token");
 		axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 	} else {
 		delete axios.defaults.headers.common["Authorization"];

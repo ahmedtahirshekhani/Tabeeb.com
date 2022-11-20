@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
 const DashboardNavbar = () => {
+	const navigate = useNavigate();
+	const clearToken = () => {
+		localStorage.removeItem("token");
+		localStorage.removeItem("role");
+		navigate("/");
+	};
 	return (
 		<div className="navbar bg-primary text-primary-content">
 			<div className="flex-1">
@@ -32,10 +39,14 @@ const DashboardNavbar = () => {
 							<a className="text-white">Settings</a>
 						</li>
 						<li>
-							<a href="/dashboard/admin/change_password" className="text-white">Change Password</a>
+							<a href="/dashboard/admin/change_password" className="text-white">
+								Change Password
+							</a>
 						</li>
 						<li>
-							<a href = "/" className="text-white">Logout</a>
+							<a className="text-white" onClick={() => clearToken()}>
+								Logout
+							</a>
 						</li>
 					</ul>
 				</div>
