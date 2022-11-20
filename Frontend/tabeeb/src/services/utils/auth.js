@@ -43,21 +43,21 @@ const signup = (obj, role) => {
 		const req = obj;
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
-		// axios.post(`/api/v1/${role}/signup`, jsonReq, {
-		//     headers: {
-		//         'Content-Type': 'application/json'
-		//     }
-		// })
-		//     .then(res => {
-		//         console.log(res);
-		//         console.log("Success")
-		//         // localStorage.setItem('role', role);
-		//         resolve(res);
-		//     })
-		//     .catch(err => {
-		//         console.log(err);
-		//         reject(err);
-		//     });
+		axios.post(`/api/v1/${role}/signup`, jsonReq, {
+		    headers: {
+		        'Content-Type': 'application/json'
+		    }
+		})
+		    .then(res => {
+		        console.log(res);
+		        console.log("Success")
+		        // localStorage.setItem('role', role);
+		        resolve(res);
+		    })
+		    .catch(err => {
+		        console.log(err);
+		        reject(err);
+		    });
 	});
 };
 
@@ -70,4 +70,64 @@ const setAuthToken = (token) => {
 	}
 };
 
-export { loginAuth, signup, setAuthToken };
+const changePasswordAuth = (oldPassword, NewPassword, role, token) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for change Password");
+		console.log(role)
+		const req = {
+			token: token,
+			oldPassword: oldPassword,
+			newPassword: NewPassword
+		};
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/changePassword`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+
+const searchAuth = (oldPassword, NewPassword, role, token) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for change Password");
+		console.log(role)
+		const req = {
+			token: token,
+			oldPassword: oldPassword,
+			newPassword: NewPassword
+		};
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/changePassword`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+
+export { loginAuth, signup, setAuthToken, changePasswordAuth };

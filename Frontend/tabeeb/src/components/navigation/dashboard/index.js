@@ -31,11 +31,13 @@ const DashboardNavbar = (props) => {
 							</a>
 						</li>
 
+						{props.name != 'Admin Dashboard' ?
 						<li>
-							<a href="/dashboard/admin/change_password" className="text-white">
+							<a href="/dashboard/change_password" className="text-white">
 								Change Password
 							</a>
-						</li>
+						</li> : null}
+
 						<li>
 							<a className="text-white" onClick={() => clearToken()}>
 								Logout

@@ -56,7 +56,7 @@ const router = createBrowserRouter([
 		element: <AdminDashboard />,
 	},
 	{
-		path: "/dashboard/admin/change_password",
+		path: "/dashboard/change_password",
 		element: <PasswordChange />,
 	},
 	{

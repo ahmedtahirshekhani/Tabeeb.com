@@ -81,7 +81,7 @@ const DoctorSignup = () => {
                 <label className="input-group input-group-sm input-group-vertical">
                   <span>Email Address</span>
                   <input
-                    type="text"
+                    type="email"
                     placeholder="Email Address"
                     className="input input-bordered input-sm "
                     onChange = {(e) => setEmail(e.target.value)}
@@ -103,7 +103,7 @@ const DoctorSignup = () => {
                 <label className="input-group input-group-sm input-group-vertical">
                   <span>Password</span>
                   <input
-                    type="text"
+                    type="password"
                     placeholder="Password"
                     className="input input-bordered input-sm"
                     onChange = {(e) => setPassword(e.target.value)}
@@ -143,6 +143,7 @@ const DoctorSignup = () => {
                   />
                 </label>
               </div>
+
               <div className="form-control">
                 <div className="input-group">
                   <select className="select select-bordered" onChange={(e)=>setCity(e.target.value)}>
@@ -153,7 +154,7 @@ const DoctorSignup = () => {
                   </select>
                 </div>
               </div>
-              
+
               <div className="form-control mt-6">
                 <button className="btn btn-primary" onClick={()=>docSignup()}>Sign Up</button>
               </div>
