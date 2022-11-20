@@ -93,15 +93,18 @@ const postChangePassword = async (req, res) => {
 const postSearch = async (req, res) => {
 	//need patient email and patient search data
 	try {
-		const { email, search } = req.body;
-		const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
-		const patientCity = (await query(queryText))[0].city;
+
+		const { token, search } = req.body;
+    const decodedToken = jwt.decode(token);
+		const email = decodedToken.email;
+		// const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
+		// const patientCity = (await query(queryText))[0].city;
 		const queryText2 = `SELECT *
     FROM tabeeb.doctors
-    WHERE city='${patientCity}'
-    AND
+    WHERE
     full_name LIKE '%${search}%'`;
 		const doctors = await query(queryText2);
+    console.log(doctors)
 		res.send(doctors);
 	} catch (err) {
 		res.status(422).send(err);
