@@ -28,9 +28,8 @@ const AdminDashboard = () => {
 	}, []);
 	return (
 		<>
-			<DashboardNavbar />
-			<SideBar role="admin" />
 			<DashboardNavbar name='Admin Dashboard' />
+			<SideBar role="admin" />
 		</>
 	);
 };

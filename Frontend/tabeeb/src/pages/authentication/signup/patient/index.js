@@ -1,8 +1,39 @@
 import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login";
+import { signup } from "../../../../services/utils/auth";
+import { useState } from "react";
 
 const PatientSignup = () => {
+
+  const [wallet, setWallet] = useState(0)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [city, setCity] = useState("");
+
+  const patSignup = ()=>{
+    console.log("Calling the Api for signup")
+    const req = {
+
+      'phone_number':phone,
+      'email':email,
+      'name':fullName,
+      'password':password,
+      'city':city
+    }
+
+    signup(req, "patient").then(res=>{
+      console.log(res);
+      console.log("Success")
+      // localStorage.setItem('role', role);
+    }
+    ).catch(err=>{
+      console.log(err);
+    }
+    );
+  }
   return (
     <div>
       <Header />
@@ -30,6 +61,7 @@ const PatientSignup = () => {
                     type="text"
                     placeholder="02131234567"
                     className="input input-bordered input-sm "
+                    onChange = {(e) => setPhone(e.target.value)}
                   />
                 </label>
               </div>
@@ -37,9 +69,10 @@ const PatientSignup = () => {
                 <label className="input-group input-group-sm input-group-vertical">
                   <span>Email Address</span>
                   <input
-                    type="text"
+                    type="email"
                     placeholder="Email Address"
                     className="input input-bordered input-sm "
+                    onChange = {(e) => setEmail(e.target.value)}
                   />
                 </label>
               </div>
@@ -50,6 +83,7 @@ const PatientSignup = () => {
                     type="text"
                     placeholder="Name"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setFullName(e.target.value)}
                   />
                 </label>
               </div>
@@ -57,9 +91,10 @@ const PatientSignup = () => {
                 <label className="input-group input-group-sm input-group-vertical">
                   <span>Password</span>
                   <input
-                    type="text"
+                    type="password"
                     placeholder="Password"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setPassword(e.target.value)}
                   />
                 </label>
               </div>
@@ -70,24 +105,25 @@ const PatientSignup = () => {
                     type="text"
                     placeholder="0-10,000"
                     className="input input-bordered input-sm"
+                    onChange = {(e) => setWallet(e.target.value)}
                   />
                 </label>
               </div>
 
 
               <div className="form-control">
-                <label className="input-group input-group-sm input-group-vertical">
-                  <span>City</span>
-                  <input
-                    type="text"
-                    placeholder="City"
-                    className="input input-bordered input-sm"
-                  />
-                </label>
+                <div className="input-group">
+                  <select className="select select-bordered" onChange={(e)=>setCity(e.target.value)}>
+                    <option disabled selected defaultValue="None" >City</option>
+                    <option value = "Karachi">Karachi</option>
+                    <option value="Lahore">Lahore</option>
+                    <option value="Islamabad">Islamabad</option>
+                  </select>
+                </div>
               </div>
-            
+
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Sign Up</button>
+                <button className="btn btn-primary" onClick={()=>patSignup ()}>Sign Up</button>
               </div>
             </div>
           </div>

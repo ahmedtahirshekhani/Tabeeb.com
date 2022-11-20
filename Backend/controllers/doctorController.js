@@ -71,6 +71,14 @@ const postLogin = async (req, res) => {
 			message: "User Successfully Logged In!",
 		};
 		if (await bcrypt.compare(password, hash)) {
+			token = jwt.sign(
+				{ email: result[0].email, role: "doctor" },
+				process.env.JWT_SECRET,
+				{
+					expiresIn: "1h",
+				}
+			);
+			successMessage["token"] = token;
 			res.send(successMessage);
 		} else {
 			throw err;
@@ -83,7 +91,9 @@ const postLogin = async (req, res) => {
 // required: email, old password, new password
 const postChangePassword = async (req, res) => {
 	try {
-		const { email, oldPassword, newPassword } = req.body;
+		const { token, oldPassword, newPassword } = req.body;
+		const decodedToken = jwt.decode(token);
+		const email = decodedToken.email;
 		if (!newPassword) throw "Enter old password";
 		const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
 		const result = await query(queryText);
@@ -91,7 +101,7 @@ const postChangePassword = async (req, res) => {
 		const match = await bcrypt.compare(oldPassword, hash);
 		if (!match) throw "Old password doesnt match";
 		const newPasswordHash = await bcrypt.hash(newPassword, 10);
-		const updateQuery = `UPDATE tabeeb.doctors 
+		const updateQuery = `UPDATE tabeeb.doctors
       SET password='${newPasswordHash}'
       WHERE email='${email}'`;
 		await query(updateQuery);
