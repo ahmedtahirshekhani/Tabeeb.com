@@ -30,6 +30,7 @@ const AdminDashboard = () => {
 		<>
 			<DashboardNavbar />
 			<SideBar role="admin" />
+			<DashboardNavbar name='Admin Dashboard' />
 		</>
 	);
 };
