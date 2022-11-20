@@ -1,5 +1,6 @@
+import SearchBar from "../searchbar";
 import { useNavigate } from "react-router-dom";
-const DashboardNavbar = () => {
+const DashboardNavbar = (props) => {
 	const navigate = useNavigate();
 	const clearToken = () => {
 		localStorage.removeItem("token");
@@ -9,17 +10,11 @@ const DashboardNavbar = () => {
 	return (
 		<div className="navbar bg-primary text-primary-content">
 			<div className="flex-1">
-				{/* <a className="btn btn-ghost normal-case text-xl">AdminDashboard</a> */}
+				<a className="btn btn-ghost normal-case text-xl">{props.name}</a>
 			</div>
 			<div className="flex-none gap-2">
-				<div className="form-control">
-					<input
-						type="text"
-						placeholder="Search"
-						className="input input-bordered"
-					/>
-				</div>
-				<div className="dropdown dropdown-end ">
+				{props.name == "Patient Dashboard" ? <SearchBar /> : null}
+				<div className="dropdown dropdown-end">
 					<label tabIndex={0} className="btn btn-ghost btn-circle avatar">
 						<div className="w-10 rounded-full">
 							<img src="https://placeimg.com/80/80/people" />
@@ -35,9 +30,7 @@ const DashboardNavbar = () => {
 								<span className="badge">New</span>
 							</a>
 						</li>
-						<li>
-							<a className="text-white">Settings</a>
-						</li>
+
 						<li>
 							<a href="/dashboard/admin/change_password" className="text-white">
 								Change Password

@@ -25,7 +25,12 @@ const AdminLogin = () => {
             </div>
             <p className="py-6 w-96">Enter username and password to login!</p>
           </div>
+<<<<<<< Updated upstream
           <LoginComponent role="admin" />
+=======
+          <LoginComponent role="admin"/>
+
+>>>>>>> Stashed changes
         </div>
       </div>
     </div>
