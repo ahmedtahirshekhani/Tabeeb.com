@@ -3,57 +3,57 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const postLogin = async (req, res) => {
-	try {
-		// required: login form data object {email, password}
-		const { email, password } = req.body;
-		if (!email || !password)
-			return res.status(422).send({ error: "Invalid login: Input missing!" });
-		const queryText = `SELECT *
+  try {
+    // required: login form data object {email, password}
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(422).send({ error: "Invalid login: Input missing!" });
+    const queryText = `SELECT *
           FROM tabeeb.admins
           WHERE email = '${email}'
           `;
-		const result = await query(queryText);
-		const hash = result[0].password;
-		const successMessage = {
-			success: true,
-			message: "User Successfully Logged In!",
-		};
-		if (await bcrypt.compare(password, hash)) {
-			token = jwt.sign(
-				{ email: result[0].email, role: "admin" },
-				process.env.JWT_SECRET,
-				{
-					expiresIn: "1h",
-				}
-			);
-			successMessage["token"] = token;
-			console.log(successMessage);
-			res.send(successMessage);
-		} else {
-			throw err;
-		}
-	} catch (err) {
-		const failureMessage = {
-			success: false,
-			message: "Invalid Credentials",
-		};
-		res.status(422).send(failureMessage);
-	}
+    const result = await query(queryText);
+    const hash = result[0].password;
+    const successMessage = {
+      success: true,
+      message: "User Successfully Logged In!",
+    };
+    if (await bcrypt.compare(password, hash)) {
+      token = jwt.sign(
+        { email: result[0].email, role: "admin" },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+      successMessage["token"] = token;
+      console.log(successMessage);
+      res.send(successMessage);
+    } else {
+      throw err;
+    }
+  } catch (err) {
+    const failureMessage = {
+      success: false,
+      message: "Invalid Credentials",
+    };
+    res.status(422).send(failureMessage);
+  }
 };
 
 const getDoctorRequests = async (req, res) => {
-	try {
-		const queryText = `SELECT *
+  try {
+    const queryText = `SELECT *
           FROM tabeeb.doctors
           WHERE isVerified = ?
           `;
-		const result = await query(queryText, [false]);
-		res.status(200).json({ success: true, data: result });
-	} catch (err) {
-		res.status(422).send(err.message);
-		return;
-		// check return format below
-	}
+    const result = await query(queryText, [false]);
+    res.status(200).json({ success: true, data: result });
+  } catch (err) {
+    res.status(422).send(err.message);
+    return;
+    // check return format below
+  }
 };
 /*
    returns list of these objects
@@ -73,50 +73,50 @@ const getDoctorRequests = async (req, res) => {
     */
 
 const postAcceptRequest = async (req, res) => {
-	console.log("IN post accept request");
-	try {
-		//required: cnic of doctor object -> {"cnic": XXXXXXX}
-		const cnic = req.body.cnic;
-		const queryText = `UPDATE tabeeb.doctors
+  console.log("IN post accept request");
+  try {
+    //required: cnic of doctor object -> {"cnic": XXXXXXX}
+    const cnic = req.body.cnic;
+    const queryText = `UPDATE tabeeb.doctors
       SET isVerified = true
       WHERE cnic = '${cnic}'`;
-		await query(queryText);
-		res.send("Request Accepted");
-	} catch (err) {
-		res.status(422).send(err.message);
-	}
+    await query(queryText);
+    res.send("Request Accepted");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
 };
 
 const postRejectRequest = async (req, res) => {
-	console.log("IN post reject request");
-	try {
-		//required: cnic of doctor object
-		const cnic = req.body.cnic;
-		const queryText = `DELETE FROM tabeeb.doctors
+  console.log("IN post reject request");
+  try {
+    //required: cnic of doctor object
+    const cnic = req.body.cnic;
+    const queryText = `DELETE FROM tabeeb.doctors
     WHERE cnic='${cnic}'`;
-		await query(queryText);
-		res.send("Request rejected");
-	} catch (err) {
-		res.status(422).send(err.message);
-	}
+    await query(queryText);
+    res.send("Request rejected");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
 };
 
 const getReports = async (req, res) => {
-	try {
-		let result = {};
-		let queryText = `SELECT *
+  try {
+    let result = {};
+    let queryText = `SELECT *
           FROM tabeeb.reported_doctors
           `;
-		result["doctors"] = await query(queryText);
-		queryText = `SELECT *
+    result["doctors"] = await query(queryText);
+    queryText = `SELECT *
           FROM tabeeb.reported_patients
           `;
-		result["patients"] = await query(queryText);
-		res.send(result);
-	} catch (err) {
-		res.status(422).send(err.message);
-		// check return format below
-	}
+    result["patients"] = await query(queryText);
+    res.send(result);
+  } catch (err) {
+    res.status(422).send(err.message);
+    // check return format below
+  }
 };
 /*
     return format:
@@ -149,11 +149,37 @@ const getReports = async (req, res) => {
         }
     ]
     */
-
+const postChangePassword = async (req, res) => {
+  try {
+    const { token, oldPassword, newPassword } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    if (!newPassword) throw "Enter old password";
+    const queryText = `SELECT * FROM tabeeb.admins WHERE email='${email}'`;
+    const result = await query(queryText);
+    const hash = result[0].password;
+    const match = await bcrypt.compare(oldPassword, hash);
+    if (!match) throw "Old password doesnt match";
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+    const updateQuery = `UPDATE tabeeb.admins
+      SET password='${newPasswordHash}'
+      WHERE email='${email}'`;
+    await query(updateQuery);
+    const successMessage = {
+      success: true,
+      message: "Password successfully changed!",
+    };
+    res.send(successMessage);
+  } catch (err) {
+    console.log(err);
+    return res.status(422).send(failureMessage);
+  }
+};
 module.exports = {
-	postLogin,
-	getDoctorRequests,
-	postAcceptRequest,
-	postRejectRequest,
-	getReports,
+  postLogin,
+  getDoctorRequests,
+  postAcceptRequest,
+  postRejectRequest,
+  getReports,
+  postChangePassword,
 };
