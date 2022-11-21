@@ -18,4 +18,36 @@ const getPatientID = async (email) => {
   )[0].phone_number;
   return phone;
 };
-module.exports = { failureMessage, getDoctorID, getPatientID };
+
+const getAppointmentsDoc = async (email, status) => {
+  try {
+    // fetch doc cnic
+    const cnic = await getDoctorID(email);
+    //get appointments
+    const queryText2 = `SELECT * FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='${status}'`;
+    const appointmentsList = await query(queryText2);
+    return appointmentsList;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getAppointmentsPatient = async (email, status) => {
+  try {
+    // fetch doc cnic
+    const phone_number = await getPatientID(email);
+    //get appointments
+    const queryText2 = `SELECT * FROM tabeeb.appointments WHERE patient_phone='${phone_number}' AND status='${status}'`;
+    const appointmentsList = await query(queryText2);
+    return appointmentsList;
+  } catch (err) {
+    console.log(err);
+  }
+};
+module.exports = {
+  failureMessage,
+  getDoctorID,
+  getPatientID,
+  getAppointmentsDoc,
+  getAppointmentsPatient,
+};

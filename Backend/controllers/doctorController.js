@@ -1,7 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { failureMessage, getDoctorID } = require("./util");
+const { failureMessage, getDoctorID, getAppointmentsDoc } = require("./util");
 
 /*required
 complete doctor object from sign up form.
@@ -152,10 +152,57 @@ const postEditProfile = async (req, res) => {
   }
 };
 
+const postPastAppointments = async (req, res) => {
+  try {
+    // //need patient email
+    const { token } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    // const { email } = req.body;
+    const result = await getAppointmentsDoc(email, "completed");
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postPendingAppointments = async (req, res) => {
+  try {
+    //need patient email
+    const { token } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    // const { email } = req.body;
+    const result = await getAppointmentsDoc(email, "pending");
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postAcceptedAppointments = async (req, res) => {
+  try {
+    //need patient email
+    const { token } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    // const { email } = req.body;
+    const result = await getAppointmentsDoc(email, "accepted");
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
 module.exports = {
   postSignup,
   postLogin,
   postChangePassword,
   postViewProfile,
   postEditProfile,
+  postPastAppointments,
+  postPendingAppointments,
+  postAcceptedAppointments,
 };

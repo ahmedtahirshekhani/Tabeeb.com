@@ -8,5 +8,14 @@ doctorRoutes.post("/signup", doctorController.postSignup);
 doctorRoutes.post("/changePassword", doctorController.postChangePassword);
 doctorRoutes.post("/profile", doctorController.postViewProfile);
 doctorRoutes.post("/editProfile", doctorController.postEditProfile);
+doctorRoutes.post("/pastAppointments", doctorController.postPastAppointments);
+doctorRoutes.post(
+  "/pendingAppointments",
+  doctorController.postPendingAppointments
+);
+doctorRoutes.post(
+  "/acceptedAppointments",
+  doctorController.postAcceptedAppointments
+);
 
 module.exports = doctorRoutes;
