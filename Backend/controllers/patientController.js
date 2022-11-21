@@ -97,14 +97,16 @@ const postSearch = async (req, res) => {
     const { token, search } = req.body;
     const decodedToken = jwt.decode(token);
     const email = decodedToken.email;
-    // const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
-    // const patientCity = (await query(queryText))[0].city;
-    const queryText2 = `SELECT *
+    // get city of patient
+    const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
+    const patientCity = (await query(queryText))[0].city;
+    //search doctors in the city of patient
+    const queryText2 = `SELECT * 
     FROM tabeeb.doctors
-    WHERE
+    WHERE city='${patientCity}'
+    AND
     full_name LIKE '%${search}%'`;
     const doctors = await query(queryText2);
-    console.log(doctors);
     res.send(doctors);
   } catch (err) {
     res.status(422).send(err);
@@ -127,10 +129,25 @@ const postDashboard = async (req, res) => {
     res.status(422).send(err);
   }
 };
+
+const postViewProfile = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
+    const result = await query(queryText);
+    res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
 module.exports = {
   postSignup,
   postLogin,
   postChangePassword,
   postSearch,
   postDashboard,
+  postViewProfile,
 };
