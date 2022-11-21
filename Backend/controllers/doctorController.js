@@ -131,4 +131,31 @@ const postViewProfile = async (req, res) => {
   }
 };
 
-module.exports = { postSignup, postLogin, postChangePassword, postViewProfile };
+const postEditProfile = async (req, res) => {
+  try {
+    //only full name, city, street address, city can be edited in doctor profile
+    const { token, full_name, city, street_address, about_doctor } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    const queryText = `UPDATE tabeeb.doctors
+    SET full_name='${full_name}', city='${city}', street_address='${street_address}', about_doctor='${about_doctor}'
+    WHERE email='${email}'`;
+    await query(queryText);
+    const successMessage = {
+      success: true,
+      message: "Profile Updated",
+    };
+    res.send(successMessage);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+module.exports = {
+  postSignup,
+  postLogin,
+  postChangePassword,
+  postViewProfile,
+  postEditProfile,
+};
