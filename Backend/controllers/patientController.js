@@ -132,12 +132,34 @@ const postDashboard = async (req, res) => {
 
 const postViewProfile = async (req, res) => {
   try {
+    // need patient email
     const { token } = req.body;
     const decodedToken = jwt.decode(token);
     const email = decodedToken.email;
     const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
     const result = await query(queryText);
     res.send(result);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postEditProfile = async (req, res) => {
+  try {
+    //only full name and city can be edited in patient profile
+    const { token, full_name, city } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    const queryText = `UPDATE tabeeb.patients
+    SET full_name='${full_name}', city='${city}'
+    WHERE email='${email}'`;
+    await query(queryText);
+    const successMessage = {
+      success: true,
+      message: "Profile Updated",
+    };
+    res.send(successMessage);
   } catch (err) {
     console.log(err);
     res.status(422).send(err.message);
@@ -150,4 +172,5 @@ module.exports = {
   postSearch,
   postDashboard,
   postViewProfile,
+  postEditProfile,
 };
