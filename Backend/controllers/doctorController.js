@@ -196,6 +196,37 @@ const postAcceptedAppointments = async (req, res) => {
     res.status(422).send(err.message);
   }
 };
+
+const postEditService = async (req, res) => {
+  /*sample object:
+	{
+    "email":"anwar@gmail.com", 
+    "start_time":"21:00",
+     "end_time":"22:00", 
+    "days":"Mon,Wed,Fri", 
+    "rate":"2990"
+}*/
+  try {
+    //time format = 'hh:mm:ss'
+    //days = 'Mon,Tue,Wed,Thur,Fri,Sat,Sun'
+    //jwt required
+    const { email, start_time, end_time, days, rate } = req.body;
+    const cnic = await getDoctorID(email);
+    const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate) 
+	VALUES('${cnic}','${start_time}', '${end_time}', '${days}',${rate}) ON DUPLICATE KEY UPDATE    
+	start_time='${start_time}', end_time='${end_time}', days='${days}', rate=${rate}`;
+    await query(queryText);
+    const successMessage = {
+      success: true,
+      message: "Service Updated",
+    };
+    res.send(successMessage);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -205,4 +236,5 @@ module.exports = {
   postPastAppointments,
   postPendingAppointments,
   postAcceptedAppointments,
+  postEditService,
 };

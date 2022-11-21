@@ -34,7 +34,7 @@ const serviceSchema = `CREATE TABLE IF NOT EXISTS tabeeb.services
     (d_cnic           varchar(13),
     start_time        time,
     end_time          time,
-    days              enum ('Mon','Tue','Wed', 'Thur', 'Fri', 'Sat', 'Sun'),
+    days              varchar(30),
     rate              double,
     PRIMARY KEY (d_cnic),
     FOREIGN KEY (d_cnic) REFERENCES doctors(cnic)

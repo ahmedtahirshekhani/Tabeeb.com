@@ -17,5 +17,6 @@ doctorRoutes.post(
   "/acceptedAppointments",
   doctorController.postAcceptedAppointments
 );
+doctorRoutes.post("/editService", doctorController.postEditService);
 
 module.exports = doctorRoutes;

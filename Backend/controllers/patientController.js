@@ -5,6 +5,7 @@ const {
   failureMessage,
   getPatientID,
   getAppointmentsPatient,
+  getDoctorID,
 } = require("./util");
 
 /*required: complete patient object from signup form
@@ -213,6 +214,15 @@ const postAcceptedAppointments = async (req, res) => {
     res.status(422).send(err.message);
   }
 };
+// incomplete
+// const postMakeAppointment = async (req, res) => {
+//   //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
+//   const { patient_email, doctor_email, datetime } = req.body;
+//   const patient_phone = await getPatientID(patient_email);
+//   const d_cnic = await getDoctorID(doctor_email)`SELECT `;
+//   const queryText = `INSERT INTO tabeeb.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
+// VALUES ("${patient_phone}", "${d_cnic}", '${datetime}', "pending", NULL, 2500)`;
+// };
 module.exports = {
   postSignup,
   postLogin,
