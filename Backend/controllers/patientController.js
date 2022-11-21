@@ -1,7 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { failureMessage } = require("./util");
+const { failureMessage, getPatientID } = require("./util");
 
 /*required: complete patient object from signup form
 follow the variable naming conventions below*/
@@ -165,6 +165,24 @@ const postEditProfile = async (req, res) => {
     res.status(422).send(err.message);
   }
 };
+
+const postPastAppointments = async (req, res) => {
+  try {
+    //need patient email
+    const { token } = req.body;
+    const decodedToken = jwt.decode(token);
+    const email = decodedToken.email;
+    // fetch patient phone
+    const patientPhone = await getPatientID(email);
+    //get appointments
+    const queryText2 = `SELECT * FROM tabeeb.appointments WHERE patient_phone='${patientPhone}'`;
+    const appointmentsList = await query(queryText2);
+    res.send(appointmentsList);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
 module.exports = {
   postSignup,
   postLogin,
@@ -173,4 +191,5 @@ module.exports = {
   postDashboard,
   postViewProfile,
   postEditProfile,
+  postPastAppointments,
 };

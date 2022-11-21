@@ -10,5 +10,6 @@ patientRoutes.post("/search", patientController.postSearch);
 patientRoutes.post("/home", patientController.postDashboard);
 patientRoutes.post("/profile", patientController.postViewProfile);
 patientRoutes.post("/editProfile", patientController.postEditProfile);
+patientRoutes.post("/pastAppointments", patientController.postPastAppointments);
 
 module.exports = patientRoutes;

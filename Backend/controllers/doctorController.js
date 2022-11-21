@@ -1,7 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { failureMessage } = require("./util");
+const { failureMessage, getDoctorID } = require("./util");
 
 /*required
 complete doctor object from sign up form.
