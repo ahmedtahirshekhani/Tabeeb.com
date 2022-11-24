@@ -208,15 +208,31 @@ const postAcceptedAppointments = async (req, res) => {
     res.status(422).send(err.message);
   }
 };
-// incomplete
-// const postMakeAppointment = async (req, res) => {
-//   //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
-//   const { patient_email, doctor_email, datetime } = req.body;
-//   const patient_phone = await getPatientID(patient_email);
-//   const d_cnic = await getDoctorID(doctor_email)`SELECT `;
-//   const queryText = `INSERT INTO tabeeb.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
-// VALUES ("${patient_phone}", "${d_cnic}", '${datetime}', "pending", NULL, 2500)`;
-// };
+
+const postMakeAppointment = async (req, res) => {
+  try {
+    //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
+    //jstoken needed
+    const { patient_email, doctor_email, datetime } = req.body;
+    const patient_phone = await getPatientID(patient_email);
+    const d_cnic = await getDoctorID(doctor_email);
+    const charges = (
+      await query(`SELECT rate FROM tabeeb.services WHERE d_cnic='${d_cnic}'`)
+    )[0].rate;
+    const queryText = `INSERT INTO tabeeb.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
+      VALUES ("${patient_phone}", "${d_cnic}", '${datetime}', "pending", NULL, ${charges})`;
+    const id = (await query(queryText)).insertId;
+    const successMessage = {
+      success: true,
+      message: "Appointment Made!",
+      id: id,
+    };
+    res.send(successMessage);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
 module.exports = {
   postSignup,
   postLogin,
@@ -228,4 +244,5 @@ module.exports = {
   postPastAppointments,
   postPendingAppointments,
   postAcceptedAppointments,
+  postMakeAppointment,
 };

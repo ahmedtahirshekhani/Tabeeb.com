@@ -20,4 +20,6 @@ patientRoutes.post(
   patientController.postAcceptedAppointments
 );
 
+patientRoutes.post("/makeAppointment", patientController.postMakeAppointment);
+
 module.exports = patientRoutes;
