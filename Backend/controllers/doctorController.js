@@ -258,6 +258,27 @@ const postRejectAppointment = async (req, res) => {
   }
 };
 
+const postEarningsReport = async (req, res) => {
+  //required: doc email
+  try {
+    const { email } = req.body;
+    const cnic = await getDoctorID(email);
+    const queryText = `SELECT * FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='completed'`;
+    const appointmentHistory = await query(queryText);
+    const queryText2 = `SELECT SUM(charges) as earnings FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='completed'`;
+    const totalEarnings = (await query(queryText2))[0].earnings;
+    res.send({
+      success: true,
+      message: "Report Generated!",
+      history: appointmentHistory,
+      earnings: totalEarnings,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -270,4 +291,5 @@ module.exports = {
   postEditService,
   postAcceptAppointment,
   postRejectAppointment,
+  postEarningsReport,
 };
