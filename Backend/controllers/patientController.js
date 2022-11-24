@@ -6,6 +6,7 @@ const {
   getPatientID,
   getAppointmentsPatient,
   getDoctorID,
+  getEmail,
 } = require("./util");
 
 /*required: complete patient object from signup form
@@ -58,7 +59,7 @@ const postLogin = async (req, res) => {
       successMessage["token"] = token;
       res.send(successMessage);
     } else {
-      throw err;
+      throw "Invalid Credentials";
     }
   } catch (err) {
     console.log(err);
@@ -72,8 +73,7 @@ const postLogin = async (req, res) => {
 const postChangePassword = async (req, res) => {
   try {
     const { token, oldPassword, newPassword } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
     const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
     const result = await query(queryText);
@@ -100,8 +100,7 @@ const postSearch = async (req, res) => {
   //need patient email and patient search data
   try {
     const { token, search } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // get city of patient
     const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
     const patientCity = (await query(queryText))[0].city;
@@ -139,8 +138,7 @@ const postViewProfile = async (req, res) => {
   try {
     // need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
     const result = await query(queryText);
     res.send(result);
@@ -154,8 +152,7 @@ const postEditProfile = async (req, res) => {
   try {
     //only full name and city can be edited in patient profile
     const { token, full_name, city } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     const queryText = `UPDATE tabeeb.patients
     SET full_name='${full_name}', city='${city}'
     WHERE email='${email}'`;
@@ -175,8 +172,7 @@ const postPastAppointments = async (req, res) => {
   try {
     //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const appointmentsList = await getAppointmentsPatient(email, "completed");
     res.send(appointmentsList);
@@ -190,8 +186,7 @@ const postPendingAppointments = async (req, res) => {
   try {
     //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const appointmentsList = await getAppointmentsPatient(email, "pending");
     res.send(appointmentsList);
@@ -204,8 +199,7 @@ const postAcceptedAppointments = async (req, res) => {
   try {
     //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const appointmentsList = await getAppointmentsPatient(email, "accepted");
     res.send(appointmentsList);

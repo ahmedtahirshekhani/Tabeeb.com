@@ -1,6 +1,7 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { failureMessage, getEmail } = require("./util");
 
 const postLogin = async (req, res) => {
   try {
@@ -149,11 +150,11 @@ const getReports = async (req, res) => {
         }
     ]
     */
+
 const postChangePassword = async (req, res) => {
   try {
     const { token, oldPassword, newPassword } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
     const queryText = `SELECT * FROM tabeeb.admins WHERE email='${email}'`;
     const result = await query(queryText);

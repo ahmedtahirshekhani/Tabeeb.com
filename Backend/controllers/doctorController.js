@@ -1,7 +1,12 @@
 const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { failureMessage, getDoctorID, getAppointmentsDoc } = require("./util");
+const {
+  failureMessage,
+  getDoctorID,
+  getAppointmentsDoc,
+  getEmail,
+} = require("./util");
 
 /*required
 complete doctor object from sign up form.
@@ -92,8 +97,7 @@ const postLogin = async (req, res) => {
 const postChangePassword = async (req, res) => {
   try {
     const { token, oldPassword, newPassword } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
     const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
     const result = await query(queryText);
@@ -120,8 +124,7 @@ const postViewProfile = async (req, res) => {
   try {
     // need doctor email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
     const result = await query(queryText);
     res.send(result);
@@ -135,8 +138,7 @@ const postEditProfile = async (req, res) => {
   try {
     //only full name, city, street address, city can be edited in doctor profile
     const { token, full_name, city, street_address, about_doctor } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     const queryText = `UPDATE tabeeb.doctors
     SET full_name='${full_name}', city='${city}', street_address='${street_address}', about_doctor='${about_doctor}'
     WHERE email='${email}'`;
@@ -156,8 +158,7 @@ const postPastAppointments = async (req, res) => {
   try {
     // //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "completed");
     res.send(result);
@@ -171,8 +172,7 @@ const postPendingAppointments = async (req, res) => {
   try {
     //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "pending");
     res.send(result);
@@ -186,8 +186,7 @@ const postAcceptedAppointments = async (req, res) => {
   try {
     //need patient email
     const { token } = req.body;
-    const decodedToken = jwt.decode(token);
-    const email = decodedToken.email;
+    const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "accepted");
     res.send(result);
@@ -209,8 +208,8 @@ const postEditService = async (req, res) => {
   try {
     //time format = 'hh:mm:ss'
     //days = 'Mon,Tue,Wed,Thur,Fri,Sat,Sun'
-    //jwt required
-    const { email, start_time, end_time, days, rate } = req.body;
+    const { token, start_time, end_time, days, rate } = req.body;
+    const email = await getEmail(token);
     const cnic = await getDoctorID(email);
     const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate) 
 	VALUES('${cnic}','${start_time}', '${end_time}', '${days}',${rate}) ON DUPLICATE KEY UPDATE    

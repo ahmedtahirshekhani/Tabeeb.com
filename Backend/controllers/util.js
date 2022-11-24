@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const failureMessage = {
   success: false,
   message: "Invalid Credentials",
@@ -44,10 +46,15 @@ const getAppointmentsPatient = async (email, status) => {
     console.log(err);
   }
 };
+
+const getEmail = async (token) => {
+  return jwt.decode(token).email;
+};
 module.exports = {
   failureMessage,
   getDoctorID,
   getPatientID,
   getAppointmentsDoc,
   getAppointmentsPatient,
+  getEmail,
 };
