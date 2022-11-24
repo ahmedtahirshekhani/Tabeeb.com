@@ -6,6 +6,7 @@ const {
   getDoctorID,
   getAppointmentsDoc,
   getEmail,
+  getPatientID,
 } = require("./util");
 
 /*required
@@ -261,7 +262,8 @@ const postRejectAppointment = async (req, res) => {
 const postEarningsReport = async (req, res) => {
   //required: doc email
   try {
-    const { email } = req.body;
+    const { token } = req.body;
+    const email = await getEmail(token);
     const cnic = await getDoctorID(email);
     const queryText = `SELECT * FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='completed'`;
     const appointmentHistory = await query(queryText);
@@ -272,6 +274,26 @@ const postEarningsReport = async (req, res) => {
       message: "Report Generated!",
       history: appointmentHistory,
       earnings: totalEarnings,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postPrescriptionHistory = async (req, res) => {
+  //required: patient email
+  //todo: jwt
+  try {
+    const { email } = req.body;
+    // const email = await getEmail(token);
+    const phone = await getPatientID(email);
+    const queryText = `SELECT * FROM tabeeb.appointments WHERE patient_phone='${phone}' AND status='completed'`;
+    const patientHistory = await query(queryText);
+    res.send({
+      success: true,
+      message: "History Generated!",
+      history: patientHistory,
     });
   } catch (err) {
     console.log(err);
@@ -292,4 +314,5 @@ module.exports = {
   postAcceptAppointment,
   postRejectAppointment,
   postEarningsReport,
+  postPrescriptionHistory,
 };
