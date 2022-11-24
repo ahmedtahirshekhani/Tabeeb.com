@@ -226,6 +226,22 @@ const postEditService = async (req, res) => {
   }
 };
 
+const postAcceptAppointment = async (req, res) => {
+  //required: appointment id
+  try {
+    const { appointment_id } = req.body;
+    const queryText = `UPDATE tabeeb.appointments SET status='accepted' WHERE appointment_id=${appointment_id}`;
+    await query(queryText);
+    res.send({
+      success: true,
+      message: "Appointment Accepted!",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -236,4 +252,5 @@ module.exports = {
   postPendingAppointments,
   postAcceptedAppointments,
   postEditService,
+  postAcceptAppointment,
 };
