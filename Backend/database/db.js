@@ -109,6 +109,164 @@ const db = mysql.createConnection({
 
 const query = util.promisify(db.query).bind(db);
 
+// FILL DB CODE---------------------------------
+const fs = require("fs").promises;
+const fileName1 = "./database/names.csv";
+const fileName2 = "./database/addresses.csv";
+const getNames = async () => {
+  const data = (await fs.readFile(fileName1)).toString().split(/\r?\n/);
+  return data;
+};
+const getAddresses = async () => {
+  const data = (await fs.readFile(fileName2))
+    .toString()
+    .split(/\r?\n/)
+    .map((el) => el.trim());
+  return data;
+};
+const generateStrings = async (names) => {
+  const pmc_reg = 9000000;
+  let fullNames = Array(names.length);
+  let emails = Array(names.length);
+  let passwords = Array(names.length);
+  let cnics = Array(names.length);
+  let phone_numbers = Array(names.length);
+  const cnic = 4230100000000;
+  const phone_number = 3200000000;
+  let cities = Array(names.length);
+  const cityNames = ["Karachi", "Lahore", "Islamabad"];
+  const half = Math.floor(names.length / 2);
+  const wallet_amounts = Array(half);
+  let pmc_regs = [];
+
+  for (let i = 0; i < names.length - 1; i++) {
+    fullNames[i] = names[i] + " " + names[i + 1];
+    emails[i] = names[i] + "@gmail.com";
+    passwords[i] = names[i + 1];
+    phone_numbers[i] = "0" + (phone_number + i).toString();
+    cnics[i] = (cnic + i).toString();
+    cities[i] = cityNames[i % 3];
+
+    if (i < half) {
+      wallet_amounts[i] = (Math.random() * 15000 + 1).toFixed(2);
+    } else {
+      pmc_regs.push((pmc_reg + i).toString());
+    }
+  }
+  return {
+    full_names: fullNames,
+    emails: emails,
+    passwords: passwords,
+    phone_numbers: phone_numbers,
+    cnics: cnics,
+    cities: cities,
+    wallet_amounts: wallet_amounts,
+    pmc_regs: pmc_regs,
+  };
+};
+
+const generateNumbers = async (names) => {
+  // for(let)
+};
+
+const fillPatients = async (
+  patientFullNames,
+  patientEmails,
+  patientPasswords,
+  patientCities,
+  patientPhones,
+  patientWallets,
+  patientsNo
+) => {
+  for (let i = 0; i < patientsNo; i++) {
+    let hash = await bcrypt.hash(patientPasswords[i], 10);
+    let queryText = `
+    INSERT INTO tabeeb.patients VALUES ('${patientPhones[i]}','${patientEmails[i]}','${patientFullNames[i]}','${hash}','${patientCities[i]}',${patientWallets[i]})
+ `;
+    db.query(queryText, (err, result) => {
+      if (err) return null;
+    });
+  }
+};
+
+const fillDoctors = async (
+  doctorFullNames,
+  doctorEmails,
+  doctorPasswords,
+  doctorCities,
+  doctorPhones,
+  addresses,
+  doctorsNo,
+  doctorCnics,
+  pmc_regs
+) => {
+  for (let i = 0; i < doctorsNo; i++) {
+    let hash = await bcrypt.hash(doctorPasswords[i], 10);
+    let queryText = `INSERT INTO tabeeb.doctors VALUES ('${doctorCnics[i]}','${
+      doctorEmails[i]
+    }','${hash}','${doctorPhones[i]}','${doctorFullNames[i]}', '' ,'${
+      addresses[i]
+    }','${doctorCities[i]}','${pmc_regs[i]}',${i % 2},0)`;
+    db.query(queryText, (err, result) => {
+      if (err) {
+      }
+    });
+  }
+};
+const fillDB = async () => {
+  const names = await getNames();
+  const {
+    full_names,
+    emails,
+    passwords,
+    phone_numbers,
+    cnics,
+    cities,
+    wallet_amounts,
+    pmc_regs,
+  } = await generateStrings(names);
+
+  const patientsNo = wallet_amounts.length;
+  const patientFullNames = full_names.slice(0, patientsNo);
+  const patientEmails = emails.slice(0, patientsNo);
+  const patientPasswords = passwords.slice(0, patientsNo);
+  const patientCities = cities.slice(0, patientsNo);
+  const patientPhones = phone_numbers.slice(0, patientsNo);
+  const patientWallets = wallet_amounts.slice(0, patientsNo);
+
+  const doctorsNo = pmc_regs.length;
+  const addresses = (await getAddresses()).slice(0, doctorsNo);
+  const doctorFullNames = full_names.slice(patientsNo);
+  const doctorEmails = emails.slice(patientsNo);
+  const doctorPasswords = passwords.slice(patientsNo);
+  const doctorCities = cities.slice(patientsNo);
+  const doctorPhones = phone_numbers.slice(patientsNo);
+  const doctorCnics = cnics.slice(patientsNo);
+
+  await fillPatients(
+    patientFullNames,
+    patientEmails,
+    patientPasswords,
+    patientCities,
+    patientPhones,
+    patientWallets,
+    patientsNo
+  );
+  await fillDoctors(
+    doctorFullNames,
+    doctorEmails,
+    doctorPasswords,
+    doctorCities,
+    doctorPhones,
+    addresses,
+    doctorsNo,
+    doctorCnics,
+    pmc_regs
+  );
+
+  //   }
+};
+
 db.connect(function (err) {
   if (err) throw err;
   console.log("Connected to the database");
@@ -126,13 +284,15 @@ db.connect(function (err) {
       });
     }
     const hash = await bcrypt.hash("admin", 10);
-    addAdminQuery = `INSERT INTO tabeeb.admins (email, password) VALUES ('admin', '${hash}')`;
-    db.query(addAdminQuery, (err, result) => {
+    const addAdminQuery = `INSERT INTO tabeeb.admins (email, password) VALUES ('admin', '${hash}')`;
+    db.query(addAdminQuery, async (err, result) => {
       if (err) {
         // console.log("Admin already exists");
       } else {
         console.log("Admin created");
       }
+      await fillDB();
+      console.log("All records inserted");
     });
   });
 });
