@@ -74,7 +74,6 @@ const router = createBrowserRouter([
 		element: <PatientDashboard />,
 	},
 	{
-
 		path: "/dashboard/patient/currentappt",
 		element: <CurrentApptPatient />,
 	},
@@ -90,9 +89,9 @@ const router = createBrowserRouter([
 		path: "/dashboard/doctor/pastappt",
 		element: <PastApptDoctor />,
 	},
+	{
 		path: "/dashboard/makeAppointment",
 		element: <MakeAppointment />,
-	}
-
+	},
 ]);
 export default router;
