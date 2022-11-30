@@ -1,4 +1,3 @@
-import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,6 @@ const PatientLogin = () => {
           <LoginComponent role="patient" />
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

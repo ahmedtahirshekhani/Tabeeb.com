@@ -1,4 +1,3 @@
-import Footer from "../../../layouts/Footer";
 import Header from "../../../layouts/Header";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
