@@ -13,6 +13,7 @@ import AdminDashboard from "../pages/dashboard/admin";
 import PasswordChange from "../pages/dashboard/change_password";
 import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
+import MakeAppointment from "../pages/makeAppointment";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -67,5 +68,9 @@ const router = createBrowserRouter([
 		path: "/dashboard/patient",
 		element: <PatientDashboard />,
 	},
+	{
+		path: "/dashboard/makeAppointment",
+		element: <MakeAppointment />,
+	}
 ]);
 export default router;
