@@ -25,8 +25,6 @@ import PastApptDoctor from "../pages/viewpastappt/doctor";
 import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
 
-import DashboardLayout from "../pages/dashboard";
-
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -65,7 +63,10 @@ const router = createBrowserRouter([
 		path: "/login/forgotpassword",
 		element: <ForgotPassword />,
 	},
-
+	{
+		path: "/dashboard/admin",
+		element: <AdminDashboard />,
+	},
 	{
 		path: "/dashboard/change_password",
 		element: <PasswordChange />,
@@ -77,60 +78,28 @@ const router = createBrowserRouter([
 		exact: true,
 	},
 	{
-		path: "/dashboard/:role/:func",
-		element: <DashboardLayout />,
-		exact: true,
-	},
-
-
-	// {
-	// 	path: "/dashboard/patient/currentappt",
-	// 	element: <CurrentApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/currentappt",
-	// 	element: <CurrentApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/pastappt",
-	// 	element: <PastApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/pastappt",
-	// 	element: <PastApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/makeAppointment",
-	// 	element: <MakeAppointment />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/currentappt",
-	// 	element: <CurrentApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/currentappt",
-	// 	element: <CurrentApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/pastappt",
-	// 	element: <PastApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/pastappt",
-	// 	element: <PastApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/makeAppointment",
-	// 	element: <MakeAppointment />,
-	// },
-	{
-		path: "/profile/doctor",
-		element: <DoctorProfile />,
+		path: "/dashboard/patient",
+		element: <PatientDashboard />,
 	},
 	{
-		path: "/profile/patient",
-		element: <PatientProfile />,
-
+		path: "/dashboard/patient/currentappt",
+		element: <CurrentApptPatient />,
+	},
+	{
+		path: "/dashboard/doctor/currentappt",
+		element: <CurrentApptDoctor />,
+	},
+	{
+		path: "/dashboard/patient/pastappt",
+		element: <PastApptPatient />,
+	},
+	{
+		path: "/dashboard/doctor/pastappt",
+		element: <PastApptDoctor />,
+	},
+	{
+		path: "/dashboard/patiemakeAppointment",
+		element: <MakeAppointment />,
 	},
 	{
 		path: "/dashboard/pendingAppointments",
