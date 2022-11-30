@@ -1,5 +1,4 @@
 import Header from "../../../layouts/Header";
-import Footer from "../../../layouts/Footer";
 import { useState } from "react";
 import ErrorAlert from "../../../components/alerts/error";
 import SuccessAlert from "../../../components/alerts/success";
@@ -105,7 +104,6 @@ const PasswordChange = (props) => {
 					</div>
 				</div>
 			</div>
-			<Footer />
 		</div>
 	);
 };

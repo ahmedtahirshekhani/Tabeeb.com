@@ -1,4 +1,3 @@
-import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login";
 import { signup } from "../../../../services/utils/auth";

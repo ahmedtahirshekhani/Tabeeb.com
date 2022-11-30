@@ -1,4 +1,3 @@
-import Footer from "../../../../layouts/Footer";
 import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login"
 
@@ -32,7 +31,6 @@ const ForgotPassword = () => {
           
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
