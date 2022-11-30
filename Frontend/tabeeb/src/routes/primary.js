@@ -13,12 +13,15 @@ import AdminDashboard from "../pages/dashboard/admin";
 import PasswordChange from "../pages/dashboard/change_password";
 import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
+import DoctorProfile from "../pages/viewprofile/doctor";
+import PatientProfile from "../pages/viewprofile/patient";
 import CurrentApptPatient from "../pages/viewcurrappt/patient";
 import CurrentApptDoctor from "../pages/viewcurrappt/doctor";
 import PastApptPatient from "../pages/viewpastappt/patient";
 import PastApptDoctor from "../pages/viewpastappt/doctor";
 import MakeAppointment from "../pages/makeAppointment";
 import DashboardLayout from "../pages/dashboard";
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -107,6 +110,14 @@ const router = createBrowserRouter([
 	{
 		path: "/dashboard/makeAppointment",
 		element: <MakeAppointment />,
+	},
+	{
+		path: "/profile/doctor",
+		element: <DoctorProfile />,
+	},
+	{
+		path: "/profile/patient",
+		element: <PatientProfile />,
 	},
 ]);
 export default router;
