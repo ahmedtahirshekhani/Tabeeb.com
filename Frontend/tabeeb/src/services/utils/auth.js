@@ -129,6 +129,36 @@ const searchAuth = (role, token, search) => {
 	});
 }
 
+const makeAppointmentAuth = (role, token, doctor_email, datetime) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for make appointment");
+		console.log(role)
+		const req = {
+			token : token, 
+			doctor_email: doctor_email,
+			datetime: datetime
+		};
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/makeAppointment`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+      
 const viewProfileAuth = (role, token) => {
 
 	return new Promise((resolve, reject) => {
@@ -137,10 +167,8 @@ const viewProfileAuth = (role, token) => {
 		console.log(role)
 		const req = {
 			token: token,
-		};
-		// convert req to json
-		const jsonReq = JSON.stringify(req);
-		axios
+    }
+
 			.post(`/api/v1/${role}/profile`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
@@ -201,4 +229,5 @@ const editProfileAuth = (role, token, full_name, city, street_address, about_doc
 	});
 }
 
-export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth, viewProfileAuth, editProfileAuth };
+export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth, viewProfileAuth, editProfileAuth,  makeAppointmentAuth };
+

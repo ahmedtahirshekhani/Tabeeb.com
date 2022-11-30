@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import { BsCalendarCheck } from "react-icons/bs";
+//import { BsCalendarCheck } from "react-icons/bs";
 
 import styles from "../assets/styles/card.module.css";
 
@@ -16,7 +16,7 @@ const Card = ({ id, name , date, time, charges, prescription }) => {
               "group",
             ])}
           >
-            <BsCalendarCheck />
+            {/* <BsCalendarCheck /> */}
             <span
               className={classNames([styles.counter, "group-hover:text-white"])}
             >
