@@ -247,5 +247,4 @@ export {
 	searchAuth,
 	viewProfileAuth,
 	editProfileAuth,
-	makeAppointmentAuth,
 };

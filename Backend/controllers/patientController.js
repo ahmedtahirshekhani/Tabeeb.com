@@ -105,7 +105,7 @@ const postSearch = async (req, res) => {
     const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
     const patientCity = (await query(queryText))[0].city;
     //search doctors in the city of patient
-    const queryText2 = `SELECT * 
+    const queryText2 = `SELECT *
     FROM tabeeb.doctors
     WHERE city='${patientCity}'
     AND
