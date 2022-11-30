@@ -4,6 +4,7 @@ import SideBar from "../../components/sidebar";
 import { Route, Link, Routes, useParams } from "react-router-dom";
 import CurrentApptDoctor from "../viewcurrappt/doctor";
 import "../../assets/styles/dashboard.css";
+import PastApptDoctor from "../viewpastappt/doctor";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -19,6 +20,7 @@ const DashboardLayout = () => {
 			<SideBar role={role} />
 			<div style={{ marginTop: "80px" }}>
 				{params.func === "currentappt" && <CurrentApptDoctor />}
+				{params.func === "pastappt" && <PastApptDoctor />}
 			</div>
 		</div>
 	);

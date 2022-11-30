@@ -72,30 +72,15 @@ const router = createBrowserRouter([
 		element: <PasswordChange />,
 	},
 	{
-
 		path: "/dashboard/:role",
 		element: <DashboardLayout />,
 		exact: true,
 	},
+
 	{
-		path: "/dashboard/patient",
-		element: <PatientDashboard />,
-	},
-	{
-		path: "/dashboard/patient/currentappt",
-		element: <CurrentApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/currentappt",
-		element: <CurrentApptDoctor />,
-	},
-	{
-		path: "/dashboard/patient/pastappt",
-		element: <PastApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/pastappt",
-		element: <PastApptDoctor />,
+		path: "/dashboard/:role/:func",
+		element: <DashboardLayout />,
+		exact: true,
 	},
 	{
 		path: "/dashboard/patiemakeAppointment",
@@ -106,8 +91,8 @@ const router = createBrowserRouter([
 		element: <PendingAppointments />,
 	},
 	{
-		path:"/dashboard/doctor/prescriptionhistory",
-		element: <PrescriptionHist />
-	}
+		path: "/dashboard/doctor/prescriptionhistory",
+		element: <PrescriptionHist />,
+	},
 ]);
 export default router;
