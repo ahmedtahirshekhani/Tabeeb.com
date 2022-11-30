@@ -158,5 +158,76 @@ const makeAppointmentAuth = (role, token, doctor_email, datetime) => {
 			});
 	});
 }
+      
+const viewProfileAuth = (role, token) => {
 
-export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth, makeAppointmentAuth };
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for view profile");
+		console.log(role)
+		const req = {
+			token: token,
+    }
+
+			.post(`/api/v1/${role}/profile`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+
+const editProfileAuth = (role, token, full_name, city, street_address, about_doctor) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for edit profile");
+		console.log(role)
+		var req = {}
+		if(role == 'doctor'){
+			req = {
+				token: token,
+				full_name: full_name,
+				city: city,
+				street_address: street_address,
+				about_doctor: about_doctor
+			};
+
+		} else if(role == 'patient'){
+			req = {
+				token: token,
+				full_name: full_name,
+				city: city,
+			};
+		}
+
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/editProfile`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+
+export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth, viewProfileAuth, editProfileAuth,  makeAppointmentAuth };
+

@@ -21,7 +21,12 @@ app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/patient", patientRoutes);
 
 app.listen(port, function () {
-  console.log("App is running! at port", port);
+	console.log("App is running! at port", port);
+});
+
+app.get("/", function (req, res) {
+	console.log("server is running");
+	res.send("Server is running!");
 });
 
 module.exports = app;
