@@ -17,6 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "next-auth": "^4.9.0",
-    "ngrok": "^4.3.3"
+    "ngrok": "^4.3.3",
+    "nodemon": "^2.0.20"
   }
 }

@@ -13,6 +13,9 @@ import AdminDashboard from "../pages/dashboard/admin";
 import PasswordChange from "../pages/dashboard/change_password";
 import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
+
+import PrescriptionHist from "../pages/prescription/history";
+
 import DoctorProfile from "../pages/viewprofile/doctor";
 import PatientProfile from "../pages/viewprofile/patient";
 import CurrentApptPatient from "../pages/viewcurrappt/patient";
@@ -23,7 +26,6 @@ import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
 
 import DashboardLayout from "../pages/dashboard";
-
 
 const router = createBrowserRouter([
 	{
@@ -69,6 +71,7 @@ const router = createBrowserRouter([
 		element: <PasswordChange />,
 	},
 	{
+
 		path: "/dashboard/:role",
 		element: <DashboardLayout />,
 		exact: true,
@@ -133,5 +136,9 @@ const router = createBrowserRouter([
 		path: "/dashboard/pendingAppointments",
 		element: <PendingAppointments />,
 	},
+	{
+		path:"/dashboard/doctor/prescriptionhistory",
+		element: <PrescriptionHist />
+	}
 ]);
 export default router;
