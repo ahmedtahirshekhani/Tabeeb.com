@@ -198,12 +198,13 @@ const postAcceptedAppointments = async (req, res) => {
 };
 
 const postEditService = async (req, res) => {
+  console.log("req recieved")
   /*sample object:
 	{
-    "email":"anwar@gmail.com", 
+    "email":"anwar@gmail.com",
     "start_time":"21:00",
-     "end_time":"22:00", 
-    "days":"Mon,Wed,Fri", 
+     "end_time":"22:00",
+    "days":"Mon,Wed,Fri",
     "rate":"2990"
 }*/
   try {
@@ -212,8 +213,8 @@ const postEditService = async (req, res) => {
     const { token, start_time, end_time, days, rate } = req.body;
     const email = await getEmail(token);
     const cnic = await getDoctorID(email);
-    const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate) 
-	VALUES('${cnic}','${start_time}', '${end_time}', '${days}',${rate}) ON DUPLICATE KEY UPDATE    
+    const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate)
+	VALUES('${cnic}','${start_time}', '${end_time}', '${days}',${rate}) ON DUPLICATE KEY UPDATE
 	start_time='${start_time}', end_time='${end_time}', days='${days}', rate=${rate}`;
     await query(queryText);
     const successMessage = {

@@ -254,6 +254,7 @@ const doctorServiceAuth = (role, token, start_time, end_time, days, rate) => {
 				rate:rate
 			};
 
+		console.log(req)
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		axios
