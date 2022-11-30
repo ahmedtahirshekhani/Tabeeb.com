@@ -15,3 +15,8 @@ code {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.drawer{
+  position: fixed;
+  z-index: 2;
+}
