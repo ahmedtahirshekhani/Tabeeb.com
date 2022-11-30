@@ -13,6 +13,7 @@ import AdminDashboard from "../pages/dashboard/admin";
 import PasswordChange from "../pages/dashboard/change_password";
 import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
+import PrescriptionHist from "../pages/prescription/history";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -62,10 +63,15 @@ const router = createBrowserRouter([
 	{
 		path: "/dashboard/doctor",
 		element: <DoctorDashboard />,
+		exact: true
 	},
 	{
 		path: "/dashboard/patient",
 		element: <PatientDashboard />,
 	},
+	{
+		path:"/dashboard/doctor/prescriptionhistory",
+		element: <PrescriptionHist />
+	}
 ]);
 export default router;
