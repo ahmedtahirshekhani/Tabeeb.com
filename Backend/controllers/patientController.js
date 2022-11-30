@@ -233,6 +233,7 @@ const postMakeAppointment = async (req, res) => {
     console.log(err);
     res.status(422).send(err.message);
   };
+}
 module.exports = {
   postSignup,
   postLogin,

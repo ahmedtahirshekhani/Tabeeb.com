@@ -25,11 +25,7 @@ const PendingAppointments = () => {
 					</div>
                     <div>
                     <AppointmentCard />
-                    <div className="form-control mt-6">
-        <button className="btn btn-primary" >
-          Submit Details
-        </button>
-      </div>
+                    
                     </div>
 				</section>
 			</main>

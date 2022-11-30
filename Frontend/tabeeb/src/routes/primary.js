@@ -15,7 +15,7 @@ import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
 
 import PrescriptionHist from "../pages/prescription/history";
-
+import DashboardLayout from "../pages/dashboard";
 import DoctorProfile from "../pages/viewprofile/doctor";
 import PatientProfile from "../pages/viewprofile/patient";
 import CurrentApptPatient from "../pages/viewcurrappt/patient";
