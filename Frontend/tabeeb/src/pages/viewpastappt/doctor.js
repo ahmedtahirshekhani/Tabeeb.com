@@ -12,7 +12,7 @@ import AppointmentCard from "../../components/appointments/cards";
 const PastApptDoctor = () => {
 	return (
 		<>
-			<AppointmentCard />
+			<AppointmentCard function="pastapt" />
 		</>
 	);
 };
