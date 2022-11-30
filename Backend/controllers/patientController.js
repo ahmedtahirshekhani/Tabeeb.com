@@ -105,7 +105,7 @@ const postSearch = async (req, res) => {
     const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
     const patientCity = (await query(queryText))[0].city;
     //search doctors in the city of patient
-    const queryText2 = `SELECT * 
+    const queryText2 = `SELECT *
     FROM tabeeb.doctors
     WHERE city='${patientCity}'
     AND
@@ -213,7 +213,8 @@ const postMakeAppointment = async (req, res) => {
   try {
     //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
     //jstoken needed
-    const { patient_email, doctor_email, datetime } = req.body;
+    const { token, doctor_email, datetime } = req.body;
+    const patient_email = await getEmail(token);
     const patient_phone = await getPatientID(patient_email);
     const d_cnic = await getDoctorID(doctor_email);
     const charges = (
