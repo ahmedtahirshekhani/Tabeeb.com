@@ -8,6 +8,7 @@ import posts from "../../components/appointments/cards/testdata";
 import { useEffect } from "react";
 import axios from "axios";
 import AppointmentCard from "../../components/appointments/cards";
+
 const CurrentApptDoctor = () => {
 	return (
 		<>

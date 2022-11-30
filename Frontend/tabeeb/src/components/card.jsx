@@ -30,7 +30,7 @@ const Card = ({ id, name , date, time, charges, prescription }) => {
         <h1 className={styles.text}>{`Doctor CNIC: ${name}`}</h1>
         <h1 className={styles.text}>{`Date: ${date}`}</h1>
         <h1 className={styles.text}>{`Time: ${time}`}</h1>
-        <h1 className={styles.text}>{`Charges: ${date}`}</h1>
+        <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
         <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
       </div>
     </div>
