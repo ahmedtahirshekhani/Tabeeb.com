@@ -13,6 +13,9 @@ import AdminDashboard from "../pages/dashboard/admin";
 import PasswordChange from "../pages/dashboard/change_password";
 import DoctorDashboard from "../pages/dashboard/doctor";
 import PatientDashboard from "../pages/dashboard/patient";
+import DoctorProfile from "../pages/viewprofile/doctor";
+import PatientProfile from "../pages/viewprofile/patient";
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -66,6 +69,14 @@ const router = createBrowserRouter([
 	{
 		path: "/dashboard/patient",
 		element: <PatientDashboard />,
+	},
+	{
+		path: "/profile/doctor",
+		element: <DoctorProfile />,
+	},
+	{
+		path: "/profile/patient",
+		element: <PatientProfile />,
 	},
 ]);
 export default router;
