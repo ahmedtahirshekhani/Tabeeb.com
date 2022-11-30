@@ -18,6 +18,7 @@ import CurrentApptDoctor from "../pages/viewcurrappt/doctor";
 import PastApptPatient from "../pages/viewpastappt/patient";
 import PastApptDoctor from "../pages/viewpastappt/doctor";
 import MakeAppointment from "../pages/makeAppointment";
+import PendingAppointments from "../pages/viewPendingAppointments";
 
 const router = createBrowserRouter([
 	{
@@ -90,8 +91,12 @@ const router = createBrowserRouter([
 		element: <PastApptDoctor />,
 	},
 	{
-		path: "/dashboard/makeAppointment",
+		path: "/dashboard/patient/makeAppointment",
 		element: <MakeAppointment />,
+	},
+	{
+		path: "/dashboard/pendingAppointments",
+		element: <PendingAppointments />,
 	},
 ]);
 export default router;

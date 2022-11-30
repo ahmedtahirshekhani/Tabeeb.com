@@ -1,27 +1,29 @@
 import { useEffect, useState } from "react";
+import { makeAppointmentAuth } from "../../services/utils/auth";
 
 
 const MakeAppointmentComponent = (props) => {
-    const [doctorEmail, setdoctorEmail] = useState("");
-	const [patientEmail, setpatientEmail] = useState("");
-    const [date, setDate] = useState("");
+  const [doctorEmail, setdoctorEmail] = useState("");
+  const [date, setDate] = useState("");
 	const [successAlert, setSuccessAlert] = useState(false);
 	const [errorAlert, setErrorAlert] = useState(false);
+  const role = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
+
+  const submitForm = () => {
+    console.log("hello", role)
+    console.log(date)
+    makeAppointmentAuth(role, token, doctorEmail, date)
+    .then((res, err) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   return (
     <div>
-      <div className="form-control">
-        <label className="label">
-          <span className="label-text">Patient Email</span>
-        </label>
-        <input
-          type="email"
-          placeholder="patient email"
-          className="input input-bordered"
-          onChange={(e) => setpatientEmail(e.target.value)}
-
-        />
-      </div>
-
       <div className="form-control">
         <label className="label">
           <span className="label-text">Doctor Email</span>
@@ -39,7 +41,7 @@ const MakeAppointmentComponent = (props) => {
           <span className="label-text">Appointment Date</span>
         </label>
         <input
-          type="date"
+          type="datetime-local"
           placeholder="date"
           className="input input-bordered"
           onChange={(e) => setDate(e.target.value)}
@@ -47,7 +49,7 @@ const MakeAppointmentComponent = (props) => {
       </div>
 
       <div className="form-control mt-6">
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" onClick={() => submitForm()}>
           Submit Details
         </button>
       </div>

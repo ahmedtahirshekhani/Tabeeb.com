@@ -129,4 +129,34 @@ const searchAuth = (role, token, search) => {
 	});
 }
 
-export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth };
+const makeAppointmentAuth = (role, token, doctor_email, datetime) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for make appointment");
+		console.log(role)
+		const req = {
+			token : token, 
+			doctor_email: doctor_email,
+			datetime: datetime
+		};
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/makeAppointment`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+
+export { loginAuth, signup, setAuthToken, changePasswordAuth, searchAuth, makeAppointmentAuth };
