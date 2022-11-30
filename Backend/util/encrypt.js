@@ -8,6 +8,7 @@ const encrypt = async (password) => {
       if (err) {
         console.log("Cannot encrypt");
       } else {
+        console.log(hash);
         return hash;
       }
     });
@@ -30,3 +31,8 @@ const tempp = async (pw) => {
   zz = await bcrypt.compare(pw, kk);
   console.log(zz);
 };
+encrypt("faizan");
+compare(
+  "faizan",
+  "$2a$10$jc7OdanR8p8x0kPWBc6VZesSyAJO4rCH7BWvAFU6KXKEt9AeGVRJC"
+);
