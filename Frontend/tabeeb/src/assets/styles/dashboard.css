@@ -1,0 +1,7 @@
+.right-layout{
+    z-index: 1;
+    width: 70vw;
+    height: 100vh;
+    position: absolute;
+    left: 30vw;
+}

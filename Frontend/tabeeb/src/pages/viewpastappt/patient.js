@@ -5,7 +5,7 @@ import axios from "axios";
 import React from "react";
 import styles from "../../assets/styles/App.module.css";
 import Card from "../../components/card";
-import posts from "../../testdata";
+import posts from "../../components/appointments/cards/testdata";
 
 const PastApptPatient = () => {
 	useEffect(() => {

@@ -67,46 +67,51 @@ const router = createBrowserRouter([
 		element: <DashboardLayout />,
 		exact: true,
 	},
+	{
+		path: "/dashboard/:role/:func",
+		element: <DashboardLayout />,
+		exact: true,
+	},
 
-	{
-		path: "/dashboard/patient/currentappt",
-		element: <CurrentApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/currentappt",
-		element: <CurrentApptDoctor />,
-	},
-	{
-		path: "/dashboard/patient/pastappt",
-		element: <PastApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/pastappt",
-		element: <PastApptDoctor />,
-	},
-	{
-		path: "/dashboard/makeAppointment",
-		element: <MakeAppointment />,
-	},
-	{
-		path: "/dashboard/patient/currentappt",
-		element: <CurrentApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/currentappt",
-		element: <CurrentApptDoctor />,
-	},
-	{
-		path: "/dashboard/patient/pastappt",
-		element: <PastApptPatient />,
-	},
-	{
-		path: "/dashboard/doctor/pastappt",
-		element: <PastApptDoctor />,
-	},
-	{
-		path: "/dashboard/makeAppointment",
-		element: <MakeAppointment />,
-	},
+	// {
+	// 	path: "/dashboard/patient/currentappt",
+	// 	element: <CurrentApptPatient />,
+	// },
+	// {
+	// 	path: "/dashboard/doctor/currentappt",
+	// 	element: <CurrentApptDoctor />,
+	// },
+	// {
+	// 	path: "/dashboard/patient/pastappt",
+	// 	element: <PastApptPatient />,
+	// },
+	// {
+	// 	path: "/dashboard/doctor/pastappt",
+	// 	element: <PastApptDoctor />,
+	// },
+	// {
+	// 	path: "/dashboard/makeAppointment",
+	// 	element: <MakeAppointment />,
+	// },
+	// {
+	// 	path: "/dashboard/patient/currentappt",
+	// 	element: <CurrentApptPatient />,
+	// },
+	// {
+	// 	path: "/dashboard/doctor/currentappt",
+	// 	element: <CurrentApptDoctor />,
+	// },
+	// {
+	// 	path: "/dashboard/patient/pastappt",
+	// 	element: <PastApptPatient />,
+	// },
+	// {
+	// 	path: "/dashboard/doctor/pastappt",
+	// 	element: <PastApptDoctor />,
+	// },
+	// {
+	// 	path: "/dashboard/makeAppointment",
+	// 	element: <MakeAppointment />,
+	// },
 ]);
 export default router;

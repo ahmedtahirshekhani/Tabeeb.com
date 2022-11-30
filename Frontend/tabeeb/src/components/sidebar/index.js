@@ -33,7 +33,6 @@ const helper = (role) => {
 };
 function SideBar(props) {
 	const role = props.role;
-	console.log(role);
 	return (
 		<div className="drawer">
 			<input id="my-drawer" type="checkbox" className="drawer-toggle" />
