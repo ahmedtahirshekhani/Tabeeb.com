@@ -163,9 +163,9 @@ const postChangePassword = async (req, res) => {
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
     const updateQuery = `UPDATE tabeeb.admins
-      SET password='${newPasswordHash}'
-      WHERE email='${email}'`;
-    await query(updateQuery);
+      SET password = ?
+      WHERE email = ?`;
+    await query(updateQuery, [newPasswordHash, email]);
     const successMessage = {
       success: true,
       message: "Password successfully changed!",

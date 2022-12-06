@@ -20,9 +20,16 @@ const postSignup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     const queryText = `INSERT INTO tabeeb.patients (email, password, phone_number, full_name ,city, wallet_amount)
-                        VALUES ('${email}', '${hash}','${phone_number}','${name}','${city}',${"0"});`;
+                        VALUES (?, ?,?,?,?,?);`;
 
-    const result = await query(queryText);
+    const result = await query(queryText, [
+      email,
+      hash,
+      phone_number,
+      name,
+      city,
+      0,
+    ]);
     res.send("Patient Signed Up");
   } catch (err) {
     res.status(422).send(err.message);
@@ -39,10 +46,10 @@ const postLogin = async (req, res) => {
 
     const queryText = `SELECT *
           FROM tabeeb.patients
-          WHERE email = '${email}'
+          WHERE email = ?'
           `;
 
-    const result = await query(queryText);
+    const result = await query(queryText, [email]);
     const hash = result[0].password;
     const successMessage = {
       success: true,
@@ -75,16 +82,16 @@ const postChangePassword = async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
     const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
-    const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
-    const result = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.patients WHERE email=?`;
+    const result = await query(queryText, [email]);
     const hash = result[0].password;
     const match = await bcrypt.compare(oldPassword, hash);
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
     const updateQuery = `UPDATE tabeeb.patients
-      SET password='${newPasswordHash}'
-      WHERE email='${email}'`;
-    await query(updateQuery);
+      SET password=?
+      WHERE email=?`;
+    await query(updateQuery, [newPasswordHash, email]);
     const successMessage = {
       success: true,
       message: "Password successfully changed!",
@@ -102,15 +109,15 @@ const postSearch = async (req, res) => {
     const { token, search } = req.body;
     const email = await getEmail(token);
     // get city of patient
-    const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
-    const patientCity = (await query(queryText))[0].city;
+    const queryText = `SELECT city FROM tabeeb.patients WHERE email=?`;
+    const patientCity = (await query(queryText, [email]))[0].city;
     //search doctors in the city of patient
     const queryText2 = `SELECT *
     FROM tabeeb.doctors
-    WHERE city='${patientCity}'
+    WHERE city=?
     AND
     full_name LIKE '%${search}%'`;
-    const doctors = await query(queryText2);
+    const doctors = await query(queryText2, [patientCity]);
     res.send(doctors);
   } catch (err) {
     res.status(422).send(err);
@@ -121,13 +128,13 @@ const postDashboard = async (req, res) => {
   //need patient email
   try {
     const { email } = req.body;
-    const queryText = `SELECT city FROM tabeeb.patients WHERE email='${email}'`;
-    const patientCity = (await query(queryText))[0].city;
+    const queryText = `SELECT city FROM tabeeb.patients WHERE email=?`;
+    const patientCity = (await query(queryText, [email]))[0].city;
     console.log(patientCity);
     const queryText2 = `SELECT *
     FROM tabeeb.doctors
-    WHERE city='${patientCity}'`;
-    const doctors = await query(queryText2);
+    WHERE city=?`;
+    const doctors = await query(queryText2, [patientCity]);
     res.send(doctors);
   } catch (err) {
     res.status(422).send(err);
@@ -139,8 +146,8 @@ const postViewProfile = async (req, res) => {
     // need patient email
     const { token } = req.body;
     const email = await getEmail(token);
-    const queryText = `SELECT * FROM tabeeb.patients WHERE email='${email}'`;
-    const result = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.patients WHERE email=?`;
+    const result = await query(queryText, [email]);
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -154,9 +161,9 @@ const postEditProfile = async (req, res) => {
     const { token, full_name, city } = req.body;
     const email = await getEmail(token);
     const queryText = `UPDATE tabeeb.patients
-    SET full_name='${full_name}', city='${city}'
-    WHERE email='${email}'`;
-    await query(queryText);
+    SET full_name=?, city=?
+    WHERE email=?`;
+    await query(queryText, [full_name, city, email]);
     const successMessage = {
       success: true,
       message: "Profile Updated",
@@ -218,7 +225,7 @@ const postMakeAppointment = async (req, res) => {
     const patient_phone = await getPatientID(patient_email);
     const d_cnic = await getDoctorID(doctor_email);
     const service = (
-      await query(`SELECT rate FROM tabeeb.services WHERE d_cnic='${d_cnic}'`)
+      await query(`SELECT rate FROM tabeeb.services WHERE d_cnic=?`, [d_cnic])
     )[0];
     if (!service) {
       throw "Doctor does not have a service!";
@@ -226,15 +233,18 @@ const postMakeAppointment = async (req, res) => {
     const charges = service.rate;
     const patient_balance = (
       await query(
-        `SELECT wallet_amount FROM tabeeb.patients WHERE phone_number=${patient_phone}`
+        `SELECT wallet_amount FROM tabeeb.patients WHERE phone_number=?`,
+        [patient_phone]
       )
     )[0];
     if (patient_balance < charges) {
       throw "Patient does not have enough balance!";
     }
     const queryText = `INSERT INTO tabeeb.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
-      VALUES ("${patient_phone}", "${d_cnic}", '${datetime}', "pending", NULL, ${charges})`;
-    const id = (await query(queryText)).insertId;
+      VALUES (?, ?, ?, "pending", NULL, ?)`;
+    const id = (
+      await query(queryText, [patient_phone, d_cnic, datetime, charges])
+    ).insertId;
     const successMessage = {
       success: true,
       message: "Appointment Made!",
