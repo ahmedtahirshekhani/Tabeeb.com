@@ -23,6 +23,7 @@ const LoginComponent = (props) => {
 
 					//set JWT token to local
 					localStorage.setItem("token", token);
+					localStorage.setItem("role", role);
 					setAuthToken(token);
 					navigate(`/dashboard/${role}`);
 				} else {

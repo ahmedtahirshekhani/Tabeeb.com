@@ -9,11 +9,12 @@ const DashboardNavbar = (props) => {
 	};
 
 	const titleUpdate = () => {
-		if (props.name == "admin") {
+		const role = localStorage.getItem("role") || props.name;
+		if (role == "admin") {
 			return "Admin Dashboard";
-		} else if (props.name == "doctor") {
+		} else if (role == "doctor") {
 			return "Doctor Dashboard";
-		} else if (props.name == "patient") {
+		} else if (role == "patient") {
 			return "Patient Dashboard";
 		}
 	};
@@ -35,7 +36,10 @@ const DashboardNavbar = (props) => {
 						className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 					>
 						<li>
-							<a href={"/profile/" + props.name.split(' ')[0]} className="justify-between text-white">
+							<a
+								href={"/profile/" + props.name.split(" ")[0]}
+								className="justify-between text-white"
+							>
 								Profile
 								<span className="badge">New</span>
 							</a>
