@@ -157,7 +157,7 @@ const postEditProfile = async (req, res) => {
 
 const postPastAppointments = async (req, res) => {
   try {
-    // //need patient email
+    // //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -171,7 +171,7 @@ const postPastAppointments = async (req, res) => {
 
 const postPendingAppointments = async (req, res) => {
   try {
-    //need patient email
+    //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -185,7 +185,7 @@ const postPendingAppointments = async (req, res) => {
 
 const postAcceptedAppointments = async (req, res) => {
   try {
-    //need patient email
+    //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -198,7 +198,7 @@ const postAcceptedAppointments = async (req, res) => {
 };
 
 const postEditService = async (req, res) => {
-  console.log("req recieved")
+  console.log("req recieved");
   /*sample object:
 	{
     "email":"anwar@gmail.com",

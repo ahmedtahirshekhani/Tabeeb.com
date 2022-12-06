@@ -217,9 +217,21 @@ const postMakeAppointment = async (req, res) => {
     const patient_email = await getEmail(token);
     const patient_phone = await getPatientID(patient_email);
     const d_cnic = await getDoctorID(doctor_email);
-    const charges = (
+    const service = (
       await query(`SELECT rate FROM tabeeb.services WHERE d_cnic='${d_cnic}'`)
-    )[0].rate;
+    )[0];
+    if (!service) {
+      throw "Doctor does not have a service!";
+    }
+    const charges = service.rate;
+    const patient_balance = (
+      await query(
+        `SELECT wallet_amount FROM tabeeb.patients WHERE phone_number=${patient_phone}`
+      )
+    )[0];
+    if (patient_balance < charges) {
+      throw "Patient does not have enough balance!";
+    }
     const queryText = `INSERT INTO tabeeb.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
       VALUES ("${patient_phone}", "${d_cnic}", '${datetime}', "pending", NULL, ${charges})`;
     const id = (await query(queryText)).insertId;
@@ -231,9 +243,9 @@ const postMakeAppointment = async (req, res) => {
     res.send(successMessage);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
-  };
-}
+    res.status(422).send(err);
+  }
+};
 module.exports = {
   postSignup,
   postLogin,
