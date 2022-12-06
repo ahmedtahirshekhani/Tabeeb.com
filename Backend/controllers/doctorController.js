@@ -44,9 +44,21 @@ const postSignup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     const queryText = `INSERT INTO tabeeb.doctors (cnic, email, password, phone_number, full_name, about_doctor, street_address,city, pmc_reg, isverified, isbanned)
-                        VALUES ('${cnic}', '${email}', '${hash}','${phone_number}','${name}','${about_doctor}','${street_address}','${city}','${pmc_reg}',false,false);`;
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
-    const result = await query(queryText);
+    const result = await query(queryText, [
+      cnic,
+      email,
+      hash,
+      phone_number,
+      name,
+      about_doctor,
+      street_address,
+      city,
+      pmc_reg,
+      false,
+      false,
+    ]);
     const successMessage = {
       success: true,
       message: "Doctor Successfully Signed Up!",
@@ -67,10 +79,10 @@ const postLogin = async (req, res) => {
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
           FROM tabeeb.doctors
-          WHERE email = '${email}'
+          WHERE email = ?'
           `;
 
-    const result = await query(queryText);
+    const result = await query(queryText, [email]);
     hash = result[0].password;
     const successMessage = {
       success: true,
@@ -100,16 +112,16 @@ const postChangePassword = async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
     const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
-    const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
-    const result = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.doctors WHERE email= ?`;
+    const result = await query(queryText, [email]);
     const hash = result[0].password;
     const match = await bcrypt.compare(oldPassword, hash);
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
     const updateQuery = `UPDATE tabeeb.doctors
-      SET password='${newPasswordHash}'
-      WHERE email='${email}'`;
-    await query(updateQuery);
+      SET password= ?
+      WHERE email= ?`;
+    await query(updateQuery, [newPasswordHash, email]);
     const successMessage = {
       success: true,
       message: "Password successfully changed!",
@@ -126,8 +138,8 @@ const postViewProfile = async (req, res) => {
     // need doctor email
     const { token } = req.body;
     const email = await getEmail(token);
-    const queryText = `SELECT * FROM tabeeb.doctors WHERE email='${email}'`;
-    const result = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.doctors WHERE email= ?`;
+    const result = await query(queryText, [email]);
     res.send(result);
   } catch (err) {
     console.log(err);
@@ -141,9 +153,15 @@ const postEditProfile = async (req, res) => {
     const { token, full_name, city, street_address, about_doctor } = req.body;
     const email = await getEmail(token);
     const queryText = `UPDATE tabeeb.doctors
-    SET full_name='${full_name}', city='${city}', street_address='${street_address}', about_doctor='${about_doctor}'
-    WHERE email='${email}'`;
-    await query(queryText);
+    SET full_name=?, city=?, street_address=?, about_doctor=?
+    WHERE email=?`;
+    await query(queryText, [
+      full_name,
+      city,
+      street_address,
+      about_doctor,
+      email,
+    ]);
     const successMessage = {
       success: true,
       message: "Profile Updated",
@@ -157,7 +175,7 @@ const postEditProfile = async (req, res) => {
 
 const postPastAppointments = async (req, res) => {
   try {
-    // //need patient email
+    // //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -171,7 +189,7 @@ const postPastAppointments = async (req, res) => {
 
 const postPendingAppointments = async (req, res) => {
   try {
-    //need patient email
+    //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -185,7 +203,7 @@ const postPendingAppointments = async (req, res) => {
 
 const postAcceptedAppointments = async (req, res) => {
   try {
-    //need patient email
+    //need doc email
     const { token } = req.body;
     const email = await getEmail(token);
     // const { email } = req.body;
@@ -198,7 +216,7 @@ const postAcceptedAppointments = async (req, res) => {
 };
 
 const postEditService = async (req, res) => {
-  console.log("req recieved")
+  console.log("req recieved");
   /*sample object:
 	{
     "email":"anwar@gmail.com",
@@ -214,9 +232,19 @@ const postEditService = async (req, res) => {
     const email = await getEmail(token);
     const cnic = await getDoctorID(email);
     const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate)
-	VALUES('${cnic}','${start_time}', '${end_time}', '${days}',${rate}) ON DUPLICATE KEY UPDATE
-	start_time='${start_time}', end_time='${end_time}', days='${days}', rate=${rate}`;
-    await query(queryText);
+	VALUES(?,?,?,?,?) ON DUPLICATE KEY UPDATE
+	start_time=?, end_time=?, days=?, rate=?`;
+    await query(queryText, [
+      cnic,
+      start_time,
+      end_time,
+      days,
+      rate,
+      start_time,
+      end_time,
+      days,
+      rate,
+    ]);
     const successMessage = {
       success: true,
       message: "Service Updated",
@@ -232,8 +260,8 @@ const postAcceptAppointment = async (req, res) => {
   //required: appointment id
   try {
     const { appointment_id } = req.body;
-    const queryText = `UPDATE tabeeb.appointments SET status='accepted' WHERE appointment_id=${appointment_id}`;
-    await query(queryText);
+    const queryText = `UPDATE tabeeb.appointments SET status='accepted' WHERE appointment_id=?`;
+    await query(queryText, [appointment_id]);
     res.send({
       success: true,
       message: "Appointment Accepted!",
@@ -248,8 +276,8 @@ const postRejectAppointment = async (req, res) => {
   //required: appointment id
   try {
     const { appointment_id } = req.body;
-    const queryText = `UPDATE tabeeb.appointments SET status='rejected' WHERE appointment_id=${appointment_id}`;
-    await query(queryText);
+    const queryText = `UPDATE tabeeb.appointments SET status='rejected' WHERE appointment_id=?}`;
+    await query(queryText, [appointment_id]);
     res.send({
       success: true,
       message: "Appointment Rejected!",
@@ -266,10 +294,10 @@ const postEarningsReport = async (req, res) => {
     const { token } = req.body;
     const email = await getEmail(token);
     const cnic = await getDoctorID(email);
-    const queryText = `SELECT * FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='completed'`;
-    const appointmentHistory = await query(queryText);
-    const queryText2 = `SELECT SUM(charges) as earnings FROM tabeeb.appointments WHERE d_cnic='${cnic}' AND status='completed'`;
-    const totalEarnings = (await query(queryText2))[0].earnings;
+    const queryText = `SELECT * FROM tabeeb.appointments WHERE d_cnic=? AND status='completed'`;
+    const appointmentHistory = await query(queryText, [cnic]);
+    const queryText2 = `SELECT SUM(charges) as earnings FROM tabeeb.appointments WHERE d_cnic=? AND status='completed'`;
+    const totalEarnings = (await query(queryText2, [cnic]))[0].earnings;
     res.send({
       success: true,
       message: "Report Generated!",
@@ -289,8 +317,8 @@ const postPrescriptionHistory = async (req, res) => {
     const { email } = req.body;
     // const email = await getEmail(token);
     const phone = await getPatientID(email);
-    const queryText = `SELECT * FROM tabeeb.appointments WHERE patient_phone='${phone}' AND status='completed'`;
-    const patientHistory = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.appointments WHERE patient_phone=? AND status='completed'`;
+    const patientHistory = await query(queryText, [phone]);
     res.send({
       success: true,
       message: "History Generated!",

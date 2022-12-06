@@ -274,6 +274,8 @@ const doctorServiceAuth = (role, token, start_time, end_time, days, rate) => {
 	});
 };
 
+
+
 export {
 	loginAuth,
 	signup,

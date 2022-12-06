@@ -11,7 +11,7 @@ const patientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.patients
     wallet_amount   double,
     PRIMARY KEY (phone_number),
     UNIQUE (email)
-    )`;
+     )`;
 
 const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
     (cnic           varchar(13),

@@ -11,9 +11,9 @@ const postLogin = async (req, res) => {
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
           FROM tabeeb.admins
-          WHERE email = '${email}'
+          WHERE email = ?
           `;
-    const result = await query(queryText);
+    const result = await query(queryText, [email]);
     const hash = result[0].password;
     const successMessage = {
       success: true,
@@ -79,9 +79,9 @@ const postAcceptRequest = async (req, res) => {
     //required: cnic of doctor object -> {"cnic": XXXXXXX}
     const cnic = req.body.cnic;
     const queryText = `UPDATE tabeeb.doctors
-      SET isVerified = true
-      WHERE cnic = '${cnic}'`;
-    await query(queryText);
+      SET isVerified = ?
+      WHERE cnic = ?`;
+    await query(queryText, [true, cnic]);
     res.send("Request Accepted");
   } catch (err) {
     res.status(422).send(err.message);
@@ -94,8 +94,8 @@ const postRejectRequest = async (req, res) => {
     //required: cnic of doctor object
     const cnic = req.body.cnic;
     const queryText = `DELETE FROM tabeeb.doctors
-    WHERE cnic='${cnic}'`;
-    await query(queryText);
+    WHERE cnic= ?`;
+    await query(queryText, [cnic]);
     res.send("Request rejected");
   } catch (err) {
     res.status(422).send(err.message);
@@ -156,16 +156,16 @@ const postChangePassword = async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
     const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
-    const queryText = `SELECT * FROM tabeeb.admins WHERE email='${email}'`;
-    const result = await query(queryText);
+    const queryText = `SELECT * FROM tabeeb.admins WHERE email= ?`;
+    const result = await query(queryText, [email]);
     const hash = result[0].password;
     const match = await bcrypt.compare(oldPassword, hash);
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
     const updateQuery = `UPDATE tabeeb.admins
-      SET password='${newPasswordHash}'
-      WHERE email='${email}'`;
-    await query(updateQuery);
+      SET password = ?
+      WHERE email = ?`;
+    await query(updateQuery, [newPasswordHash, email]);
     const successMessage = {
       success: true,
       message: "Password successfully changed!",
