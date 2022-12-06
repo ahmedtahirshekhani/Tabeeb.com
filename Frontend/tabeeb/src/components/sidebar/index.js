@@ -34,21 +34,8 @@ const helper = (role) => {
 function SideBar(props) {
 	const role = props.role;
 	return (
-		<div className="drawer">
-			<input id="my-drawer" type="checkbox" className="drawer-toggle" />
-			<div className="drawer-content">
-				<label
-					htmlFor="my-drawer"
-					className="btn btn-primary drawer-button drawer-btn-custom"
-				>
-					<img
-						src="https://img.icons8.com/ios/50/000000/menu.png"
-						width="30px"
-					/>
-				</label>
-			</div>
-			<div className="drawer-side">
-				<label htmlFor="my-drawer" className="drawer-overlay"></label>
+		<div>
+			<div>
 				<ul className="menu p-4 w-80 bg-base-100 text-base-content">
 					{helper(role)}
 				</ul>
