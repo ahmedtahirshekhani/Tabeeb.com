@@ -28,10 +28,6 @@ import DoctorService from "../pages/services";
 
 const router = createBrowserRouter([
 	{
-		path: "/dashboard/doctor/currentAppointments",
-		element: <CurrentApptDoctor />,
-	},
-	{
 		path: "/",
 		element: <Root />,
 		errorElement: <ErrorPage />,
@@ -99,7 +95,7 @@ const router = createBrowserRouter([
 		path: "/dashboard/doctor/prescriptionhistory",
 		element: <PrescriptionHist />,
 	},
-	
+
 
 ]);
 export default router;

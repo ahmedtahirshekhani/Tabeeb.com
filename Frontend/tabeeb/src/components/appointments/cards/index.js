@@ -34,7 +34,9 @@ const AppointmentCard = (props) => {
 	const getCards = () => {
 		const tempList = [];
 		post.map((element, index) => {
-			const date = element.date.split("T")[0];
+			console.log(element)
+			const date = element.date_time.split("T")[0];
+			const time = element.date_time.split("T")[1].slice(0,-5);
 
 			tempList.push(
 				<Card
@@ -42,7 +44,7 @@ const AppointmentCard = (props) => {
 					name={element.d_cnic}
 					id={element.appointment_id}
 					date={date}
-					time={element.time}
+					time={time}
 					charges={element.charges}
 					prescription={element.prescription}
 				/>
