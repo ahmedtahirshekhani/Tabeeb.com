@@ -1,10 +1,9 @@
 import React from "react";
 import classNames from "classnames";
-//import { BsCalendarCheck } from "react-icons/bs";
 
 import styles from "../assets/styles/card.module.css";
 
-const Card = ({ id, name , date, time, charges, prescription }) => {
+const Card = ({ id, name , date, time, charges, prescription, props }) => {
   return (
     <div className={classNames([styles.wrapper, styles.wrapperAnime])}>
       <div className={styles.header}>
@@ -32,6 +31,7 @@ const Card = ({ id, name , date, time, charges, prescription }) => {
         <h1 className={styles.text}>{`Time: ${time}`}</h1>
         <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
         <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
+        {props == "currentappt" ? <button className="btn btn-primary">Finish Appointment</button> : null}
       </div>
     </div>
   );

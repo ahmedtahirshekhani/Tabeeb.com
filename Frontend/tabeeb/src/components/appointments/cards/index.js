@@ -47,6 +47,7 @@ const AppointmentCard = (props) => {
 					time={time}
 					charges={element.charges}
 					prescription={element.prescription}
+					props = "currentappt"
 				/>
 			);
 		});
