@@ -133,10 +133,13 @@ const postDashboard = async (req, res) => {
     console.log(patientCity);
     const queryText2 = `SELECT *
     FROM ${process.env.database}.doctors
+    INNER JOIN ${process.env.database}.services ON cnic=d_cnic
     WHERE city=?`;
     const doctors = await query(queryText2, [patientCity]);
+    console.log(doctors);
     res.send(doctors);
   } catch (err) {
+    console.log(err);
     res.status(422).send(err);
   }
 };
@@ -276,14 +279,31 @@ const postWalletAmount = async (req, res) => {
 const postAddBalance = async (req, res) => {
   try {
     //need patient email and added amount
-    const { email, balance } = req.body;
-    // const email = await getEmail(token);
+    const { token, balance } = req.body;
+    const email = await getEmail(token);
     const queryText = `SELECT * from ${process.env.database}.patients WHERE email=?`;
     const updated_amount =
       (await query(queryText, [email]))[0].wallet_amount + balance;
     const queryText2 = `UPDATE ${process.env.database}.patients SET wallet_amount=? WHERE email=?`;
     query(queryText2, [updated_amount, email]);
     res.send({ success: true, message: "Balance Updated" });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const getServiceDetails = async (req, res) => {
+  try {
+    //need doc email
+    const { token } = req.body;
+    // console.log(email);
+    const email = await getEmail(token);
+    const cnic = await getDoctorID(email);
+    // console.log("CNIC", cnic);
+    const queryText = `SELECT * FROM ${process.env.database}.services WHERE d_cnic=?`;
+    const service = (await query(queryText, [cnic]))[0];
+    res.send(service);
   } catch (err) {
     console.log(err);
     res.status(422).send(err.message);
@@ -304,4 +324,5 @@ module.exports = {
   postMakeAppointment,
   postWalletAmount,
   postAddBalance,
+  getServiceDetails,
 };

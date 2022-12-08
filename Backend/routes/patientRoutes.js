@@ -23,4 +23,5 @@ patientRoutes.post(
 patientRoutes.post("/makeAppointment", patientController.postMakeAppointment);
 patientRoutes.post("/wallet", patientController.postWalletAmount);
 patientRoutes.post("/update_wallet", patientController.postAddBalance);
+patientRoutes.post("/service_details", patientController.getServiceDetails);
 module.exports = patientRoutes;
