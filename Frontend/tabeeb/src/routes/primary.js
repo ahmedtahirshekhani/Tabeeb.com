@@ -26,6 +26,7 @@ import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
 import DoctorService from "../pages/services";
 import Wallet from "../pages/wallet";
+import PatientCard from "../components/patientcard";
 
 const router = createBrowserRouter([
 	{
@@ -103,6 +104,10 @@ const router = createBrowserRouter([
 	{
 		path: "/wallet",
 		element: <Wallet />,
+	},
+	{
+		path: "/patientdashboard",
+		element: <PatientCard />,
 	},
 	{
 		path: "/temp/:patient",

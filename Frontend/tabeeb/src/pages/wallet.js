@@ -19,10 +19,10 @@ const Wallet = (props) => {
                 <div className={styles.layout}>
                 
                     <Card
-                    amount={posts[0].amount}
+                    amount={props.amount}
                     // likes={posts[0].likes}
                     //   order={index + 1}
-                    image={posts[0].image}
+                    // image={posts[0].image}
                     />
                 </div>
             </section>
