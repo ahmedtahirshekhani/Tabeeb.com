@@ -259,6 +259,37 @@ const postMakeAppointment = async (req, res) => {
     res.status(422).send(err);
   }
 };
+const postWalletAmount = async (req, res) => {
+  try {
+    //need patient email
+    const { token } = req.body;
+    const email = await getEmail(token);
+    const queryText = `SELECT wallet_amount from ${process.env.database}.patients WHERE email=?`;
+    const wallet_amount = (await query(queryText, [email]))[0].wallet_amount;
+    res.send({ balance: wallet_amount });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postAddBalance = async (req, res) => {
+  try {
+    //need patient email and added amount
+    const { email, balance } = req.body;
+    // const email = await getEmail(token);
+    const queryText = `SELECT * from ${process.env.database}.patients WHERE email=?`;
+    const updated_amount =
+      (await query(queryText, [email]))[0].wallet_amount + balance;
+    const queryText2 = `UPDATE ${process.env.database}.patients SET wallet_amount=? WHERE email=?`;
+    query(queryText2, [updated_amount, email]);
+    res.send({ success: true, message: "Balance Updated" });
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -271,4 +302,6 @@ module.exports = {
   postPendingAppointments,
   postAcceptedAppointments,
   postMakeAppointment,
+  postWalletAmount,
+  postAddBalance,
 };
