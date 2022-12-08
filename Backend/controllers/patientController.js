@@ -223,10 +223,12 @@ const postMakeAppointment = async (req, res) => {
   try {
     //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
     //jstoken needed
-    const { token, doctor_email, datetime } = req.body;
-    const patient_email = await getEmail(token);
+    const { patient_email, doctor_email, datetime } = req.body;
+    // const patient_email = await getEmail(token);
     const patient_phone = await getPatientID(patient_email);
     const d_cnic = await getDoctorID(doctor_email);
+
+    //check if doc has service
     const service = (
       await query(
         `SELECT rate FROM ${process.env.database}.services WHERE d_cnic=?`,
@@ -237,14 +239,23 @@ const postMakeAppointment = async (req, res) => {
       throw "Doctor does not have a service!";
     }
     const charges = service.rate;
+
+    //check if patient has enough balance
     const patient_balance = (
       await query(
         `SELECT wallet_amount FROM ${process.env.database}.patients WHERE phone_number=?`,
         [patient_phone]
       )
-    )[0];
+    )[0].wallet_amount;
     if (patient_balance < charges) {
       throw "Patient does not have enough balance!";
+    } else {
+      //update patient balance
+      const updatedBalance = patient_balance - charges;
+      await query(
+        `UPDATE ${process.env.database}.patients SET wallet_amount=? WHERE phone_number=?`,
+        [updatedBalance, patient_phone]
+      );
     }
     const queryText = `INSERT INTO ${process.env.database}.appointments (patient_phone, d_cnic, date_time, status, prescription, charges)
       VALUES (?, ?, ?, "pending", NULL, ?)`;
