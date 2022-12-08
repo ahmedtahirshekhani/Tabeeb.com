@@ -25,6 +25,7 @@ import PastApptDoctor from "../pages/viewpastappt/doctor";
 import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
 import DoctorService from "../pages/services";
+import Wallet from "../pages/wallet";
 
 const router = createBrowserRouter([
 	{
@@ -98,6 +99,14 @@ const router = createBrowserRouter([
 	{
 		path: "/dashboard/doctor/service",
 		element: <DoctorService />,
+	},
+	{
+		path: "/wallet",
+		element: <Wallet />,
+	},
+	{
+		path: "/temp/:patient",
+		element: <DashboardLayout />,
 	},
 ]);
 export default router;

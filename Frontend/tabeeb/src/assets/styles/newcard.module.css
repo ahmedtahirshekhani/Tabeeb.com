@@ -35,11 +35,11 @@
   }
   
   .primaryBadge {
-    @apply h-10 w-16 ml-2 bg-white hover:bg-blue-600 flex items-center justify-center font-medium text-blue-600 hover:text-white rounded-2xl shadow-xl;
+    @apply h-12 w-32 ml-2 bg-white hover:bg-blue-600 flex items-center justify-center font-medium text-blue-600 hover:text-white rounded-2xl shadow-xl;
   }
   
   .counter {
-    @apply text-gray-800 ml-2;
+    @apply text-gray-500 ml-2;
   }
   
   .badgeAnime {
