@@ -19,6 +19,7 @@ import ViewEarnRep from "../pages/viewearnrep";
 import DoctorSignUpRequests from "../pages/doctorSignUpRequests";
 import ViewReports from "../pages/viewreports"
 
+import DashboardLayout from "../pages/dashboard";
 import DoctorProfile from "../pages/viewprofile/doctor";
 import PatientProfile from "../pages/viewprofile/patient";
 // import CurrentApptPatient from "../pages/viewcurrappt/patient";
@@ -27,8 +28,7 @@ import PatientProfile from "../pages/viewprofile/patient";
 // import PastApptDoctor from "../pages/viewpastappt/doctor";
 // import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
-
-import DashboardLayout from "../pages/dashboard";
+import DoctorService from "../pages/services";
 
 const router = createBrowserRouter([
 	{
@@ -68,64 +68,33 @@ const router = createBrowserRouter([
 		path: "/login/forgotpassword",
 		element: <ForgotPassword />,
 	},
-
+	// {
+	// 	path: "/dashboard/admin",
+	// 	element: <AdminDashboard />,
+	// },
 	{
 		path: "/dashboard/change_password",
 		element: <PasswordChange />,
 	},
 	{
-
 		path: "/dashboard/:role",
 		element: <DashboardLayout />,
 		exact: true,
 	},
+
 	{
 		path: "/dashboard/:role/:func",
 		element: <DashboardLayout />,
 		exact: true,
 	},
-
-
-	// {
-	// 	path: "/dashboard/patient/currentappt",
-	// 	element: <CurrentApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/currentappt",
-	// 	element: <CurrentApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/pastappt",
-	// 	element: <PastApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/pastappt",
-	// 	element: <PastApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/makeAppointment",
-	// 	element: <MakeAppointment />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/currentappt",
-	// 	element: <CurrentApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/currentappt",
-	// 	element: <CurrentApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/patient/pastappt",
-	// 	element: <PastApptPatient />,
-	// },
-	// {
-	// 	path: "/dashboard/doctor/pastappt",
-	// 	element: <PastApptDoctor />,
-	// },
-	// {
-	// 	path: "/dashboard/makeAppointment",
-	// 	element: <MakeAppointment />,
-	// },
+	{
+		path: "/dashboard/admin/doctorsignuprequests",
+		element: <DoctorSignUpRequests />
+	},
+	{
+		path: "/dashboard/admin/viewreports",
+		element: <ViewReports />
+	},
 	{
 		path: "/dashboard/admin/doctorsignuprequests",
 		element: <DoctorSignUpRequests />
@@ -140,8 +109,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/profile/patient",
-		element: <PatientProfile />,
-
+		element: <PatientProfile />
 	},
 	{
 		path: "/dashboard/pendingAppointments",
@@ -154,6 +122,14 @@ const router = createBrowserRouter([
 	{
 		path:"/dashboard/doctor/viewearnrep",
 		element: <ViewEarnRep />
-	}
+	},
+	{
+		path: "/dashboard/doctor/prescriptionhistory",
+		element: <PrescriptionHist />,
+	},
+	{
+		path: "/dashboard/doctor/service",
+		element: <DoctorService />,
+	},
 ]);
 export default router;

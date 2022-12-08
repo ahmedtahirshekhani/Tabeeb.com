@@ -18,5 +18,5 @@ code {
 
 .drawer{
   position: fixed;
-  z-index: 2;
+  z-index: -1
 }

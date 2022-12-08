@@ -2,20 +2,34 @@
 import Card from "../../card";
 import styles from "../../../assets/styles/App.module.css";
 import { useEffect } from "react";
-import { getCurrentAppt } from "../../../services/utils/sidebarfunctions";
+import {
+	getCurrentAppt,
+	getPastAppt,
+} from "../../../services/utils/sidebarfunctions";
 import React from "react";
-const AppointmentCard = () => {
+const AppointmentCard = (props) => {
 	const [post, setPost] = React.useState([]);
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		const role = localStorage.getItem("role");
-		getCurrentAppt(role, token)
-			.then((res) => {
-				setPost(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		const func = props.function;
+		if (func === "currentapt") {
+			getCurrentAppt(role, token)
+				.then((res) => {
+					setPost(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} else if (func === "pastapt") {
+			getPastAppt(role, token)
+				.then((res) => {
+					setPost(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	}, []);
 	const getCards = () => {
 		const tempList = [];

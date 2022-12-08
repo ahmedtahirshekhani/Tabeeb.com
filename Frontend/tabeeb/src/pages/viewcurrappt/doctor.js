@@ -13,7 +13,7 @@ const CurrentApptDoctor = () => {
 	return (
 		<>
 			{console.log("Current Appointment")}
-			<AppointmentCard />
+			<AppointmentCard function="currentapt" />
 		</>
 	);
 };
