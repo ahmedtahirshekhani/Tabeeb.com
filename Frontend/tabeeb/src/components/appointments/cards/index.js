@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import {
 	getCurrentAppt,
 	getPastAppt,
+	getPendingAppt,
 } from "../../../services/utils/sidebarfunctions";
 import React from "react";
 const AppointmentCard = (props) => {
@@ -30,8 +31,18 @@ const AppointmentCard = (props) => {
 					console.log(err);
 				});
 		}
+		else if (func === "pendingappt") {
+			getPendingAppt(role, token)
+				.then((res) => {
+					setPost(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} 
 	}, []);
 	const getCards = () => {
+		const func = props.function;
 		const tempList = [];
 		post.map((element, index) => {
 			console.log(element)
@@ -47,7 +58,7 @@ const AppointmentCard = (props) => {
 					time={time}
 					charges={element.charges}
 					prescription={element.prescription}
-					props = "currentappt"
+					props = {func}
 				/>
 			);
 		});

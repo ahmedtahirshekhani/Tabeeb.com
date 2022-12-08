@@ -23,7 +23,7 @@ export const sideBarDoctor = [
 	},
 	{
 		title: "View Pending Appointments",
-		link: "/dashboard/pendingAppointments",
+		link: "/dashboard/doctor/pendingAppointments",
 	},
 	
 ];

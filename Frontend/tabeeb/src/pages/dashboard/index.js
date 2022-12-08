@@ -3,6 +3,7 @@ import DashboardNavbar from "../../components/navigation/dashboard";
 import SideBar from "../../components/sidebar";
 import { Route, Link, Routes, useParams } from "react-router-dom";
 import CurrentApptDoctor from "../viewcurrappt/doctor";
+import PendingAppointmentsDoctor from "../viewPendingAppointments";
 import "../../assets/styles/dashboard.css";
 import PastApptDoctor from "../viewpastappt/doctor";
 import DoctorSignupRequests from "../../components/doctorreqs/cards";
@@ -24,6 +25,7 @@ const DashboardLayout = () => {
 				{params.func === "currentappt" && <CurrentApptDoctor />}
 				{params.func === "pastappt" && <PastApptDoctor />}
 				{params.func === "doctorreqs" && <DoctorSignupRequests />}
+				{params.func === "pendingAppointments" && <PendingAppointmentsDoctor />}
 			</div>
 		</div>
 	);

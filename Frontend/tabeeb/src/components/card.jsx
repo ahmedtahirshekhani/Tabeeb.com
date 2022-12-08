@@ -31,7 +31,8 @@ const Card = ({ id, name , date, time, charges, prescription, props }) => {
         <h1 className={styles.text}>{`Time: ${time}`}</h1>
         <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
         <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
-        {props == "currentappt" ? <button className="btn btn-primary">Finish Appointment</button> : null}
+        {props == "currentapt" ? <button className="btn btn-primary btn-wide">Finish Appointment</button> : null}
+        {props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide">Accept</button> <button className="btn btn-outline btn-error btn-wide">Reject</button></div> : null}
       </div>
     </div>
   );

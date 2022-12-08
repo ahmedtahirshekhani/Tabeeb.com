@@ -88,10 +88,6 @@ const router = createBrowserRouter([
 		element: <MakeAppointment />,
 	},
 	{
-		path: "/dashboard/pendingAppointments",
-		element: <PendingAppointments />,
-	},
-	{
 		path: "/dashboard/doctor/prescriptionhistory",
 		element: <PrescriptionHist />,
 	},
