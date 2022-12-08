@@ -21,4 +21,5 @@ export const sideBarDoctor = [
 		title: "View Past Appointments",
 		link: "/dashboard/doctor/pastappt",
 	},
+	
 ];

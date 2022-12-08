@@ -8,5 +8,9 @@ export const sideBarPatient = [
     {
         title: "Wallet",
         link: ""
-    }
+    },
+    {
+		title: "Make Appointments",
+		link: "/dashboard/patient/makeAppointment",
+	},
 ]
