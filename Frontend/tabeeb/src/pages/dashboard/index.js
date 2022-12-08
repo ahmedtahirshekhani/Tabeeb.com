@@ -7,6 +7,9 @@ import PendingAppointmentsDoctor from "../viewPendingAppointments";
 import "../../assets/styles/dashboard.css";
 import PastApptDoctor from "../viewpastappt/doctor";
 import DoctorSignupRequests from "../../components/doctorreqs/cards";
+import ViewEarnRep from "../../components/earnreports/doctor";
+import ViewReports from "../../components/reports/admin";
+import MakeAppointment from "../makeAppointment";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -25,7 +28,14 @@ const DashboardLayout = () => {
 				{params.func === "currentappt" && <CurrentApptDoctor />}
 				{params.func === "pastappt" && <PastApptDoctor />}
 				{params.func === "doctorreqs" && <DoctorSignupRequests />}
-				{params.func === "pendingAppointments" && <PendingAppointmentsDoctor />}
+				{role === "doctor" && params.func === "pendingAppointments" && (
+					<PendingAppointmentsDoctor />
+				)}
+				{role === "doctor" && params.func === "viewearnrep" && <ViewEarnRep />}
+				{role === "admin" && params.func === "viewreports" && <ViewReports />}
+				{role === "patient" && params.func === "makeAppointment" && (
+					<MakeAppointment />
+				)}
 			</div>
 		</div>
 	);

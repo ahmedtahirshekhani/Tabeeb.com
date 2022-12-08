@@ -1,36 +1,16 @@
 import axios from "axios";
+import { setAuthToken } from "./auth";
 
-const getCurrentAppt = (role, token) => {
+const viewEarnRep = (role, token) => {
 	return new Promise((resolve, reject) => {
+		// request content type json
 		const req = {
 			token: token,
 		};
+		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/${role}/acceptedAppointments`, jsonReq, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				console.log("Success");
-				resolve(res);
-			})
-			.catch((err) => {
-				console.log(err);
-				reject(err);
-			});
-	});
-};
-const getPastAppt = (role, token) => {
-	return new Promise((resolve, reject) => {
-		const req = {
-			token: token,
-		};
-		const jsonReq = JSON.stringify(req);
-		axios
-			.post(`/api/v1/${role}/pastAppointments`, jsonReq, {
+			.post(`/api/v1/${role}/earningsReport`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -47,14 +27,43 @@ const getPastAppt = (role, token) => {
 	});
 };
 
-const getPendingAppt = (role, token) => {
+const viewReport = () => {
 	return new Promise((resolve, reject) => {
-		const req = {
-			token: token,
-		};
-		const jsonReq = JSON.stringify(req);
+		// request content type json
+		const role = localStorage.getItem("role");
+		setAuthToken(localStorage.getItem("token"));
 		axios
-			.post(`/api/v1/${role}/pendingAppointments`, jsonReq, {
+			.get(`/api/v1/${role}/reports`, {
+				headers: {
+					"ngrok-skip-browser-warning": "true",
+					"cache-control": "no-cache",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+};
+
+const handleBan = (role, report_id) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		const req = {
+			token: localStorage.getItem("token"),
+			report_id: report_id,
+			role: role,
+		};
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		const tokenRole = localStorage.getItem("role");
+		axios
+			.post(`/api/v1/${tokenRole}/banUser`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -71,4 +80,4 @@ const getPendingAppt = (role, token) => {
 	});
 };
 
-export { getCurrentAppt, getPastAppt, getPendingAppt };
+export { viewEarnRep, viewReport };

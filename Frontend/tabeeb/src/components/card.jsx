@@ -2,8 +2,35 @@ import React from "react";
 import classNames from "classnames";
 
 import styles from "../assets/styles/card.module.css";
+import axios from "axios";
+
 
 const Card = ({ id, name , date, time, charges, prescription, props }) => {
+  const acceptPending = (id) => {
+    axios.post("/api/v1/doctor/acceptAppointment", { appointment_id: id }).then((res) => {
+      console.log(res.data);
+      if(res.data.success == true){
+
+        window.location.reload();
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+
+  }
+  const rejectPending = (id) => {
+    axios.post("/api/v1/doctor/rejectAppointment", { appointment_id: id }).then((res) => {
+      console.log(res.data);
+      if(res.data.success == true){
+
+        window.location.reload();
+      }
+    }
+    ).catch((err) => {
+      console.log(err);
+    }
+    )
+  }
   return (
     <div className={classNames([styles.wrapper, styles.wrapperAnime])}>
       <div className={styles.header}>
@@ -32,7 +59,7 @@ const Card = ({ id, name , date, time, charges, prescription, props }) => {
         <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
         <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
         {props == "currentapt" ? <button className="btn btn-primary btn-wide">Finish Appointment</button> : null}
-        {props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide">Accept</button> <button className="btn btn-outline btn-error btn-wide">Reject</button></div> : null}
+        {props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide" onClick={()=>acceptPending(id)}>Accept</button> <button className="btn btn-outline btn-error btn-wide" onClick={()=>rejectPending(id)}>Reject</button></div> : null}
       </div>
     </div>
   );
