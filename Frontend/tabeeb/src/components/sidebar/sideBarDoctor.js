@@ -7,7 +7,7 @@ export const sideBarDoctor = [
 	},
 	{
 		title: "View Earnings Reports",
-		link: "",
+		link: "/dashboard/doctor/viewearnrep",
 	},
 	{
 		title: "Make Timing Slots",

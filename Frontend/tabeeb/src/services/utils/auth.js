@@ -25,14 +25,6 @@ const loginAuth = (email, password, role) => {
 				console.log(err);
 				reject(err);
 			});
-		// const res = {
-		// 	status: 200,
-		// 	data: {
-		// 		success: true,
-		// 		message: "User successfully logged in",
-		// 	},
-		// };
-		// resolve(res);
 	});
 };
 
@@ -253,7 +245,7 @@ const doctorServiceAuth = (role, token, start_time, end_time, days, rate) => {
 			rate: rate,
 		};
 
-		console.log(req)
+		console.log(req);
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		axios
@@ -273,8 +265,6 @@ const doctorServiceAuth = (role, token, start_time, end_time, days, rate) => {
 			});
 	});
 };
-
-
 
 export {
 	loginAuth,

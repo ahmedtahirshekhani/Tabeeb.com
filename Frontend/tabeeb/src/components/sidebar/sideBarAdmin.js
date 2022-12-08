@@ -3,7 +3,7 @@ import React from "react";
 export const sideBarAdmin = [
 	{
 		title: "View Reports",
-		link: "",
+		link: "/dashboard/admin/viewreports",
 	},
 	{
 		title: "Doctor Signup Requests",

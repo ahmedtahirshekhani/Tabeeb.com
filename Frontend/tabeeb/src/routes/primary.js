@@ -15,9 +15,7 @@ import PasswordChange from "../pages/dashboard/change_password";
 // import PatientDashboard from "../pages/dashboard/patient";
 
 import PrescriptionHist from "../pages/prescription/history";
-import ViewEarnRep from "../pages/viewearnrep";
 import DoctorSignUpRequests from "../pages/doctorSignUpRequests";
-import ViewReports from "../pages/viewreports"
 
 import DashboardLayout from "../pages/dashboard";
 import DoctorProfile from "../pages/viewprofile/doctor";
@@ -68,10 +66,7 @@ const router = createBrowserRouter([
 		path: "/login/forgotpassword",
 		element: <ForgotPassword />,
 	},
-	// {
-	// 	path: "/dashboard/admin",
-	// 	element: <AdminDashboard />,
-	// },
+
 	{
 		path: "/dashboard/change_password",
 		element: <PasswordChange />,
@@ -89,40 +84,31 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/dashboard/admin/doctorsignuprequests",
-		element: <DoctorSignUpRequests />
+		element: <DoctorSignUpRequests />,
 	},
-	{
-		path: "/dashboard/admin/viewreports",
-		element: <ViewReports />
-	},
+
 	{
 		path: "/dashboard/admin/doctorsignuprequests",
-		element: <DoctorSignUpRequests />
+		element: <DoctorSignUpRequests />,
 	},
-	{
-		path: "/dashboard/admin/viewreports",
-		element: <ViewReports />
-	},
+
 	{
 		path: "/profile/doctor",
 		element: <DoctorProfile />,
 	},
 	{
 		path: "/profile/patient",
-		element: <PatientProfile />
+		element: <PatientProfile />,
 	},
 	{
 		path: "/dashboard/pendingAppointments",
 		element: <PendingAppointments />,
 	},
 	{
-		path:"/dashboard/doctor/prescriptionhistory",
-		element: <PrescriptionHist />
+		path: "/dashboard/doctor/prescriptionhistory",
+		element: <PrescriptionHist />,
 	},
-	{
-		path:"/dashboard/doctor/viewearnrep",
-		element: <ViewEarnRep />
-	},
+
 	{
 		path: "/dashboard/doctor/prescriptionhistory",
 		element: <PrescriptionHist />,
