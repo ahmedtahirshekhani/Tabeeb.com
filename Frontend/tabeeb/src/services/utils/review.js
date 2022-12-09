@@ -31,4 +31,32 @@ const sendReview = (rate, review, d_cnic, id) => {
 	});
 };
 
-export { sendReview };
+const sendReport = (report, d_cnic) => {
+	return new Promise((resolve, reject) => {
+		const token = localStorage.getItem("token");
+
+		const req = {
+			report: report,
+			token: token,
+			d_cnic: d_cnic,
+		};
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/patient/report`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+};
+
+export { sendReview, sendReport };
