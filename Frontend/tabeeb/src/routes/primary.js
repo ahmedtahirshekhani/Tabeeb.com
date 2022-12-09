@@ -84,7 +84,7 @@ const router = createBrowserRouter([
 		exact: true,
 	},
 	{
-		path: "/dashboard/patiemakeAppointment",
+		path: "/dashboard/patientmakeAppointment",
 		element: <MakeAppointment />,
 	},
 	{
