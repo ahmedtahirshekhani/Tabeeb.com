@@ -33,6 +33,44 @@ const Card = ({ id, name , date, time, charges, prescription, props }) => {
         <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
         {props == "currentapt" ? <button className="btn btn-primary btn-wide">Finish Appointment</button> : null}
         {props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide">Accept</button> <button className="btn btn-outline btn-error btn-wide">Reject</button></div> : null}
+        {props == "pastapt" ? 
+        <div>
+        <div className="dropdown dropdown-hover p-5" >
+          <label tabIndex={0} className="btn m-1">Rate Doctor</label>
+          <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li><a>1</a></li>
+            <li><a>2</a></li>
+            <li><a>3</a></li>
+            <li><a>4</a></li>
+            <li><a>5</a></li>
+            
+          </ul>
+        </div>
+        <div className="form-control">
+        <label className="label">
+          <span className="label-text">Add Review</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Review"
+          className="input input-bordered"
+          // onChange={(e) => setEmail(e.target.value)}
+        />
+        </div>
+        <div className="form-control mt-6">
+					<button className="btn btn-primary" 
+          // onClick={() => login()}
+          >
+						Submit Review
+					</button>
+				</div>
+        </div>
+        
+        
+
+
+
+        : null}
       </div>
     </div>
   );

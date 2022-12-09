@@ -30,7 +30,7 @@ const getPastAppt = (role, token) => {
 		};
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/${role}/pastAppoitments`, jsonReq, {
+			.post(`/api/v1/${role}/pastAppointments`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
