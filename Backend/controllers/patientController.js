@@ -381,11 +381,11 @@ const getAverageRating = async (cnic) => {
 };
 
 const postReport = async (req, res) => {
-  //cnic, patient_phone, report
+  //cnic, patient token, report
   try {
-    const { d_cnic, patient_phone, report } = req.body;
-    // const patient_email = await getEmail(token);
-    // const d_cnic = await getDoctorID(doc_email);
+    const { d_cnic, token, report } = req.body;
+    const patient_email = await getEmail(token);
+    const patient_phone = await getPatientID(patient_email);
     const queryText = `INSERT INTO ${process.env.database}.reported_doctors
     (patient_phone, d_cnic, report_reason)
     VALUES (?,?,?)`;
