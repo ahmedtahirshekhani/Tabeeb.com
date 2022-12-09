@@ -28,4 +28,6 @@ adminRoutes.post(
   adminController.postChangePassword
 );
 
+adminRoutes.post("/ban_user", /*auth.checkToken, */adminController.postBanUser);
+
 module.exports = adminRoutes;

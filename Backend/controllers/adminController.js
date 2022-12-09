@@ -2,6 +2,8 @@ const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { failureMessage, getEmail } = require("./util");
+const e = require("express");
+const { report } = require("../routes/adminRoutes.js");
 
 const postLogin = async (req, res) => {
   try {
@@ -180,6 +182,38 @@ const postChangePassword = async (req, res) => {
     return res.status(422).send(failureMessage);
   }
 };
+
+const postBanUser = async (req, res) => {
+  console.log("IN ban user");
+  try {
+    //required object:
+    /*{
+    report_id: id  (doc/patient)
+    user_type: "patients"/"doctors"
+    }*/
+    const { id, user_type } = req.body;
+    let queryText = "";
+    console.log("REQ BODY:", req.body);
+    if (user_type === "patients") {
+      queryText = `SELECT patient_phone FROM ${process.env.database}.reported_${user_type} WHERE report_id=?`;
+      const phone = (await query(queryText, [id]))[0].patient_phone;
+      queryText = `UPDATE ${process.env.database}.${user_type} SET isbanned=? WHERE phone_number=?`;
+      await query(queryText, [true, phone]);
+    } else {
+      queryText = `SELECT d_cnic FROM ${process.env.database}.reported_${user_type} WHERE report_id=?`;
+      const cnic = (await query(queryText, [id]))[0].d_cnic;
+      queryText = `UPDATE ${process.env.database}.${user_type} SET isbanned=? WHERE cnic=?`;
+      await query(queryText, [true, cnic]);
+    }
+    console.log(id);
+    queryText = `DELETE FROM ${process.env.database}.reported_${user_type} WHERE report_id=?`;
+    await query(queryText, [id]);
+    res.send("User Banned!");
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
 module.exports = {
   postLogin,
   getDoctorRequests,
@@ -187,4 +221,5 @@ module.exports = {
   postRejectRequest,
   getReports,
   postChangePassword,
+  postBanUser,
 };

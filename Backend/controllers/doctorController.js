@@ -277,7 +277,7 @@ const postRejectAppointment = async (req, res) => {
   //required: appointment id
   try {
     const { appointment_id } = req.body;
-    const queryText = `UPDATE ${process.env.database}.appointments SET status='rejected' WHERE appointment_id=?}`;
+    const queryText = `UPDATE ${process.env.database}.appointments SET status='rejected' WHERE appointment_id=?`;
     await query(queryText, [appointment_id]);
     res.send({
       success: true,

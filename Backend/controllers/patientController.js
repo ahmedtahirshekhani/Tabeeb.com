@@ -19,8 +19,8 @@ const postSignup = async (req, res) => {
       return res.status(422).send({ error: "Invalid signup: Input missing!" });
     const hash = await bcrypt.hash(password, 10);
 
-    const queryText = `INSERT INTO ${process.env.database}.patients (email, password, phone_number, full_name ,city, wallet_amount)
-                        VALUES (?, ?,?,?,?,?);`;
+    const queryText = `INSERT INTO ${process.env.database}.patients (email, password, phone_number, full_name ,city, wallet_amount, isbanned)
+                        VALUES (?,?,?,?,?,?, false);`;
 
     const result = await query(queryText, [
       email,
@@ -46,7 +46,7 @@ const postLogin = async (req, res) => {
 
     const queryText = `SELECT *
           FROM ${process.env.database}.patients
-          WHERE email = ?'
+          WHERE email = ?
           `;
 
     const result = await query(queryText, [email]);

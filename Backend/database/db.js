@@ -9,6 +9,7 @@ const patientSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.patien
     password        varchar(100),
     city            varchar(20),
     wallet_amount   double,
+    isbanned        boolean,
     PRIMARY KEY (phone_number),
     UNIQUE (email)
      )`;
@@ -181,7 +182,7 @@ const fillPatients = async (
   for (let i = 0; i < patientsNo; i++) {
     let hash = await bcrypt.hash(patientPasswords[i], 10);
     let queryText = `
-    INSERT INTO ${process.env.database}.patients VALUES ('${patientPhones[i]}','${patientEmails[i]}','${patientFullNames[i]}','${hash}','${patientCities[i]}',${patientWallets[i]})
+    INSERT INTO ${process.env.database}.patients VALUES ('${patientPhones[i]}','${patientEmails[i]}','${patientFullNames[i]}','${hash}','${patientCities[i]}',${patientWallets[i]}, false)
  `;
     db.query(queryText, (err, result) => {
       if (err) return null;

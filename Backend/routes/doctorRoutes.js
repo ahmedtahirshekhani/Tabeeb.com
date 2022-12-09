@@ -20,6 +20,10 @@ doctorRoutes.post(
 doctorRoutes.post("/editService", doctorController.postEditService);
 doctorRoutes.post("/acceptAppointment", doctorController.postAcceptAppointment);
 doctorRoutes.post("/rejectAppointment", doctorController.postRejectAppointment);
+// doctorRoutes.post(
+//   "/completeAppointment",
+//   doctorController.postCompleteAppointment
+// );
 doctorRoutes.post("/earningsReport", doctorController.postEarningsReport);
 doctorRoutes.post(
   "/prescriptionHistory",
