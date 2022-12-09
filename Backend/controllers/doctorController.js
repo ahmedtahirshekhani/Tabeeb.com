@@ -331,6 +331,19 @@ const postPrescriptionHistory = async (req, res) => {
   }
 };
 
+const postCompleteAppointment = async (req, res) => {
+  //appointment id and prescription text required
+  try {
+    const { appointment_id, prescription } = req.body;
+    const queryText = `UPDATE ${process.env.database}.appointments SET prescription=?, status=? WHERE appointment_id=?`;
+    await query(queryText, [prescription, "completed", appointment_id]);
+    res.send("Appointment Completed");
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -345,4 +358,5 @@ module.exports = {
   postRejectAppointment,
   postEarningsReport,
   postPrescriptionHistory,
+  postCompleteAppointment,
 };
