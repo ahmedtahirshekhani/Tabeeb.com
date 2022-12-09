@@ -1,17 +1,24 @@
 import React from "react";
 
 export const sideBarPatient = [
-    {
-        title: "View Current Appointments",
-        link: ""
-    }, 
-    {
-        title: "Wallet",
-        link: "/dashboard/patient/wallet"
-    },
-    {
+	{
+		title: "Doctors",
+		link: "/dashboard/patient/getdoctors",
+	},
+	{
+		title: "View Current Appointments",
+		link: "/dashboard/patient/currentappt",
+	},
+	{
+		title: "Wallet",
+		link: "/dashboard/patient/wallet",
+	},
+	{
 		title: "Make Appointments",
 		link: "/dashboard/patient/makeAppointment",
 	},
-    
-]
+	{
+		title: "View Past Appointments",
+		link: "/dashboard/patient/pastappt",
+	},
+];

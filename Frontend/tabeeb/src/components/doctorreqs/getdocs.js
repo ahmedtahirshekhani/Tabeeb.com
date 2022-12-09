@@ -1,21 +1,22 @@
 // import posts from "./testdata";
-import DoctorCard from "../../doctorcard";
-import DoctorCardForPatients from "../../doctorcardforpatients";
-import styles from "../../../assets/styles/App.module.css";
+import DoctorCard from "../doctorcard";
+import styles from "../../assets/styles/App.module.css";
 import { useEffect } from "react";
-import testdata from "./testdata";
-import { getDoctors } from "../../../services/utils/adminfunction";
+import {
+	getDoctors,
+	GetDoctorsListService,
+} from "../../services/utils/adminfunction";
 
 import React from "react";
-const DoctorSignupRequests = () => {
+const GetDoctorsList = () => {
 	const [cardposts, setPost] = React.useState([]);
 	const token = localStorage.getItem("token");
 	const role = localStorage.getItem("role");
 	useEffect(() => {
-		getDoctors(role, token)
+		GetDoctorsListService()
 			.then((res) => {
 				console.log(res.data);
-				setPost(res.data.data);
+				setPost(res.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -37,7 +38,7 @@ const DoctorSignupRequests = () => {
 					city={element.city}
 					pmc_reg={element.pmc_reg}
 					role={role}
-					params="doctorreqs"
+					params="doctorlist"
 				/>
 			);
 		});
@@ -45,6 +46,7 @@ const DoctorSignupRequests = () => {
 	};
 	return (
 		<div>
+			{console.log("Iam in getdocs")}
 			<section className={styles.container}>
 				<div className={styles.layout}>{getCards()}</div>
 			</section>
@@ -52,4 +54,4 @@ const DoctorSignupRequests = () => {
 	);
 };
 
-export default DoctorSignupRequests;
+export default GetDoctorsList;
