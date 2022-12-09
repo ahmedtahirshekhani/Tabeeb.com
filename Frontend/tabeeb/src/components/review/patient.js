@@ -34,19 +34,21 @@ const ReviewIt = () => {
             <option value={5}>5</option>
           </select>
         </div>
-        <div className="form-control ">
+        <div className="form-control">
           <label className="label">
-            <span className="label-text ">Add Review</span>
+            <span className="label-text">Add Review</span>
           </label>
           <input
             type="text"
             placeholder="Review"
-            className="input input-bordered "
+            className="input input-bordered"
             onChange={(e) => setReview(e.target.value)}
           />
         </div>
 
-        <button className="btn btn-primary">Submit Review</button>
+        <button className="btn btn-primary" onClick={() => reviewSubmit()}>
+          Submit Review
+        </button>
       </div>
     );
   };
