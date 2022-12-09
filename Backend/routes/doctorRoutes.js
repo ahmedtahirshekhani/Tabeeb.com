@@ -30,4 +30,6 @@ doctorRoutes.post(
   doctorController.postPrescriptionHistory
 );
 
+doctorRoutes.post("/report", doctorController.postReport);
+
 module.exports = doctorRoutes;

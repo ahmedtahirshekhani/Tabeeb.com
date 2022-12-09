@@ -51,6 +51,10 @@ const postLogin = async (req, res) => {
 
     const result = await query(queryText, [email]);
     const hash = result[0].password;
+    const isbanned = result[0].isbanned;
+    if (isbanned == true) {
+      throw "USER IS BANNED!";
+    }
     const successMessage = {
       success: true,
       message: "User Successfully Logged In!",
@@ -72,7 +76,7 @@ const postLogin = async (req, res) => {
     console.log(err);
     const failureMessage = {
       success: false,
-      message: "Invalid Credentials",
+      message: err,
     };
     return res.status(422).send(failureMessage);
   }
@@ -312,16 +316,15 @@ const getServiceDetails = async (req, res) => {
   try {
     //need doc email
     const { docEmail } = req.body;
-    // console.log(email);
-    // const email = await getEmail(token);
     const cnic = await getDoctorID(docEmail);
-    // console.log("CNIC", cnic);
     const queryText = `SELECT * FROM ${process.env.database}.services WHERE d_cnic=?`;
     const service = (await query(queryText, [cnic]))[0];
     const reviews = await getReviews(docEmail);
+    const average_rating = await getAverageRating(cnic);
     res.send({
       service_details: service,
       doc_reviews: reviews,
+      average_rating: average_rating,
     });
   } catch (err) {
     console.log(err);
@@ -366,6 +369,33 @@ const getReviews = async (doctor_email) => {
   }
 };
 
+const getAverageRating = async (cnic) => {
+  try {
+    //need doc email
+    const queryText = `SELECT AVG(rating) as avg FROM ${process.env.database}.reviews WHERE d_cnic=?`;
+    const average_rating = await query(queryText, [cnic]);
+    return average_rating;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const postReport = async (req, res) => {
+  //cnic, patient_phone, report
+  try {
+    const { d_cnic, patient_phone, report } = req.body;
+    // const patient_email = await getEmail(token);
+    // const d_cnic = await getDoctorID(doc_email);
+    const queryText = `INSERT INTO ${process.env.database}.reported_doctors
+    (patient_phone, d_cnic, report_reason)
+    VALUES (?,?,?)`;
+    await query(queryText, [patient_phone, d_cnic, report]);
+    return res.send("Report Done");
+  } catch (err) {
+    return res.status(422).send(err.message);
+  }
+};
+
 module.exports = {
   postSignup,
   postLogin,
@@ -383,4 +413,5 @@ module.exports = {
   getServiceDetails,
   postReview,
   getReviews,
+  postReport,
 };

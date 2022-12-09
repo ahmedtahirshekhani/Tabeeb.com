@@ -28,7 +28,9 @@ const getAppointmentsDoc = async (email, status) => {
     // fetch doc cnic
     const cnic = await getDoctorID(email);
     //get appointments
-    const queryText2 = `SELECT * FROM ${process.env.database}.appointments WHERE d_cnic='${cnic}' AND status='${status}'`;
+    const queryText2 = `SELECT * FROM ${process.env.database}.appointments 
+    INNER JOIN ${process.env.database}.patients ON patient_phone=phone_number
+    WHERE d_cnic='${cnic}' AND status='${status}'`;
     const appointmentsList = await query(queryText2);
     return appointmentsList;
   } catch (err) {
@@ -41,7 +43,9 @@ const getAppointmentsPatient = async (email, status) => {
     // fetch doc cnic
     const phone_number = await getPatientID(email);
     //get appointments
-    const queryText2 = `SELECT * FROM ${process.env.database}.appointments WHERE patient_phone='${phone_number}' AND status='${status}'`;
+    const queryText2 = `SELECT * FROM ${process.env.database}.appointments
+    INNER JOIN ${process.env.database}.doctors ON cnic=d_cnic
+    WHERE patient_phone='${phone_number}' AND status='${status}'`;
     const appointmentsList = await query(queryText2);
     return appointmentsList;
   } catch (err) {

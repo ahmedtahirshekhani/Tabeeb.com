@@ -40,7 +40,7 @@ const postSignup = async (req, res) => {
         pmc_reg
       )
     )
-      return res.status(422).send({ error: "Invalid signup: Input missing!" });
+      return (422).send({ error: "Invalid signup: Input missing!" });
     const hash = await bcrypt.hash(password, 10);
 
     const queryText = `INSERT INTO ${process.env.database}.doctors (cnic, email, password, phone_number, full_name, about_doctor, street_address,city, pmc_reg, isverified, isbanned)
@@ -64,9 +64,9 @@ const postSignup = async (req, res) => {
       message: "Doctor Successfully Signed Up!",
       user: result,
     };
-    res.status(200).send(successMessage);
+    return res.status(200).send(successMessage);
   } catch (err) {
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -84,6 +84,10 @@ const postLogin = async (req, res) => {
 
     const result = await query(queryText, [email]);
     hash = result[0].password;
+    const isbanned = result[0].isbanned;
+    if (isbanned == true) {
+      throw "USER IS BANNED!";
+    }
     const successMessage = {
       success: true,
       message: "User Successfully Logged In!",
@@ -97,13 +101,20 @@ const postLogin = async (req, res) => {
         }
       );
       successMessage["token"] = token;
-      res.send(successMessage);
+      return res.send(successMessage);
     } else {
       throw err;
     }
   } catch (err) {
     console.log(err);
-    return res.status(422).send(failureMessage);
+    if (err == "USER IS BANNED!") {
+      return res.status(422).send({
+        success: false,
+        message: err,
+      });
+    } else {
+      return res.status(422).send(failureMessage);
+    }
   }
 };
 
@@ -127,7 +138,7 @@ const postChangePassword = async (req, res) => {
       success: true,
       message: "Password successfully changed!",
     };
-    res.send(successMessage);
+    return res.send(successMessage);
   } catch (err) {
     console.log(err);
     return res.status(422).send(failureMessage);
@@ -141,10 +152,10 @@ const postViewProfile = async (req, res) => {
     const email = await getEmail(token);
     const queryText = `SELECT * FROM ${process.env.database}.doctors WHERE email= ?`;
     const result = await query(queryText, [email]);
-    res.send(result);
+    return res.send(result);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -167,10 +178,10 @@ const postEditProfile = async (req, res) => {
       success: true,
       message: "Profile Updated",
     };
-    res.send(successMessage);
+    return res.send(successMessage);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -181,10 +192,10 @@ const postPastAppointments = async (req, res) => {
     const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "completed");
-    res.send(result);
+    return res.send(result);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -195,10 +206,10 @@ const postPendingAppointments = async (req, res) => {
     const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "pending");
-    res.send(result);
+    return res.send(result);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -209,10 +220,10 @@ const postAcceptedAppointments = async (req, res) => {
     const email = await getEmail(token);
     // const { email } = req.body;
     const result = await getAppointmentsDoc(email, "accepted");
-    res.send(result);
+    return res.send(result);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -250,10 +261,10 @@ const postEditService = async (req, res) => {
       success: true,
       message: "Service Updated",
     };
-    res.send(successMessage);
+    return res.send(successMessage);
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -263,13 +274,13 @@ const postAcceptAppointment = async (req, res) => {
     const { appointment_id } = req.body;
     const queryText = `UPDATE ${process.env.database}.appointments SET status='accepted' WHERE appointment_id=?`;
     await query(queryText, [appointment_id]);
-    res.send({
+    return res.send({
       success: true,
       message: "Appointment Accepted!",
     });
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -279,13 +290,13 @@ const postRejectAppointment = async (req, res) => {
     const { appointment_id } = req.body;
     const queryText = `UPDATE ${process.env.database}.appointments SET status='rejected' WHERE appointment_id=?`;
     await query(queryText, [appointment_id]);
-    res.send({
+    return res.send({
       success: true,
       message: "Appointment Rejected!",
     });
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -299,7 +310,7 @@ const postEarningsReport = async (req, res) => {
     const appointmentHistory = await query(queryText, [cnic]);
     const queryText2 = `SELECT SUM(charges) as earnings FROM ${process.env.database}.appointments WHERE d_cnic=? AND status='completed'`;
     const totalEarnings = (await query(queryText2, [cnic]))[0].earnings;
-    res.send({
+    return res.send({
       success: true,
       message: "Report Generated!",
       history: appointmentHistory,
@@ -307,7 +318,7 @@ const postEarningsReport = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -320,14 +331,14 @@ const postPrescriptionHistory = async (req, res) => {
     const phone = await getPatientID(email);
     const queryText = `SELECT * FROM ${process.env.database}.appointments WHERE patient_phone=? AND status='completed'`;
     const patientHistory = await query(queryText, [phone]);
-    res.send({
+    return res.send({
       success: true,
       message: "History Generated!",
       history: patientHistory,
     });
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
   }
 };
 
@@ -337,10 +348,26 @@ const postCompleteAppointment = async (req, res) => {
     const { appointment_id, prescription } = req.body;
     const queryText = `UPDATE ${process.env.database}.appointments SET prescription=?, status=? WHERE appointment_id=?`;
     await query(queryText, [prescription, "completed", appointment_id]);
-    res.send("Appointment Completed");
+    return res.send("Appointment Completed");
   } catch (err) {
     console.log(err);
-    res.status(422).send(err.message);
+    return res.status(422).send(err.message);
+  }
+};
+
+const postReport = async (req, res) => {
+  //doc token, patient_phone, report
+  try {
+    const { token, patient_phone, report } = req.body;
+    const doc_email = await getEmail(token);
+    const d_cnic = await getDoctorID(doc_email);
+    const queryText = `INSERT INTO ${process.env.database}.reported_patients 
+    (patient_phone, d_cnic, report_reason)
+    VALUES (?,?,?)`;
+    await query(queryText, [patient_phone, d_cnic, report]);
+    return res.send("Report Done");
+  } catch (err) {
+    return res.status(422).send(err.message);
   }
 };
 
@@ -359,4 +386,5 @@ module.exports = {
   postEarningsReport,
   postPrescriptionHistory,
   postCompleteAppointment,
+  postReport,
 };
