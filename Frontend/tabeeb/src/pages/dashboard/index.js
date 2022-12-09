@@ -6,6 +6,7 @@ import CurrentApptDoctor from "../viewcurrappt/doctor";
 import "../../assets/styles/dashboard.css";
 import PastApptDoctor from "../viewpastappt/doctor";
 import DoctorSignupRequests from "../../components/doctorreqs/cards";
+import Wallet from "../../components/wallet";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -24,6 +25,7 @@ const DashboardLayout = () => {
 				{params.func === "currentappt" && <CurrentApptDoctor />}
 				{params.func === "pastappt" && <PastApptDoctor />}
 				{params.func === "doctorreqs" && <DoctorSignupRequests />}
+				{role === "patient" && params.func === "wallet" && <Wallet />}
 			</div>
 		</div>
 	);

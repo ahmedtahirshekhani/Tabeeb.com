@@ -7,6 +7,6 @@ export const sideBarPatient = [
     }, 
     {
         title: "Wallet",
-        link: ""
+        link: "/dashboard/patient/wallet"
     }
 ]

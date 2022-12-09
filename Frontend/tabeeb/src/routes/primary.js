@@ -25,7 +25,7 @@ import PastApptDoctor from "../pages/viewpastappt/doctor";
 import MakeAppointment from "../pages/makeAppointment";
 import PendingAppointments from "../pages/viewPendingAppointments";
 import DoctorService from "../pages/services";
-import Wallet from "../pages/wallet";
+import Wallet from "../components/wallet";
 import PatientCard from "../components/patientcard";
 
 const router = createBrowserRouter([
