@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { viewReport } from "../../services/utils/reports";
+import { handleBan } from "../../services/utils/reports";
 
 const ViewReports = (dict) => {
 	const reportDetails = [
@@ -48,7 +49,24 @@ const ViewReports = (dict) => {
 			});
 	}, []);
 
-	const banUser = (role, reportid) => {};
+	const banUser = (role, reportid) => {
+		console.log(role, reportid);
+		// convert reportid to int
+		let report_id = parseInt(reportid);
+		handleBan(role, report_id)
+			.then((res) => {
+				if (res.status === 200) {
+					console.log(res);
+
+					if (window.confirm("User banned successfully")) {
+						window.location.reload();
+					}
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
 
 	return (
 		<div className="overflow-x-auto">

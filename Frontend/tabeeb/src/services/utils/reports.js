@@ -56,28 +56,32 @@ const handleBan = (role, report_id) => {
 		// request content type json
 		const req = {
 			token: localStorage.getItem("token"),
-			report_id: report_id,
-			role: role,
+			id: report_id,
+			user_type: role,
 		};
 		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		const tokenRole = localStorage.getItem("role");
-		axios
-			.post(`/api/v1/${tokenRole}/banUser`, jsonReq, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				console.log("Success");
-				resolve(res);
-			})
-			.catch((err) => {
-				console.log(err);
-				reject(err);
-			});
+		if (tokenRole === "admin") {
+			axios
+				.post(`/api/v1/${tokenRole}/ban_user`, jsonReq, {
+					headers: {
+						"Content-Type": "application/json",
+					},
+				})
+				.then((res) => {
+					console.log(res);
+					console.log("Success");
+					resolve(res);
+				})
+				.catch((err) => {
+					console.log(err);
+					reject(err);
+				});
+		} else {
+			reject("You are not authorized to perform this action");
+		}
 	});
 };
 
-export { viewEarnRep, viewReport };
+export { viewEarnRep, viewReport, handleBan };
