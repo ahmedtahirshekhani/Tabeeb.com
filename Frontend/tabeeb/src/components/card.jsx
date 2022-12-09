@@ -5,12 +5,15 @@ import styles from "../assets/styles/card.module.css";
 import axios from "axios";
 import { sendPresc } from "../services/utils/appointments";
 import { sendReview } from "../services/utils/review";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) => {
   const role = localStorage.getItem("role");
   const [presc, setPresc] = React.useState("");
   const [rate, setRate] = React.useState(0);
   const [review, setReview] = React.useState("");
+  const [appointmentId, setappointmentId] = React.useState(0) ;
+  const navigate = useNavigate()
   
 
 
@@ -40,50 +43,21 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
     )
   }
 
-  const getReview = (idval) => {
-    return (
-      <div>
-        {console.log('getReview Idval', idval)}
-        <div className="dropdown dropdown-hover p-5" >
-          <select className="select select-info w-full max-w-xs" onChange={(e)=>setRate(e.target.value)}>
-  <option disabled selected>Rate Doctor </option>
-  <option value={1}>1</option>
-  <option value={2}>2</option>
-  <option value={3}>3</option>
-  <option value={4}>4</option>
-  <option value = {5}>5</option>
-</select>
-        </div>
-        <div className="form-control">
-        <label className="label">
-          <span className="label-text">Add Review {idval}</span>
-        </label>
-        <input
-          type="text"
-          placeholder="Review"
-          className="input input-bordered"
-          onChange={(e) => setReview(e.target.value)}
-        />
-        </div>
-       
-        </div>
-        
-    )
-  }
+ 
 
   const reviewSubmit = (idt) => {
     console.log(rate, review, idt);
-    // sendReview(rate, review, d_cnic, idt).then((res) => {
-    //   console.log(res);
-    //   if(res.status == 200){
-    //     if(window.confirm("Review sent successfully")){
-    //       window.location.reload();
-    //     }
-    //   }
-    // }).catch((err) => {
-    //   console.log(err);
-    // }
-    // )
+    sendReview(rate, review, d_cnic, idt).then((res) => {
+      console.log(res);
+      if(res.status == 200){
+        if(window.confirm("Review sent successfully")){
+          window.location.reload();
+        }
+      }
+    }).catch((err) => {
+      console.log(err);
+    }
+    )
   }
 
 
@@ -91,22 +65,13 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
     console.log('review pop up', idval)
     return(
       <div className="m-5">
-        <label htmlFor="my-modal" className="btn">Review It* {idval}</label>
-
-        {/* Put this part before </body> tag */}
-        <input type="checkbox" id="my-modal" className="modal-toggle" />
-        <div className="modal">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Review the Doctor! {idval}</h3>
-            {console.log('review pop up', idval)}
-            {getReview(idval)}
-            <div className="modal-action">
-              <label htmlFor="my-modal" className="btn" onClick = {()=>reviewSubmit(idval)}>Done</label>
-              <label htmlFor="my-modal" className="btn" onClick = {()=>window.location.reload()}>Cancel</label>
-            </div>
-          </div>
-        </div>
-      </div>
+        <label className="btn" onClick={() => navigate('/dashboard/patient/review', {
+          state:{
+            appointment_id: idval,
+            dcnic: d_cnic
+          }
+        })}>Review Doctor</label>
+</div>
 
     )
   }
@@ -126,6 +91,7 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
   }
 
   const askForPrescription = (id)=>{
+
     return(<div className="p-5">
       {/* The button to open modal */}
 <label htmlFor="my-modal" className="btn m-5">Finish Appointment</label>
@@ -135,7 +101,7 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
 <div className="modal">
   <div className="modal-box">
     <h3 className="font-bold text-lg">Enter Prescription:</h3>
-    <textarea className="w-full h-32 p-2 border border-gray-300 rounded mt-2 mb-4" placeholder="Enter Prescription" onChange={(e)=>setPresc(e.target.value)}></textarea>
+    <textarea className="w-full h-32 p-2 border border-gray-300 rounded mt-2 mb-4" placeholder="Enter Prescription " onChange={(e)=>setPresc(e.target.value)}></textarea>
     <div className="modal-action">
       <label htmlFor="my-modal" className="btn" onClick = {()=>sendPrescript(id)}>Done</label>
     </div>
