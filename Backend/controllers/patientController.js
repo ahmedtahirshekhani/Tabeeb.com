@@ -114,6 +114,7 @@ const postSearch = async (req, res) => {
     //search doctors in the city of patient
     const queryText2 = `SELECT *
     FROM ${process.env.database}.doctors
+    INNER JOIN ${process.env.database}.services on cnic=d_cnic
     WHERE city=?
     AND
     full_name LIKE '%${search}%'
