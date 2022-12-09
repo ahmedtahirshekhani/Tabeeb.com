@@ -7,10 +7,11 @@ export const sideBarPatient = [
     }, 
     {
         title: "Wallet",
-        link: ""
+        link: "/dashboard/patient/wallet"
     },
     {
 		title: "Make Appointments",
 		link: "/dashboard/patient/makeAppointment",
 	},
+    
 ]
