@@ -3,10 +3,12 @@ import {
 	makeAppointmentAuth,
 	fetchServiceDataAuth,
 } from "../../services/utils/auth";
-import moment from "moment";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MakeAppointmentComponent = (props) => {
-	const [doctorEmail, setdoctorEmail] = useState("");
+  const location = useLocation();
+	const [doctorEmail, setdoctorEmail] = useState(location.state.docEmail);
 	const [startTime, setStartTime] = useState("");
 	const [endTime, setEndTime] = useState("");
 	const [daysDoctor, setDaysDoctor] = useState(["Mon", "Tue", "Wed"]);
@@ -20,6 +22,7 @@ const MakeAppointmentComponent = (props) => {
 	const [listTimes, setListTimes] = useState([]);
 	const [reviews, setReviews] = useState([]);
   const [avgReview, setAvgReview] = useState(0) ;
+  const navigate = useNavigate()
 
 	const getWeek = () => {
 		Date.prototype.addDays = function (days) {
@@ -61,25 +64,27 @@ const MakeAppointmentComponent = (props) => {
 	}
 
 	const fetchData = async () => {
-		const serviceData = await fetchServiceDataAuth(role, "Glynda@gmail.com");
-		setdoctorEmail("Glynda@gmail.com");
+    console.log(location.state.docEmail)
+		const serviceData = await fetchServiceDataAuth(role, location.state.docEmail);
+    var starttime = serviceData["data"]["service_details"]["start_time"]
+		var interval = "15";
+		var endtime = serviceData["data"]["service_details"]["end_time"]
+		var timeslots = [serviceData["data"]["service_details"]["end_time"]]
+		while (starttime <= endtime) {
+			starttime = addMinutes(starttime, interval);
+			timeslots.push(starttime);
+		}
+
+		setdoctorEmail(location.state.docEmail);
 		setStartTime(serviceData["data"]["service_details"]["start_time"]);
     setAvgReview(serviceData["data"]["average_rating"][0]['avg']);
-    console.log(serviceData["data"]["average_rating"][0]['avg'])
 		setEndTime(serviceData["data"]["service_details"]["end_time"]);
 		setRate(serviceData["data"]["service_details"]["rate"]);
 		const temp = serviceData["data"]["service_details"]["days"].split(",");
 		setReviews(serviceData["data"]["doc_reviews"]);
 		setDaysDoctor(temp);
-		var starttime = startTime;
-		var interval = "15";
-		var endtime = endTime;
-		var timeslots = [startTime];
-		while (starttime <= endtime) {
-			starttime = addMinutes(starttime, interval);
-			timeslots.push(starttime);
-		}
 		setListTimes(timeslots);
+    console.log(daysDoctor)
 	};
 
 	useEffect(() => {
@@ -93,6 +98,9 @@ const MakeAppointmentComponent = (props) => {
 		makeAppointmentAuth(role, token, doctorEmail, temp)
 			.then((res, err) => {
 				console.log(res);
+        if(window.confirm("Appointment successful")){
+          navigate("/dashboard/patient/getdoctors")
+        }
 			})
 			.catch((err) => {
 				console.log(err);

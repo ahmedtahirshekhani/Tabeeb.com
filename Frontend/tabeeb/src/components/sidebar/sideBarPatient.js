@@ -14,10 +14,6 @@ export const sideBarPatient = [
 		link: "/dashboard/patient/wallet",
 	},
 	{
-		title: "Make Appointments",
-		link: "/dashboard/patient/makeAppointment",
-	},
-	{
 		title: "View Past Appointments",
 		link: "/dashboard/patient/pastappt",
 	},

@@ -4,10 +4,12 @@ import classNames from "classnames";
 import { useEffect } from "react";
 import styles from "../assets/styles/card.module.css";
 import { acceptRejectDoctor } from "../services/utils/adminfunction";
+import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ id, cnic, email, phone_number, full_name, about_doctor, street_address, city, pmc_reg, role, params }) => {
   const [reqButton, setReqButton] = React.useState(false);
   const [render, setRender] = React.useState(false);
+  const navigate = useNavigate()
   useEffect(() => {
     if (role === "admin" && params === "doctorreqs"){
       setReqButton(true);
@@ -18,7 +20,7 @@ const DoctorCard = ({ id, cnic, email, phone_number, full_name, about_doctor, st
     acceptRejectDoctor(cnic, token, type).then((res) => {
       console.log(res);
       window.location.reload();
-      
+
     }).catch((err) => {
       console.log(err);
       window.location.reload();
@@ -54,14 +56,18 @@ const DoctorCard = ({ id, cnic, email, phone_number, full_name, about_doctor, st
         <h1 className={styles.text}>{`Clinic Address: ${street_address}`}</h1>
         <h1 className={styles.text}>{`City: ${city}`}</h1>
         {role==="admin"&&<h1 className={styles.text}>{`PMC Reg: ${pmc_reg}`}</h1>}
-  
+
       </div>
       {reqButton && (
       <div>
       <button className="btn btn-primary m-3" onClick={()=>btnClick(cnic, 'accept')}>Accept</button>
       <button className="btn m-3" onClick={()=>btnClick(cnic, 'reject')}>Reject</button>
       </div>)}
-      {role==="patient" && params === "doctorlist" && <button className="btn btn-primary m-3">Book Appointment</button>}
+      {role==="patient" && params === "doctorlist" && <button className="btn btn-primary m-3" onClick={() => {navigate("/dashboard/patient/makeAppointment", {
+      state: {
+        docEmail: email,
+      }
+      })}}>Book Appointment</button>}
     </div>
     </div>
   );
