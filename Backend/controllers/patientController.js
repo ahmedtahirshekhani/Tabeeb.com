@@ -127,14 +127,15 @@ const postSearch = async (req, res) => {
 const postDashboard = async (req, res) => {
   //need patient email
   try {
-    const { email } = req.body;
+    const { token } = req.body;
+    const email = await getEmail(token);
     const queryText = `SELECT city FROM ${process.env.database}.patients WHERE email=?`;
     const patientCity = (await query(queryText, [email]))[0].city;
     console.log(patientCity);
     const queryText2 = `SELECT *
     FROM ${process.env.database}.doctors
     INNER JOIN ${process.env.database}.services ON cnic=d_cnic
-    WHERE city=?`;
+    WHERE city=? AND isverified=true`;
     const doctors = await query(queryText2, [patientCity]);
     console.log(doctors);
     res.send(doctors);
@@ -307,14 +308,45 @@ const postAddBalance = async (req, res) => {
 const getServiceDetails = async (req, res) => {
   try {
     //need doc email
-    const { token } = req.body;
+    const { docEmail } = req.body;
     // console.log(email);
-    const email = await getEmail(token);
-    const cnic = await getDoctorID(email);
+    // const email = await getEmail(token);
+    const cnic = await getDoctorID(docEmail);
     // console.log("CNIC", cnic);
     const queryText = `SELECT * FROM ${process.env.database}.services WHERE d_cnic=?`;
     const service = (await query(queryText, [cnic]))[0];
     res.send(service);
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const postReview = async (req, res) => {
+  try {
+    //need patient token, doc email, rating and review
+    const { patient_email, doctor_email, rating, review } = req.body;
+    // const patient_email = await getEmail(token);
+    const patient_phone = await getPatientID(patient_email);
+    const d_cnic = await getDoctorID(doctor_email);
+    const queryText = `INSERT INTO ${process.env.database}.reviews 
+    (patient_phone, d_cnic, rating, review_text) VALUES (?,?,?,?)`;
+    await query(queryText, [patient_phone, d_cnic, rating, review]);
+    res.send("Review Posted!");
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err.message);
+  }
+};
+
+const getReviews = async (req, res) => {
+  try {
+    //need doc email
+    const { doctor_email } = req.body;
+    const d_cnic = await getDoctorID(doctor_email);
+    const queryText = `SELECT * FROM  ${process.env.database}.reviews WHERE d_cnic=?`;
+    const reviews = await query(queryText, [d_cnic]);
+    res.send(reviews);
   } catch (err) {
     console.log(err);
     res.status(422).send(err.message);
@@ -336,4 +368,6 @@ module.exports = {
   postWalletAmount,
   postAddBalance,
   getServiceDetails,
+  postReview,
+  getReviews,
 };

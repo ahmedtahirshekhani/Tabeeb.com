@@ -2,8 +2,6 @@ const { db, query } = require("../database/db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { failureMessage, getEmail } = require("./util");
-const e = require("express");
-const { report } = require("../routes/adminRoutes.js");
 
 const postLogin = async (req, res) => {
   try {
