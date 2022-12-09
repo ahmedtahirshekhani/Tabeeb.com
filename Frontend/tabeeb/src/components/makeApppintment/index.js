@@ -19,6 +19,7 @@ const MakeAppointmentComponent = (props) => {
 	const token = localStorage.getItem("token");
 	const [listTimes, setListTimes] = useState([]);
 	const [reviews, setReviews] = useState([]);
+  const [avgReview, setAvgReview] = useState(0) ;
 
 	const getWeek = () => {
 		Date.prototype.addDays = function (days) {
@@ -60,9 +61,11 @@ const MakeAppointmentComponent = (props) => {
 	}
 
 	const fetchData = async () => {
-		const serviceData = await fetchServiceDataAuth(role, props.email);
-		setdoctorEmail(props.email);
+		const serviceData = await fetchServiceDataAuth(role, "Glynda@gmail.com");
+		setdoctorEmail("Glynda@gmail.com");
 		setStartTime(serviceData["data"]["service_details"]["start_time"]);
+    setAvgReview(serviceData["data"]["average_rating"][0]['avg']);
+    console.log(serviceData["data"]["average_rating"][0]['avg'])
 		setEndTime(serviceData["data"]["service_details"]["end_time"]);
 		setRate(serviceData["data"]["service_details"]["rate"]);
 		const temp = serviceData["data"]["service_details"]["days"].split(",");
@@ -77,7 +80,6 @@ const MakeAppointmentComponent = (props) => {
 			timeslots.push(starttime);
 		}
 		setListTimes(timeslots);
-		console.log(timeslots);
 	};
 
 	useEffect(() => {
@@ -158,6 +160,9 @@ const MakeAppointmentComponent = (props) => {
 					Book Appointment
 				</button>
 			</div>
+      <div>
+        Average Ratings: {avgReview}/5
+      </div>
 			<div>Reviews:</div>
 			<div className="overflow-x-auto">
 				<table className="table w-full">
