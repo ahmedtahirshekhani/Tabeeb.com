@@ -12,6 +12,7 @@ import ViewReports from "../../components/reports/admin";
 import MakeAppointment from "../makeAppointment";
 import Wallet from "../../components/wallet";
 import GetDoctorsList from "../../components/doctorreqs/getdocs";
+import PendingAppointmentsPatient from "../viewPendingAppointments/patientpending";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -50,6 +51,10 @@ const DashboardLayout = () => {
 				{role === "patient" && params.func === "getdoctors" && (
 					<GetDoctorsList />
 				)}
+				{role === "patient" && params.func === "pendingappt" && (
+					<PendingAppointmentsPatient />
+				)}
+
 			</div>
 		</div>
 	);

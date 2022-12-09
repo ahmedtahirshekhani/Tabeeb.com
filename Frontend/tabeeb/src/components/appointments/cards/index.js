@@ -46,6 +46,7 @@ const AppointmentCard = (props) => {
 		const tempList = [];
 		post.map((element, index) => {
 			console.log(element)
+
 			const date = element.date_time.split("T")[0];
 			const time = element.date_time.split("T")[1].slice(0,-5);
 
@@ -60,6 +61,7 @@ const AppointmentCard = (props) => {
 					prescription={element.prescription}
 					d_cnic = {element.d_cnic}
 					props = {func}
+					d_name = {element.full_name}
 				/>
 			);
 		});
