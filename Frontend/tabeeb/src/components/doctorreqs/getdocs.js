@@ -25,6 +25,7 @@ const GetDoctorsList = () => {
 	const getCards = () => {
 		const tempList = [];
 		cardposts.map((element, index) => {
+		
 			tempList.push(
 				<DoctorCard
 					key={index + 1}

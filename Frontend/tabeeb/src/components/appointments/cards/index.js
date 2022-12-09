@@ -58,6 +58,7 @@ const AppointmentCard = (props) => {
 					time={time}
 					charges={element.charges}
 					prescription={element.prescription}
+					d_cnic = {element.d_cnic}
 					props = {func}
 				/>
 			);
