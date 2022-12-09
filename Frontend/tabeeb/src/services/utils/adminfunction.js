@@ -28,6 +28,32 @@ const getDoctors = (role, token) => {
 	// });
 };
 
+const GetDoctorsListService = () => {
+	const token = localStorage.getItem("token");
+	const req = {
+		token: token,
+	};
+	// convert req to json
+	const jsonReq = JSON.stringify(req);
+	return new Promise((resolve, reject) => {
+		axios
+			.post("/api/v1/patient/home", jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+};
+
 const acceptRejectDoctor = (cnic, token, task) => {
 	return new Promise((resolve, reject) => {
 		const req = {
@@ -54,4 +80,4 @@ const acceptRejectDoctor = (cnic, token, task) => {
 	});
 };
 
-export { getDoctors, acceptRejectDoctor };
+export { getDoctors, acceptRejectDoctor, GetDoctorsListService };

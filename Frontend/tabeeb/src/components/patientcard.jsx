@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import styles from "../assets/styles/card.module.css";
 import { acceptRejectDoctor } from "../services/utils/adminfunction";
 
-const DoctorCard = ({ id, cnic, email, phone_number, full_name, about_doctor, street_address, city, pmc_reg, role, params }) => {
+const PatientCard = ({ id, cnic, email, phone_number, full_name, about_doctor, street_address, city , role, params  }) => {
   const [reqButton, setReqButton] = React.useState(false);
   const [render, setRender] = React.useState(false);
   useEffect(() => {
@@ -46,25 +46,25 @@ const DoctorCard = ({ id, cnic, email, phone_number, full_name, about_doctor, st
         </div>
       </div>
       <div className={styles.textWrapper}>
-        {role==="admin"&&<h1 className={styles.text}>{`Doctor CNIC: ${cnic}`}</h1>}
+        <h1 className={styles.text}>{`Doctor CNIC: ${cnic}`}</h1>
         <h1 className={styles.text}>{`Email: ${email}`}</h1>
-        {role==="admin"&&<h1 className={styles.text}>{`Phone Number: ${phone_number}`}</h1>}
+        <h1 className={styles.text}>{`Phone Number: ${phone_number}`}</h1>
         <h1 className={styles.text}>{`Full Name: ${full_name}`}</h1>
         <h1 className={styles.text}>{`About Doctor: ${about_doctor}`}</h1>
-        <h1 className={styles.text}>{`Clinic Address: ${street_address}`}</h1>
+        <h1 className={styles.text}>{`Street Address: ${street_address}`}</h1>
         <h1 className={styles.text}>{`City: ${city}`}</h1>
-        {role==="admin"&&<h1 className={styles.text}>{`PMC Reg: ${pmc_reg}`}</h1>}
+        {/* <h1 className={styles.text}>{`PMC Reg: ${pmc_reg}`}</h1> */}
   
       </div>
-      {reqButton && (
+      {/* {reqButton && ( */}
       <div>
-      <button className="btn btn-primary m-3" onClick={()=>btnClick(cnic, 'accept')}>Accept</button>
-      <button className="btn m-3" onClick={()=>btnClick(cnic, 'reject')}>Reject</button>
-      </div>)}
-      {role==="patient" && params === "doctorlist" && <button className="btn btn-primary m-3">Book Appointment</button>}
+      <button className="btn btn-primary m-3" onClick={()=>btnClick(cnic, 'accept')}>Make Appointment</button>
+      {/* <button className="btn m-3" onClick={()=>btnClick(cnic, 'reject')}>Reject</button> */}
+      </div>
+      {/* )} */}
     </div>
     </div>
   );
 };
 
-export default DoctorCard;
+export default PatientCard;

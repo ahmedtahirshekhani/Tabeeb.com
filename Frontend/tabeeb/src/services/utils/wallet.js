@@ -1,36 +1,15 @@
 import axios from "axios";
 
-const getCurrentAppt = (role, token) => {
+const getTotalAmount = () => {
+	const role = localStorage.getItem("role");
+	const token = localStorage.getItem("token");
 	return new Promise((resolve, reject) => {
 		const req = {
 			token: token,
 		};
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/${role}/acceptedAppointments`, jsonReq, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				console.log("Success");
-				resolve(res);
-			})
-			.catch((err) => {
-				console.log(err);
-				reject(err);
-			});
-	});
-};
-const getPastAppt = (role, token) => {
-	return new Promise((resolve, reject) => {
-		const req = {
-			token: token,
-		};
-		const jsonReq = JSON.stringify(req);
-		axios
-			.post(`/api/v1/${role}/pastAppointments`, jsonReq, {
+			.post(`/api/v1/${role}/wallet`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -47,14 +26,17 @@ const getPastAppt = (role, token) => {
 	});
 };
 
-const getPendingAppt = (role, token) => {
+const addAmount = (amount) => {
+	const role = localStorage.getItem("role");
+	const token = localStorage.getItem("token");
 	return new Promise((resolve, reject) => {
 		const req = {
 			token: token,
+			balance: amount,
 		};
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/${role}/pendingAppointments`, jsonReq, {
+			.post(`/api/v1/${role}/update_wallet`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -71,4 +53,4 @@ const getPendingAppt = (role, token) => {
 	});
 };
 
-export { getCurrentAppt, getPastAppt, getPendingAppt };
+export { getTotalAmount, addAmount };

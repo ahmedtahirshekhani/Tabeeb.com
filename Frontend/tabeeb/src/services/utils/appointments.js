@@ -1,57 +1,12 @@
 import axios from "axios";
 
-const getCurrentAppt = (role, token) => {
+const pendingAppointments = (role, token) => {
 	return new Promise((resolve, reject) => {
+		// request content type json
 		const req = {
 			token: token,
 		};
-		const jsonReq = JSON.stringify(req);
-		axios
-			.post(`/api/v1/${role}/acceptedAppointments`, jsonReq, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				console.log("Success");
-				resolve(res);
-			})
-			.catch((err) => {
-				console.log(err);
-				reject(err);
-			});
-	});
-};
-const getPastAppt = (role, token) => {
-	return new Promise((resolve, reject) => {
-		const req = {
-			token: token,
-		};
-		const jsonReq = JSON.stringify(req);
-		axios
-			.post(`/api/v1/${role}/pastAppointments`, jsonReq, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			})
-			.then((res) => {
-				console.log(res);
-				console.log("Success");
-				resolve(res);
-			})
-			.catch((err) => {
-				console.log(err);
-				reject(err);
-			});
-	});
-};
-
-const getPendingAppt = (role, token) => {
-	return new Promise((resolve, reject) => {
-		const req = {
-			token: token,
-		};
+		// convert req to json
 		const jsonReq = JSON.stringify(req);
 		axios
 			.post(`/api/v1/${role}/pendingAppointments`, jsonReq, {
@@ -71,4 +26,29 @@ const getPendingAppt = (role, token) => {
 	});
 };
 
-export { getCurrentAppt, getPastAppt, getPendingAppt };
+const sendPresc = (appointment_id, prescription) => {
+	return new Promise((resolve, reject) => {
+		const req = {
+			appointment_id: appointment_id,
+			prescription: prescription,
+		};
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/doctor/completeAppointment`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+};
+
+export { pendingAppointments, sendPresc };

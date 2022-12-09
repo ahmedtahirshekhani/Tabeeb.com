@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "moment": "^2.29.4"
+    "classnames": "^2.3.2"
   }
 }

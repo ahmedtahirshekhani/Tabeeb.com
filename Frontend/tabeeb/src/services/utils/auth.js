@@ -25,14 +25,6 @@ const loginAuth = (email, password, role) => {
 				console.log(err);
 				reject(err);
 			});
-		// const res = {
-		// 	status: 200,
-		// 	data: {
-		// 		success: true,
-		// 		message: "User successfully logged in",
-		// 	},
-		// };
-		// resolve(res);
 	});
 };
 

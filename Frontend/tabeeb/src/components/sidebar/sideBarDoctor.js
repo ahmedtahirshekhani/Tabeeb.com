@@ -7,7 +7,7 @@ export const sideBarDoctor = [
 	},
 	{
 		title: "View Earnings Reports",
-		link: "",
+		link: "/dashboard/doctor/viewearnrep",
 	},
 	{
 		title: "Make Service",
@@ -16,5 +16,9 @@ export const sideBarDoctor = [
 	{
 		title: "View Past Appointments",
 		link: "/dashboard/doctor/pastappt",
+	},
+	{
+		title: "View Pending Appointments",
+		link: "/dashboard/doctor/pendingAppointments",
 	},
 ];

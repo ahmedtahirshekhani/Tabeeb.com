@@ -2,7 +2,7 @@ import Header from "../../../../layouts/Header";
 import LoginComponent from "../../../../components/login";
 import { signup } from "../../../../services/utils/auth";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const PatientSignup = () => {
 
   const [wallet, setWallet] = useState(0)
@@ -11,9 +11,10 @@ const PatientSignup = () => {
   const [phone, setPhone] = useState("");
   const [fullName, setFullName] = useState("");
   const [city, setCity] = useState("");
-
+  const navigate = useNavigate();
   const patSignup = ()=>{
     console.log("Calling the Api for signup")
+    
     const req = {
 
       'phone_number':phone,
@@ -26,6 +27,7 @@ const PatientSignup = () => {
     signup(req, "patient").then(res=>{
       console.log(res);
       console.log("Success")
+      navigate(`/`);
       // localStorage.setItem('role', role);
     }
     ).catch(err=>{

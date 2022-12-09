@@ -20,6 +20,7 @@ const DashboardNavbar = (props) => {
 	};
 	return (
 		<div className="navbar bg-primary text-primary-content">
+			{console.log("I am here")}
 			<div className="flex-1">
 				<a className="btn btn-ghost normal-case text-xl">{titleUpdate()}</a>
 			</div>

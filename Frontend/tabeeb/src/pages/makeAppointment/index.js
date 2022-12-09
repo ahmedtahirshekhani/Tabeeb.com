@@ -39,4 +39,4 @@ const makeAppointment = () => {
   );
 };
 
-export default makeAppointment;
+export default MakeAppointment;
