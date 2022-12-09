@@ -116,7 +116,9 @@ const postSearch = async (req, res) => {
     FROM ${process.env.database}.doctors
     WHERE city=?
     AND
-    full_name LIKE '%${search}%'`;
+    full_name LIKE '%${search}%'
+    AND
+    isverified=true`;
     const doctors = await query(queryText2, [patientCity]);
     res.send(doctors);
   } catch (err) {
@@ -222,10 +224,10 @@ const postAcceptedAppointments = async (req, res) => {
 
 const postMakeAppointment = async (req, res) => {
   try {
-    //need patient email, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
-    //jstoken needed
-    const { patient_email, doctor_email, datetime } = req.body;
-    // const patient_email = await getEmail(token);
+    //need patient token, doctor email, datetime (format 'YYYY-MM-DD hh:mm:ss') of appointment
+    const { token, doctor_email, datetime } = req.body;
+    console.log("adadasdas", req.body);
+    const patient_email = await getEmail(token);
     const patient_phone = await getPatientID(patient_email);
     const d_cnic = await getDoctorID(doctor_email);
 
@@ -315,7 +317,11 @@ const getServiceDetails = async (req, res) => {
     // console.log("CNIC", cnic);
     const queryText = `SELECT * FROM ${process.env.database}.services WHERE d_cnic=?`;
     const service = (await query(queryText, [cnic]))[0];
-    res.send(service);
+    const reviews = await getReviews(docEmail);
+    res.send({
+      service_details: service,
+      doc_reviews: reviews,
+    });
   } catch (err) {
     console.log(err);
     res.status(422).send(err.message);
@@ -324,14 +330,20 @@ const getServiceDetails = async (req, res) => {
 
 const postReview = async (req, res) => {
   try {
-    //need patient token, doc email, rating and review
-    const { patient_email, doctor_email, rating, review } = req.body;
-    // const patient_email = await getEmail(token);
+    //need patient token, d_cnic, rating and review
+    const { token, d_cnic, rating, review, appointment_id } = req.body;
+    console.log(req.body);
+    const patient_email = await getEmail(token);
     const patient_phone = await getPatientID(patient_email);
-    const d_cnic = await getDoctorID(doctor_email);
     const queryText = `INSERT INTO ${process.env.database}.reviews 
-    (patient_phone, d_cnic, rating, review_text) VALUES (?,?,?,?)`;
-    await query(queryText, [patient_phone, d_cnic, rating, review]);
+    (patient_phone, d_cnic, rating, review_text, appointment_id) VALUES (?,?,?,?,?)`;
+    await query(queryText, [
+      patient_phone,
+      d_cnic,
+      rating,
+      review,
+      appointment_id,
+    ]);
     res.send("Review Posted!");
   } catch (err) {
     console.log(err);
@@ -339,14 +351,14 @@ const postReview = async (req, res) => {
   }
 };
 
-const getReviews = async (req, res) => {
+const getReviews = async (doctor_email) => {
   try {
     //need doc email
-    const { doctor_email } = req.body;
+    // const { doctor_email } = req.body;
     const d_cnic = await getDoctorID(doctor_email);
     const queryText = `SELECT * FROM  ${process.env.database}.reviews WHERE d_cnic=?`;
     const reviews = await query(queryText, [d_cnic]);
-    res.send(reviews);
+    return reviews;
   } catch (err) {
     console.log(err);
     res.status(422).send(err.message);

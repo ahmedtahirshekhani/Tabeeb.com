@@ -66,7 +66,10 @@ const reviewsSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.review
     d_cnic          varchar(13),
     rating          SMALLINT,
     review_text     MEDIUMTEXT,
+    appointment_id  INT,
+    UNIQUE (appointment_id ),
     PRIMARY KEY (review_id),
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id),
     FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (patient_phone) REFERENCES patients(phone_number) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
