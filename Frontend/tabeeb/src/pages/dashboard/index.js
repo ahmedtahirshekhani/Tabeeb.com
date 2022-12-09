@@ -12,6 +12,7 @@ import ViewReports from "../../components/reports/admin";
 import MakeAppointment from "../makeAppointment";
 import Wallet from "../../components/wallet";
 import GetDoctorsList from "../../components/doctorreqs/getdocs";
+import ReviewIt from "../../components/review/patient";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -50,6 +51,8 @@ const DashboardLayout = () => {
 				{role === "patient" && params.func === "getdoctors" && (
 					<GetDoctorsList />
 				)}
+
+				{role === "patient" && params.func === "review" && <ReviewIt />}
 			</div>
 		</div>
 	);
