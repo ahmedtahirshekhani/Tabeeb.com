@@ -169,10 +169,6 @@ const generateStrings = async (names) => {
   };
 };
 
-const generateNumbers = async (names) => {
-  // for(let)
-};
-
 const fillPatients = async (
   patientFullNames,
   patientEmails,
