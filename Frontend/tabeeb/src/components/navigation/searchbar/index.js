@@ -7,6 +7,7 @@ const SearchBar = () => {
 	const [doctorsInfo, setDoctorsInfo] = useState([]);
 	const role = localStorage.getItem("role");
 	const token = localStorage.getItem("token");
+	const [queryInfo, setQueryInfo] = useState("") ;
 
 	const search = () => {
 		setDoctorsInfo([])
@@ -14,7 +15,7 @@ const SearchBar = () => {
 			.then((res, err) => {
 
 				const data = res.data;
-
+				setQueryInfo(data)
 				var myList = [];
 				data.map((item) => {
 					myList.push(item.full_name);
@@ -29,24 +30,9 @@ const SearchBar = () => {
 			});
 	};
 
-	// useEffect(() => {
-	// 	const fetchData = async () => {
-	// 		try {
-	// 			//const {data} = await axios.get(`https://rickandmortyapi.com/api/character/?name=${query}`)
-	// 			//setDoctorsInfo(data.results)
-	// 			const data = [
-	// 				{ name: "Shozab" },
-	// 				{ name: "Shekhani" },
-	// 				{ name: "ali" },
-	// 			];
-	// 			setDoctorsInfo(data);
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 		}
-	// 	};
-
-	// 	fetchData();
-	// }, [query]);
+	const submitSearch = (email) => {
+		console.log(email)
+	}
 
 	return (
 		<div className="form-control">
@@ -68,10 +54,12 @@ const SearchBar = () => {
 			/>
 
 			<ul className="menu shadow bg-base-100 rounded-box w-52 search-dropdown">
-				{doctorsInfo.map((item) => {
-						console.log(item)
-						return (<li>
-							<a>{item}</a>
+				{doctorsInfo.map((item,index) => {
+						return (
+						<li>
+							<div className="clickBox" onClick={() => {submitSearch(queryInfo[index]['email'])}}>
+								<a>{item}</a>
+							</div>
 						</li>)
 
 				})}

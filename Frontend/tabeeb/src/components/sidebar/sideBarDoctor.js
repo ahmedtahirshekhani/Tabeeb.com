@@ -10,10 +10,9 @@ export const sideBarDoctor = [
 		link: "/dashboard/doctor/viewearnrep",
 	},
 	{
-		title: "Make Timing Slots",
-		link: "",
+		title: "Make Service",
+		link: "/dashboard/doctor/service",
 	},
-
 	{
 		title: "View Past Appointments",
 		link: "/dashboard/doctor/pastappt",

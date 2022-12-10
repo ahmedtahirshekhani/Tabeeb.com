@@ -36,17 +36,19 @@ const DashboardNavbar = (props) => {
 						tabIndex={0}
 						className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
 					>
-						<li>
-							<a
-								href={"/profile/" + props.name.split(" ")[0]}
-								className="justify-between text-white"
-							>
-								Profile
-								<span className="badge">New</span>
-							</a>
-						</li>
+						{titleUpdate() != "Admin Dashboard" ? (
+							<li>
+								<a
+									href={"/profile/" + props.name.split(" ")[0]}
+									className="justify-between text-white"
+								>
+									Profile
+									<span className="badge">New</span>
+								</a>
+							</li>
+						) : null}
 
-						{props.name != "Admin Dashboard" ? (
+						{titleUpdate() != "Admin Dashboard" ? (
 							<li>
 								<a href="/dashboard/change_password" className="text-white">
 									Change Password

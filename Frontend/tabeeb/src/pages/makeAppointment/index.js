@@ -2,8 +2,6 @@ import DashboardNavbar from "../../components/navigation/dashboard";
 import MakeAppointmentComponent from "../../components/makeApppintment";
 import { useEffect } from "react";
 import axios from "axios";
-import SideBar from "../../components/sidebar";
-
 const MakeAppointment = () => {
 	//   useEffect(() => {
 	//     console.log("Doctor Dashboard");
@@ -31,9 +29,6 @@ const MakeAppointment = () => {
 									</span>
 									<h1 className="text-5xl font-bold">Make an Appointment!</h1>
 								</div>
-								<p className="py-6 w-96">
-									Enter the required details to proceed!
-								</p>
 							</div>
 							<MakeAppointmentComponent />
 						</div>

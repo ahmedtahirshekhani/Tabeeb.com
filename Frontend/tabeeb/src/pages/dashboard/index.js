@@ -15,6 +15,7 @@ import GetDoctorsList from "../../components/doctorreqs/getdocs";
 import ReviewIt from "../../components/review/patient";
 import ReportIt from "../../components/report/patient";
 import ReportIt2 from "../../components/report/doctor";
+import PendingAppointmentsPatient from "../viewPendingAppointments/patientpending";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -56,6 +57,11 @@ const DashboardLayout = () => {
 
 				{role === "patient" && params.func === "report" && <ReportIt />}
 				{role === "doctor" && params.func === "report" && <ReportIt2 />}
+				{role === "patient" && params.func === "review" && <ReviewIt />}
+				{role === "patient" && params.func === "pendingappt" && (
+					<PendingAppointmentsPatient />
+				)}
+
 			</div>
 		</div>
 	);

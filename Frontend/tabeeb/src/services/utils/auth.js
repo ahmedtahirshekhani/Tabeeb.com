@@ -266,6 +266,35 @@ const doctorServiceAuth = (role, token, start_time, end_time, days, rate) => {
 	});
 };
 
+const fetchServiceDataAuth = (role, docEmail) => {
+	return new Promise((resolve, reject) => {
+		// request content type json
+		console.log("Calling the Api for fetch service data");
+		console.log(role);
+		const req = {
+			docEmail: docEmail,
+		};
+
+		// convert req to json
+		const jsonReq = JSON.stringify(req);
+		axios
+			.post(`/api/v1/${role}/service_details`, jsonReq, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+				console.log("Success");
+				resolve(res);
+			})
+			.catch((err) => {
+				console.log(err);
+				reject(err);
+			});
+	});
+};
+
 export {
 	loginAuth,
 	signup,
@@ -276,4 +305,5 @@ export {
 	editProfileAuth,
 	doctorServiceAuth,
 	makeAppointmentAuth,
+	fetchServiceDataAuth
 };
