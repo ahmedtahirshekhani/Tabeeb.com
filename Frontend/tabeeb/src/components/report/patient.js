@@ -3,12 +3,16 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { sendReview } from "../../services/utils/review";
 import { sendReport } from "../../services/utils/review";
+import { useNavigate } from "react-router-dom";
+
 
 const ReportIt = () => {
   const [report, setReport] = useState("")
   const location = useLocation();
   const [id, setId] = useState(0);
   const [dcnic, setDcnic] = useState("");
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     setId(location.state.appointment_id);
@@ -44,7 +48,7 @@ const ReportIt = () => {
         console.log(res);
         if (res.status == 200) {
           if (window.confirm("Report sent successfully")) {
-            window.location.reload();
+            navigate("/dashboard/patient/pastappt");
           }
         }
       })
