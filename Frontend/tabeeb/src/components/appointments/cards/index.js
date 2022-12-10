@@ -39,7 +39,7 @@ const AppointmentCard = (props) => {
 				.catch((err) => {
 					console.log(err);
 				});
-		} 
+		}
 	}, []);
 	const getCards = () => {
 		const func = props.function;
