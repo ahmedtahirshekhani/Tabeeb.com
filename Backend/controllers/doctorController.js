@@ -217,7 +217,7 @@ const postAcceptedAppointments = async (req, res) => {
 };
 
 const postEditService = async (req, res) => {
-  console.log("req recieved");
+  console.log("req recieved")
   /*sample object:
 	{
     "email":"anwar@gmail.com",
