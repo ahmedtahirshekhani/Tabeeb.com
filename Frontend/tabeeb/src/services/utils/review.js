@@ -34,15 +34,28 @@ const sendReview = (rate, review, d_cnic, id) => {
 const sendReport = (report, d_cnic) => {
 	return new Promise((resolve, reject) => {
 		const token = localStorage.getItem("token");
+		const role = localStorage.getItem("role");
+		let req = {}
 
-		const req = {
+		 if (role == "patient"){
+			req = {
 			report: report,
 			token: token,
 			d_cnic: d_cnic,
+			}
+			
+		}
+		else if (role == "doctor")
+		{
+			req = {
+				report: report,
+				token: token,
+				patient_phone: d_cnic,
+				}
 		};
 		const jsonReq = JSON.stringify(req);
 		axios
-			.post(`/api/v1/patient/report`, jsonReq, {
+			.post(`/api/v1/${role}/report`, jsonReq, {
 				headers: {
 					"Content-Type": "application/json",
 				},

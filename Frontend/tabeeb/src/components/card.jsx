@@ -16,6 +16,9 @@ const Card = ({
   prescription,
   d_cnic,
   props,
+  patient_phone,
+  patient_name
+
 }) => {
   const role = localStorage.getItem("role");
   const [presc, setPresc] = React.useState("");
@@ -85,7 +88,8 @@ const Card = ({
           Review Doctor
         </label>
         <label
-          className="btn btn-outline btn-error btn-wide" onClick={() =>
+          className="btn btn-outline btn-error btn-wide"
+          onClick={() =>
             navigate("/dashboard/patient/report", {
               state: {
                 appointment_id: idval,
@@ -93,7 +97,10 @@ const Card = ({
               },
             })
           }
-        > Report</label>
+        >
+          {" "}
+          Report
+        </label>
       </div>
     );
   };
@@ -167,10 +174,11 @@ const Card = ({
       </div>
       <div className={styles.textWrapper}>
         <h1 className={styles.text}>{`Appointment ID: ${id}`}</h1>
-        <h1 className={styles.text}>{`Doctor CNIC: ${name}`}</h1>
+        {role === "doctor" && <h1 className={styles.text}>{`Patient Name: ${patient_name}`}</h1> }
+        {role === "patient" && <h1 className={styles.text}>{`Doctor Name: ${patient_name}`}</h1> }
         <h1 className={styles.text}>{`Date: ${date}`}</h1>
         <h1 className={styles.text}>{`Time: ${time}`}</h1>
-        <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
+        <h1 className={styles.text}>{`Charges: ${charges}`}</h1> 
         {props != "currentapt" && (
           <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>
         )}
@@ -194,6 +202,22 @@ const Card = ({
           </div>
         ) : null}
         {role === "patient" && props === "pastapt" ? reviewPopup(id) : null}
+        {role === "doctor" && props == "pastapt"
+          ? <button
+          className="btn btn-error btn-wide"
+          onClick={() => 
+            navigate("/dashboard/doctor/report",
+            {
+              state: {
+                id: id,
+                phone: patient_phone
+              },
+            })
+          }
+        >
+          Report
+        </button>
+          : null}
       </div>
     </div>
   );

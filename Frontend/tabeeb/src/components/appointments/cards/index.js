@@ -60,6 +60,8 @@ const AppointmentCard = (props) => {
 					prescription={element.prescription}
 					d_cnic = {element.d_cnic}
 					props = {func}
+					patient_phone = {element.patient_phone}
+					patient_name = {element.full_name}
 				/>
 			);
 		});

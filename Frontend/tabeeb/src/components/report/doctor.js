@@ -4,21 +4,22 @@ import { useLocation } from "react-router-dom";
 import { sendReview } from "../../services/utils/review";
 import { sendReport } from "../../services/utils/review";
 
-const ReportIt = () => {
+const ReportIt2 = () => {
   const [report, setReport] = useState("")
   const location = useLocation();
   const [id, setId] = useState(0);
   const [dcnic, setDcnic] = useState("");
+  const [phone, setPhone] = useState(0)
 
   useEffect(() => {
-    setId(location.state.appointment_id);
-    setDcnic(location.state.dcnic);
+    setPhone(location.state.phone);
+    setId(location.state.id)
     console.log("id", id);
   }, []);
   const getReport = () => {
     return (
       <div>
-        <h1 className="text-5xl text-center font-bold"> Report Doctor for Appointment ID: {id}</h1>
+        <h1 className="text-5xl text-center font-bold"> Report Doctor for Appointment ID: {id}: </h1>
         
         <div className="form-control">
           <label className="label">
@@ -39,7 +40,7 @@ const ReportIt = () => {
     );
   };
   const reportSubmit = () => {
-    sendReport(report, dcnic)
+    sendReport(report, phone)
       .then((res) => {
         console.log(res);
         if (res.status == 200) {
@@ -56,4 +57,4 @@ const ReportIt = () => {
   return getReport();
 };
 
-export default ReportIt;
+export default ReportIt2;
