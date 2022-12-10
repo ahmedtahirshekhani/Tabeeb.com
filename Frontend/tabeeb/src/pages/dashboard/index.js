@@ -14,6 +14,8 @@ import Wallet from "../../components/wallet";
 import GetDoctorsList from "../../components/doctorreqs/getdocs";
 import ReviewIt from "../../components/review/patient";
 import PendingAppointmentsPatient from "../viewPendingAppointments/patientpending";
+import ReportIt from "../../components/report/patient";
+import ReportIt2 from "../../components/report/doctor";
 
 const DashboardLayout = () => {
 	const role = localStorage.getItem("role");
@@ -58,6 +60,8 @@ const DashboardLayout = () => {
 					<PendingAppointmentsPatient />
 				)}
 
+				{role === "patient" && params.func === "report" && <ReportIt />}
+				{role === "doctor" && params.func === "report" && <ReportIt2 />}
 			</div>
 		</div>
 	);

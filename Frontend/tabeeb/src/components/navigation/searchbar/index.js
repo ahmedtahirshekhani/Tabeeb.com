@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../../assets/styles/searchbar.css";
 import { searchAuth } from "../../../services/utils/auth";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
 	const [query, setQuery] = useState("");
@@ -8,6 +9,7 @@ const SearchBar = () => {
 	const role = localStorage.getItem("role");
 	const token = localStorage.getItem("token");
 	const [queryInfo, setQueryInfo] = useState("") ;
+	const navigate = useNavigate();
 
 	const search = () => {
 		setDoctorsInfo([])
@@ -32,6 +34,16 @@ const SearchBar = () => {
 
 	const submitSearch = (email) => {
 		console.log(email)
+		// setQuery('')
+		// setDoctorsInfo([])
+		console.log("no navigate")
+		navigate("/dashboard/patient/makeAppointment",
+            {
+              state: {
+                docEmail: email
+              },
+            })
+		window.location.reload()
 	}
 
 	return (
