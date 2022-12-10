@@ -43,7 +43,7 @@ const postSignup = async (req, res) => {
       return res.status(422).send({ error: "Invalid signup: Input missing!" });
     const hash = await bcrypt.hash(password, 10);
 
-    const queryText = `INSERT INTO tabeeb.doctors (cnic, email, password, phone_number, full_name, about_doctor, street_address,city, pmc_reg, isverified, isbanned)
+    const queryText = `INSERT INTO ${process.env.database}.doctors (cnic, email, password, phone_number, full_name, about_doctor, street_address,city, pmc_reg, isverified, isbanned)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
     const result = await query(queryText, [
@@ -78,8 +78,8 @@ const postLogin = async (req, res) => {
     if (!email || !password)
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
-          FROM tabeeb.doctors
-          WHERE email = ?'
+          FROM ${process.env.database}.doctors
+          WHERE email = ?
           `;
 
     const result = await query(queryText, [email]);
@@ -102,6 +102,7 @@ const postLogin = async (req, res) => {
       throw err;
     }
   } catch (err) {
+    console.log(err);
     return res.status(422).send(failureMessage);
   }
 };
@@ -112,13 +113,13 @@ const postChangePassword = async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
     const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
-    const queryText = `SELECT * FROM tabeeb.doctors WHERE email= ?`;
+    const queryText = `SELECT * FROM ${process.env.database}.doctors WHERE email= ?`;
     const result = await query(queryText, [email]);
     const hash = result[0].password;
     const match = await bcrypt.compare(oldPassword, hash);
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
-    const updateQuery = `UPDATE tabeeb.doctors
+    const updateQuery = `UPDATE ${process.env.database}.doctors
       SET password= ?
       WHERE email= ?`;
     await query(updateQuery, [newPasswordHash, email]);
@@ -138,7 +139,7 @@ const postViewProfile = async (req, res) => {
     // need doctor email
     const { token } = req.body;
     const email = await getEmail(token);
-    const queryText = `SELECT * FROM tabeeb.doctors WHERE email= ?`;
+    const queryText = `SELECT * FROM ${process.env.database}.doctors WHERE email= ?`;
     const result = await query(queryText, [email]);
     res.send(result);
   } catch (err) {
@@ -152,7 +153,7 @@ const postEditProfile = async (req, res) => {
     //only full name, city, street address, city can be edited in doctor profile
     const { token, full_name, city, street_address, about_doctor } = req.body;
     const email = await getEmail(token);
-    const queryText = `UPDATE tabeeb.doctors
+    const queryText = `UPDATE ${process.env.database}.doctors
     SET full_name=?, city=?, street_address=?, about_doctor=?
     WHERE email=?`;
     await query(queryText, [
@@ -231,7 +232,7 @@ const postEditService = async (req, res) => {
     const { token, start_time, end_time, days, rate } = req.body;
     const email = await getEmail(token);
     const cnic = await getDoctorID(email);
-    const queryText = `INSERT INTO tabeeb.services (d_cnic, start_time, end_time, days, rate)
+    const queryText = `INSERT INTO ${process.env.database}.services (d_cnic, start_time, end_time, days, rate)
 	VALUES(?,?,?,?,?) ON DUPLICATE KEY UPDATE
 	start_time=?, end_time=?, days=?, rate=?`;
     await query(queryText, [
@@ -260,7 +261,7 @@ const postAcceptAppointment = async (req, res) => {
   //required: appointment id
   try {
     const { appointment_id } = req.body;
-    const queryText = `UPDATE tabeeb.appointments SET status='accepted' WHERE appointment_id=?`;
+    const queryText = `UPDATE ${process.env.database}.appointments SET status='accepted' WHERE appointment_id=?`;
     await query(queryText, [appointment_id]);
     res.send({
       success: true,
@@ -276,7 +277,7 @@ const postRejectAppointment = async (req, res) => {
   //required: appointment id
   try {
     const { appointment_id } = req.body;
-    const queryText = `UPDATE tabeeb.appointments SET status='rejected' WHERE appointment_id=?}`;
+    const queryText = `UPDATE ${process.env.database}.appointments SET status='rejected' WHERE appointment_id=?}`;
     await query(queryText, [appointment_id]);
     res.send({
       success: true,
@@ -294,9 +295,9 @@ const postEarningsReport = async (req, res) => {
     const { token } = req.body;
     const email = await getEmail(token);
     const cnic = await getDoctorID(email);
-    const queryText = `SELECT * FROM tabeeb.appointments WHERE d_cnic=? AND status='completed'`;
+    const queryText = `SELECT * FROM ${process.env.database}.appointments WHERE d_cnic=? AND status='completed'`;
     const appointmentHistory = await query(queryText, [cnic]);
-    const queryText2 = `SELECT SUM(charges) as earnings FROM tabeeb.appointments WHERE d_cnic=? AND status='completed'`;
+    const queryText2 = `SELECT SUM(charges) as earnings FROM ${process.env.database}.appointments WHERE d_cnic=? AND status='completed'`;
     const totalEarnings = (await query(queryText2, [cnic]))[0].earnings;
     res.send({
       success: true,
@@ -317,7 +318,7 @@ const postPrescriptionHistory = async (req, res) => {
     const { email } = req.body;
     // const email = await getEmail(token);
     const phone = await getPatientID(email);
-    const queryText = `SELECT * FROM tabeeb.appointments WHERE patient_phone=? AND status='completed'`;
+    const queryText = `SELECT * FROM ${process.env.database}.appointments WHERE patient_phone=? AND status='completed'`;
     const patientHistory = await query(queryText, [phone]);
     res.send({
       success: true,

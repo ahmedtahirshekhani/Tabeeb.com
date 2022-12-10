@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const util = require("util");
 const bcrypt = require("bcryptjs");
 
-const patientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.patients
+const patientSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.patients
     (phone_number   varchar(13),
     email           varchar(255),
     full_name       varchar(50),
@@ -13,7 +13,7 @@ const patientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.patients
     UNIQUE (email)
      )`;
 
-const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
+const doctorSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.doctors
     (cnic           varchar(13),
     email           varchar(255),
     password        varchar(100),
@@ -30,17 +30,17 @@ const doctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.doctors
     UNIQUE (phone_number)
 )`;
 
-const serviceSchema = `CREATE TABLE IF NOT EXISTS tabeeb.services
+const serviceSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.services
     (d_cnic           varchar(13),
     start_time        time,
     end_time          time,
     days              varchar(30),
     rate              double,
     PRIMARY KEY (d_cnic),
-    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic)
+    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
 
-const appointmentSchema = `CREATE TABLE IF NOT EXISTS tabeeb.appointments
+const appointmentSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.appointments
     (appointment_id     int NOT NULL AUTO_INCREMENT,
     patient_phone       varchar(11),
     d_cnic              varchar(13),
@@ -49,45 +49,45 @@ const appointmentSchema = `CREATE TABLE IF NOT EXISTS tabeeb.appointments
     prescription        MEDIUMTEXT,
     charges             double,
     PRIMARY KEY (appointment_id),
-    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic),
-    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
+    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
 
-const adminSchema = `CREATE TABLE IF NOT EXISTS tabeeb.admins
+const adminSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.admins
     (email          varchar(255),
     password        varchar(100),
     PRIMARY KEY (email)
 )`;
 
-const reviewsSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reviews
+const reviewsSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.reviews
     (review_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
     rating          SMALLINT,
     review_text     MEDIUMTEXT,
     PRIMARY KEY (review_id),
-    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic),
-    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
+    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
 
-const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reported_doctors
+const reportDoctorSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.reported_doctors
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
     report_reason   MEDIUMTEXT,
     PRIMARY KEY (report_id),
-    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic),
-    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
+    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
 
-const reportPatientSchema = `CREATE TABLE IF NOT EXISTS tabeeb.reported_patients
+const reportPatientSchema = `CREATE TABLE IF NOT EXISTS ${process.env.database}.reported_patients
     (report_id      int NOT NULL AUTO_INCREMENT,
     patient_phone   varchar(11),
     d_cnic          varchar(13),
     report_reason   MEDIUMTEXT,
     PRIMARY KEY (report_id),
-    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic),
-    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number)
+    FOREIGN KEY (d_cnic) REFERENCES doctors(cnic) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (patient_phone) REFERENCES patients(phone_number) ON DELETE CASCADE ON UPDATE CASCADE
 )`;
 
 const schemas = [
@@ -181,7 +181,7 @@ const fillPatients = async (
   for (let i = 0; i < patientsNo; i++) {
     let hash = await bcrypt.hash(patientPasswords[i], 10);
     let queryText = `
-    INSERT INTO tabeeb.patients VALUES ('${patientPhones[i]}','${patientEmails[i]}','${patientFullNames[i]}','${hash}','${patientCities[i]}',${patientWallets[i]})
+    INSERT INTO ${process.env.database}.patients VALUES ('${patientPhones[i]}','${patientEmails[i]}','${patientFullNames[i]}','${hash}','${patientCities[i]}',${patientWallets[i]})
  `;
     db.query(queryText, (err, result) => {
       if (err) return null;
@@ -202,11 +202,13 @@ const fillDoctors = async (
 ) => {
   for (let i = 0; i < doctorsNo; i++) {
     let hash = await bcrypt.hash(doctorPasswords[i], 10);
-    let queryText = `INSERT INTO tabeeb.doctors VALUES ('${doctorCnics[i]}','${
-      doctorEmails[i]
-    }','${hash}','${doctorPhones[i]}','${doctorFullNames[i]}', '' ,'${
-      addresses[i]
-    }','${doctorCities[i]}','${pmc_regs[i]}',${i % 2},0)`;
+    let queryText = `INSERT INTO ${process.env.database}.doctors VALUES ('${
+      doctorCnics[i]
+    }','${doctorEmails[i]}','${hash}','${doctorPhones[i]}','${
+      doctorFullNames[i]
+    }', '' ,'${addresses[i]}','${doctorCities[i]}','${pmc_regs[i]}',${
+      i % 2
+    },0)`;
     db.query(queryText, (err, result) => {
       if (err) {
       }
@@ -214,7 +216,7 @@ const fillDoctors = async (
   }
 };
 const fillDB = async () => {
-  const names = await getNames();
+  const names = (await getNames()).slice(0, 500);
   const {
     full_names,
     emails,
@@ -284,7 +286,7 @@ db.connect(function (err) {
       });
     }
     const hash = await bcrypt.hash("admin", 10);
-    const addAdminQuery = `INSERT INTO tabeeb.admins (email, password) VALUES ('admin', '${hash}')`;
+    const addAdminQuery = `INSERT INTO ${process.env.database}.admins (email, password) VALUES ('admin', '${hash}')`;
     db.query(addAdminQuery, async (err, result) => {
       if (err) {
         // console.log("Admin already exists");

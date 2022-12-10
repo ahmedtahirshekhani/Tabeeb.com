@@ -10,7 +10,7 @@ const postLogin = async (req, res) => {
     if (!email || !password)
       return res.status(422).send({ error: "Invalid login: Input missing!" });
     const queryText = `SELECT *
-          FROM tabeeb.admins
+          FROM ${process.env.database}.admins
           WHERE email = ?
           `;
     const result = await query(queryText, [email]);
@@ -45,7 +45,7 @@ const postLogin = async (req, res) => {
 const getDoctorRequests = async (req, res) => {
   try {
     const queryText = `SELECT *
-          FROM tabeeb.doctors
+          FROM ${process.env.database}.doctors
           WHERE isVerified = ?
           `;
     const result = await query(queryText, [false]);
@@ -77,11 +77,12 @@ const postAcceptRequest = async (req, res) => {
   console.log("IN post accept request");
   try {
     //required: cnic of doctor object -> {"cnic": XXXXXXX}
-    const cnic = req.body.cnic;
-    const queryText = `UPDATE tabeeb.doctors
+    const { token, cnic } = req.body;
+
+    const queryText = `UPDATE ${process.env.database}.doctors
       SET isVerified = ?
       WHERE cnic = ?`;
-    await query(queryText, [true, cnic]);
+    await query(queryText, [1, cnic]);
     res.send("Request Accepted");
   } catch (err) {
     res.status(422).send(err.message);
@@ -92,12 +93,15 @@ const postRejectRequest = async (req, res) => {
   console.log("IN post reject request");
   try {
     //required: cnic of doctor object
-    const cnic = req.body.cnic;
-    const queryText = `DELETE FROM tabeeb.doctors
+    const { token, cnic } = req.body;
+    console.log(cnic);
+    console.log("MADAR");
+    const queryText = `DELETE FROM ${process.env.database}.doctors
     WHERE cnic= ?`;
     await query(queryText, [cnic]);
     res.send("Request rejected");
   } catch (err) {
+    console.log(err);
     res.status(422).send(err.message);
   }
 };
@@ -106,11 +110,11 @@ const getReports = async (req, res) => {
   try {
     let result = {};
     let queryText = `SELECT *
-          FROM tabeeb.reported_doctors
+          FROM ${process.env.database}.reported_doctors
           `;
     result["doctors"] = await query(queryText);
     queryText = `SELECT *
-          FROM tabeeb.reported_patients
+          FROM ${process.env.database}.reported_patients
           `;
     result["patients"] = await query(queryText);
     res.send(result);
@@ -156,13 +160,13 @@ const postChangePassword = async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
     const email = await getEmail(token);
     if (!newPassword) throw "Enter old password";
-    const queryText = `SELECT * FROM tabeeb.admins WHERE email= ?`;
+    const queryText = `SELECT * FROM ${process.env.database}.admins WHERE email= ?`;
     const result = await query(queryText, [email]);
     const hash = result[0].password;
     const match = await bcrypt.compare(oldPassword, hash);
     if (!match) throw "Old password doesnt match";
     const newPasswordHash = await bcrypt.hash(newPassword, 10);
-    const updateQuery = `UPDATE tabeeb.admins
+    const updateQuery = `UPDATE ${process.env.database}.admins
       SET password = ?
       WHERE email = ?`;
     await query(updateQuery, [newPasswordHash, email]);
