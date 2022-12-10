@@ -39,7 +39,7 @@ const DashboardLayout = () => {
 				)}
 				{role === "doctor" && params.func === "pastappt" && <PastApptDoctor />}
 				{role === "patient" && params.func === "pastappt" && <PastApptDoctor />}
-				{role === "doctor" && params.func === "doctorreqs" && (
+				{role === "admin" && params.func === "doctorreqs" && (
 					<DoctorSignupRequests />
 				)}
 				{role === "doctor" && params.func === "pendingAppointments" && (
@@ -61,7 +61,6 @@ const DashboardLayout = () => {
 				{role === "patient" && params.func === "pendingappt" && (
 					<PendingAppointmentsPatient />
 				)}
-
 			</div>
 		</div>
 	);
