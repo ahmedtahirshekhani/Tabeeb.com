@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { sendReview } from "../../services/utils/review";
 import { sendReport } from "../../services/utils/review";
+import { useNavigate } from "react-router-dom";
 
 const ReportIt2 = () => {
   const [report, setReport] = useState("")
@@ -10,6 +11,8 @@ const ReportIt2 = () => {
   const [id, setId] = useState(0);
   const [dcnic, setDcnic] = useState("");
   const [phone, setPhone] = useState(0)
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     setPhone(location.state.phone);
@@ -19,7 +22,7 @@ const ReportIt2 = () => {
   const getReport = () => {
     return (
       <div>
-        <h1 className="text-5xl text-center font-bold"> Report Doctor for Appointment ID: {id}: </h1>
+        <h1 className="text-5xl text-center font-bold"> Report Patient for Appointment ID: {id}: </h1>
         
         <div className="form-control">
           <label className="label">
@@ -45,7 +48,7 @@ const ReportIt2 = () => {
         console.log(res);
         if (res.status == 200) {
           if (window.confirm("Report sent successfully")) {
-            window.location.reload();
+            navigate("/dashboard/doctor/pastappt");
           }
         }
       })
