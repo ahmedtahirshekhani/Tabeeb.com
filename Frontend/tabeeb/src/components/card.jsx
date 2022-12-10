@@ -7,20 +7,20 @@ import { sendPresc } from "../services/utils/appointments";
 import { sendReview } from "../services/utils/review";
 import { useNavigate } from "react-router-dom";
 
-const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) => {
+const Card = ({ id, name, date, time, charges, prescription, d_cnic, props, d_name}) => {
   const role = localStorage.getItem("role");
   const [presc, setPresc] = React.useState("");
   const [rate, setRate] = React.useState(0);
   const [review, setReview] = React.useState("");
   const [appointmentId, setappointmentId] = React.useState(0) ;
   const navigate = useNavigate()
-  
+
 
 
   const acceptPending = (id) => {
     axios.post("/api/v1/doctor/acceptAppointment", { appointment_id: id }).then((res) => {
       console.log(res.data);
-      if(res.data.success == true){
+      if (res.data.success == true) {
 
         window.location.reload();
       }
@@ -32,7 +32,7 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
   const rejectPending = (id) => {
     axios.post("/api/v1/doctor/rejectAppointment", { appointment_id: id }).then((res) => {
       console.log(res.data);
-      if(res.data.success == true){
+      if (res.data.success == true) {
 
         window.location.reload();
       }
@@ -43,7 +43,6 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
     )
   }
 
- 
 
   const reviewSubmit = (idt) => {
     console.log(rate, review, idt);
@@ -61,9 +60,9 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
   }
 
 
-  const reviewPopup = (idval)=>{
+  const reviewPopup = (idval) => {
     console.log('review pop up', idval)
-    return(
+    return (
       <div className="m-5">
         <label className="btn" onClick={() => navigate('/dashboard/patient/review', {
           state:{
@@ -79,8 +78,8 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
   const sendPrescript = (id) => {
     sendPresc(id, presc).then((res) => {
       console.log(res);
-      if(res.status == 200){
-        if(window.confirm("Prescription sent successfully")){
+      if (res.status == 200) {
+        if (window.confirm("Prescription sent successfully")) {
           window.location.reload();
         }
       }
@@ -94,7 +93,7 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
 
     return(<div className="p-5">
       {/* The button to open modal */}
-<label htmlFor="my-modal" className="btn m-5">Finish Appointment</label>
+      <label htmlFor="my-modal" className="btn m-5">Finish Appointment</label>
 
 {/* Put this part before </body> tag */}
 <input type="checkbox" id="my-modal" className="modal-toggle" />
@@ -106,10 +105,13 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
       <label htmlFor="my-modal" className="btn" onClick = {()=>sendPrescript(id)}>Done</label>
     </div>
   </div>
-</div>
-</div>
+  </div>
+    </div>
+
     )
   }
+
+
   return (
     <div className={classNames([styles.wrapper, styles.wrapperAnime])}>
       <div className={styles.header}>
@@ -132,14 +134,19 @@ const Card = ({ id, name , date, time, charges, prescription,d_cnic, props }) =>
       </div>
       <div className={styles.textWrapper}>
         <h1 className={styles.text}>{`Appointment ID: ${id}`}</h1>
-        <h1 className={styles.text}>{`Doctor CNIC: ${name}`}</h1>
+        <h1 className={styles.text}>{`Doctor Name: ${d_name}`}</h1>
         <h1 className={styles.text}>{`Date: ${date}`}</h1>
         <h1 className={styles.text}>{`Time: ${time}`}</h1>
         <h1 className={styles.text}>{`Charges: ${charges}`}</h1>
-        {props != "currentapt" &&<h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>}
-        {role==="doctor" && props == "currentapt" ? askForPrescription(id)  : null}
-        {role==="doctor" && props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide" onClick={()=>acceptPending(id)}>Accept</button> <button className="btn btn-outline btn-error btn-wide" onClick={()=>rejectPending(id)}>Reject</button></div> : null}
-        {role === "patient" && props === "pastapt" ? reviewPopup(id) : null}  
+
+        {props != "currentapt" && <h1 className={styles.text}>{`Prescription: ${prescription}`}</h1>}
+        {role === "doctor" && props == "currentapt" ? askForPrescription(id) : null}
+        {role === "doctor" && props == "pendingappt" ? <div ><button className="btn btn-primary btn-wide" onClick={() => acceptPending(id)}>Accept</button> <button className="btn btn-outline btn-error btn-wide" onClick={() => rejectPending(id)}>Reject</button></div> : null}
+
+        {role === "patient" && props == "pendingappt"}
+
+        {role === "patient" && props === "pastapt" ? reviewPopup(id) : null}
+       
       </div>
     </div>
   );

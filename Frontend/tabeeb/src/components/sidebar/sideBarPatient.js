@@ -17,4 +17,8 @@ export const sideBarPatient = [
 		title: "View Past Appointments",
 		link: "/dashboard/patient/pastappt",
 	},
+	{
+		title: "View Pending Appointments",
+		link: "/dashboard/patient/pendingappt",
+	},
 ];

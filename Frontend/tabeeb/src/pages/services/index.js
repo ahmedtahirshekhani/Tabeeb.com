@@ -38,6 +38,11 @@ const DoctorService = () => {
 		)
 			.then((res, err) => {
 				console.log(res);
+				if (res.status == 200) {
+					if (window.confirm("Service Made Successfully")) {
+					  window.location.reload();
+					}
+				}
 			})
 			.catch((err) => {
 				console.log(err);
