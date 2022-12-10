@@ -92,12 +92,6 @@ const router = createBrowserRouter([
 		path: "/dashboard/admin/doctorsignuprequests",
 		element: <DoctorSignUpRequests />,
 	},
-
-	{
-		path: "/dashboard/admin/doctorsignuprequests",
-		element: <DoctorSignUpRequests />,
-	},
-
 	{
 		path: "/profile/doctor",
 		element: <DoctorProfile />,
